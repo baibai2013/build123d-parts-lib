@@ -1,0 +1,374 @@
+# 精密圆柱销（Cylindrical Dowel Pins）
+# Standards: GB/T 119.1 / ISO 8734，公差 m6，淬硬磨削
+# 适用场景：四足机器人关节转轴、定位销、铰链轴
+# License: MIT
+#
+# 字段说明：
+#   d = 公称直径，tolerance = 配合公差
+#   H7_hole = 配对孔推荐公差（过渡配合 H7/m6）
+#   clearance_hole_d = 间隙配合孔径（装配拆卸用）
+#   chamfer = 两端倒角长度 c（GB/T 119.1）
+
+PIN_D3:
+  aliases: [pin-d3, d3-pin, 3mm-pin, GB119-3]
+  dimensions:
+    d: 3.0
+    tolerance: m6
+    chamfer: 0.5
+    unit: mm
+  fit:
+    H7_hole: 3.0H7
+    clearance_hole_d: 3.2
+  material:
+    default: "45# steel, HRC58-65"
+    optional: "SUS304"
+  common_lengths_mm: [8, 10, 12, 16, 20, 25, 30]
+  source:
+    primary: https://www.misumi-china.com.cn/vona2/detail/110302634310/
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_cylindrical
+    fn: make_cylindrical_pin
+    args: {diameter: 3.0, length: 12}
+    cache: cache/pin_d3_L12.step
+  notes: |
+    四足机器人脚踝/指节转轴；
+    FDM 承销孔建议 ⌀3.1mm（+0.1mm 收缩补偿）。
+
+PIN_D4:
+  aliases: [pin-d4, d4-pin, 4mm-pin, GB119-4]
+  dimensions:
+    d: 4.0
+    tolerance: m6
+    chamfer: 0.5
+    unit: mm
+  fit:
+    H7_hole: 4.0H7
+    clearance_hole_d: 4.2
+  material:
+    default: "45# steel, HRC58-65"
+    optional: "SUS304"
+  common_lengths_mm: [8, 10, 12, 16, 20, 25, 30, 40]
+  source:
+    primary: https://www.misumi-china.com.cn/vona2/detail/110302634310/
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_cylindrical
+    fn: make_cylindrical_pin
+    args: {diameter: 4.0, length: 20}
+    cache: cache/pin_d4_L20.step
+  notes: 机器狗膝/髋关节首选；与 MR74ZZ / MR84ZZ 配套。
+
+PIN_D5:
+  aliases: [pin-d5, d5-pin, 5mm-pin, GB119-5]
+  dimensions:
+    d: 5.0
+    tolerance: m6
+    chamfer: 0.8
+    unit: mm
+  fit:
+    H7_hole: 5.0H7
+    clearance_hole_d: 5.2
+  material:
+    default: "45# steel, HRC58-65"
+    optional: "SUS304"
+  common_lengths_mm: [10, 12, 16, 20, 25, 30, 40, 50]
+  source:
+    primary: https://www.misumi-china.com.cn/vona2/detail/110302634310/
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_cylindrical
+    fn: make_cylindrical_pin
+    args: {diameter: 5.0, length: 20}
+    cache: cache/pin_d5_L20.step
+  notes: 与 MR85ZZ 配套；机器狗主承力关节轴推荐规格。
+
+PIN_D6:
+  aliases: [pin-d6, d6-pin, 6mm-pin, GB119-6]
+  dimensions:
+    d: 6.0
+    tolerance: m6
+    chamfer: 1.0
+    unit: mm
+  fit:
+    H7_hole: 6.0H7
+    clearance_hole_d: 6.3
+  material:
+    default: "45# steel, HRC58-65"
+    optional: "SUS304"
+  common_lengths_mm: [10, 12, 16, 20, 25, 30, 40, 50, 60]
+  source:
+    primary: https://www.misumi-china.com.cn/vona2/detail/110302634310/
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_cylindrical
+    fn: make_cylindrical_pin
+    args: {diameter: 6.0, length: 25}
+    cache: cache/pin_d6_L25.step
+  notes: 髋部大轴；需要大承载时可搭配 624ZZ 轴承。
+
+# ─────────────────────────────────────────────
+# 开口销（Cotter Pin / Split Pin）
+# Standards: ISO 1234
+# 几何：主轴圆柱 + 顶部圆环头
+# ─────────────────────────────────────────────
+
+SPLIT_PIN_D1_5:
+  aliases: [split-pin-d1.5, cotter-pin-d1.5, ISO1234-1.5]
+  dimensions:
+    d: 1.5
+    unit: mm
+  common_lengths_mm: [8, 10, 12, 16, 20]
+  source:
+    primary: https://www.misumi-china.com.cn/
+    confidence: 3
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_split
+    fn: make_split_pin
+    args: {diameter: 1.5, length: 16}
+    cache: cache/pin_split_d1_5_L16.step
+  notes: 小型关节锁定销；薄壁孔 d1.6mm。
+
+SPLIT_PIN_D2:
+  aliases: [split-pin-d2, cotter-pin-d2, ISO1234-2]
+  dimensions:
+    d: 2.0
+    unit: mm
+  common_lengths_mm: [10, 12, 16, 20, 25]
+  source:
+    primary: https://www.misumi-china.com.cn/
+    confidence: 3
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_split
+    fn: make_split_pin
+    args: {diameter: 2.0, length: 16}
+    cache: cache/pin_split_d2_0_L16.step
+  notes: 通用开口销；锁定销孔 d2.1mm。
+
+SPLIT_PIN_D2_5:
+  aliases: [split-pin-d2.5, cotter-pin-d2.5, ISO1234-2.5]
+  dimensions:
+    d: 2.5
+    unit: mm
+  common_lengths_mm: [12, 16, 20, 25, 30]
+  source:
+    primary: https://www.misumi-china.com.cn/
+    confidence: 3
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_split
+    fn: make_split_pin
+    args: {diameter: 2.5, length: 20}
+    cache: cache/pin_split_d2_5_L20.step
+  notes: 中型关节锁定；孔 d2.6mm。
+
+SPLIT_PIN_D3:
+  aliases: [split-pin-d3, cotter-pin-d3, ISO1234-3]
+  dimensions:
+    d: 3.0
+    unit: mm
+  common_lengths_mm: [16, 20, 25, 30, 40]
+  source:
+    primary: https://www.misumi-china.com.cn/
+    confidence: 3
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_split
+    fn: make_split_pin
+    args: {diameter: 3.0, length: 25}
+    cache: cache/pin_split_d3_0_L25.step
+  notes: 机器人关节轴向锁定；孔 d3.2mm。
+
+# ─────────────────────────────────────────────
+# 弹性圆柱销（Roll Pin / Spring Pin）
+# Standards: ISO 8752（轻型系列）
+# 几何：空心圆柱
+# ─────────────────────────────────────────────
+
+SPRING_PIN_D3:
+  aliases: [roll-pin-d3, spring-pin-d3, ISO8752-3]
+  dimensions:
+    d: 3.0
+    wall_thickness: 0.5
+    unit: mm
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+  source:
+    primary: https://www.misumi-china.com.cn/
+    confidence: 3
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_spring
+    fn: make_spring_pin
+    args: {diameter: 3.0, length: 16}
+    cache: cache/pin_spring_d3_L16.step
+  notes: 小轴快速固定；安装孔 H12 公差。
+
+SPRING_PIN_D4:
+  aliases: [roll-pin-d4, spring-pin-d4, ISO8752-4]
+  dimensions:
+    d: 4.0
+    wall_thickness: 0.6
+    unit: mm
+  common_lengths_mm: [10, 12, 16, 20, 25, 30]
+  source:
+    primary: https://www.misumi-china.com.cn/
+    confidence: 3
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_spring
+    fn: make_spring_pin
+    args: {diameter: 4.0, length: 20}
+    cache: cache/pin_spring_d4_L20.step
+  notes: 通用弹性销；机器人连杆快拆定位。
+
+SPRING_PIN_D5:
+  aliases: [roll-pin-d5, spring-pin-d5, ISO8752-5]
+  dimensions:
+    d: 5.0
+    wall_thickness: 0.8
+    unit: mm
+  common_lengths_mm: [12, 16, 20, 24, 30, 40]
+  source:
+    primary: https://www.misumi-china.com.cn/
+    confidence: 3
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_spring
+    fn: make_spring_pin
+    args: {diameter: 5.0, length: 24}
+    cache: cache/pin_spring_d5_L24.step
+  notes: 中型弹性销；与 5mm 轴孔配合。
+
+SPRING_PIN_D6:
+  aliases: [roll-pin-d6, spring-pin-d6, ISO8752-6]
+  dimensions:
+    d: 6.0
+    wall_thickness: 1.0
+    unit: mm
+  common_lengths_mm: [16, 20, 25, 30, 40, 50]
+  source:
+    primary: https://www.misumi-china.com.cn/
+    confidence: 3
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.pin_spring
+    fn: make_spring_pin
+    args: {diameter: 6.0, length: 30}
+    cache: cache/pin_spring_d6_L30.step
+  notes: 大载荷弹性销；髋部连杆定位。
+
+# ─────────────────────────────────────────────
+# 精密光轴（Smooth Shaft）
+# Reference: MISUMI PSFJ 系列
+# 几何：圆柱 + 两端倒角
+# ─────────────────────────────────────────────
+
+SHAFT_D4:
+  aliases: [smooth-shaft-d4, linear-shaft-d4, PSFJ-4]
+  dimensions:
+    d: 4.0
+    tolerance: h6
+    chamfer: 0.5
+    unit: mm
+  fit:
+    H7_hole: 4.0H7
+    clearance_hole_d: 4.1
+  material:
+    default: "SUS440C, HRC58"
+    optional: "S45C chrome plated"
+  length_range_mm: [20, 200]
+  common_lengths_mm: [20, 30, 40, 50, 60, 80, 100, 150, 200]
+  source:
+    primary: https://www.misumi-china.com.cn/vona2/detail/110302647640/
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.shaft_smooth
+    fn: make_smooth_shaft
+    args: {diameter: 4.0, length: 50}
+    cache: cache/shaft_smooth_d4_L50.step
+  notes: 四足机器人指节/脚踝线性导轨轴；与 LM4UU 直线轴承配套。
+
+SHAFT_D5:
+  aliases: [smooth-shaft-d5, linear-shaft-d5, PSFJ-5]
+  dimensions:
+    d: 5.0
+    tolerance: h6
+    chamfer: 0.5
+    unit: mm
+  fit:
+    H7_hole: 5.0H7
+    clearance_hole_d: 5.1
+  material:
+    default: "SUS440C, HRC58"
+    optional: "S45C chrome plated"
+  length_range_mm: [20, 200]
+  common_lengths_mm: [20, 30, 40, 50, 60, 80, 100, 150, 200]
+  source:
+    primary: https://www.misumi-china.com.cn/vona2/detail/110302647640/
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.shaft_smooth
+    fn: make_smooth_shaft
+    args: {diameter: 5.0, length: 60}
+    cache: cache/shaft_smooth_d5_L60.step
+  notes: 标准光轴；与 LM5UU 直线轴承配套，适合膝关节滑块导轨。
+
+SHAFT_D6:
+  aliases: [smooth-shaft-d6, linear-shaft-d6, PSFJ-6]
+  dimensions:
+    d: 6.0
+    tolerance: h6
+    chamfer: 0.8
+    unit: mm
+  fit:
+    H7_hole: 6.0H7
+    clearance_hole_d: 6.1
+  material:
+    default: "SUS440C, HRC58"
+    optional: "S45C chrome plated"
+  length_range_mm: [20, 300]
+  common_lengths_mm: [30, 40, 50, 60, 80, 100, 150, 200, 250, 300]
+  source:
+    primary: https://www.misumi-china.com.cn/vona2/detail/110302647640/
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.shaft_smooth
+    fn: make_smooth_shaft
+    args: {diameter: 6.0, length: 80}
+    cache: cache/shaft_smooth_d6_L80.step
+  notes: 主力光轴规格；与 LM6UU 配套，髋部导轨首选。
+
+SHAFT_D8:
+  aliases: [smooth-shaft-d8, linear-shaft-d8, PSFJ-8]
+  dimensions:
+    d: 8.0
+    tolerance: h6
+    chamfer: 1.0
+    unit: mm
+  fit:
+    H7_hole: 8.0H7
+    clearance_hole_d: 8.1
+  material:
+    default: "SUS440C, HRC58"
+    optional: "S45C chrome plated"
+  length_range_mm: [30, 500]
+  common_lengths_mm: [50, 80, 100, 150, 200, 250, 300, 400, 500]
+  source:
+    primary: https://www.misumi-china.com.cn/vona2/detail/110302647640/
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.pins.shaft_smooth
+    fn: make_smooth_shaft
+    args: {diameter: 8.0, length: 100}
+    cache: cache/shaft_smooth_d8_L100.step
+  notes: 大载荷光轴；与 LM8UU 配套，躯干纵向滑台用。

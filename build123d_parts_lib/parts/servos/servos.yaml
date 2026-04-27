@@ -1,0 +1,214 @@
+# 舵机规格（Servo Motors）
+# License: MIT
+
+SG90:
+  aliases: [sg90, tower-pro-sg90, mini-servo-9g, 9g-servo]
+  body:
+    length: 22.8
+    width:  12.2
+    height: 22.7
+    unit:   mm
+  mount:
+    ear_width_total: 32.2
+    ear_thickness:    2.5
+    ear_z_offset:    15.5
+    screw_hole_d:     2.0
+    screw_pitch:     28.0
+  output:
+    shaft_height_from_body_top: 5.0
+    total_height: 27.7
+    spline: "25T"
+  torque_kg_cm: 1.2
+  weight_g: 9.0
+  source:
+    primary: https://servodatabase.com/servo/towerpro/sg-90
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.servos.standard_servo
+    fn: make_servo
+    args: {model: SG90}
+    cache: cache/sg90.step
+  notes: 量产公差 ±0.3mm；FDM 安装腔每侧留 +0.2~0.3mm 间隙。
+
+MG90S:
+  aliases: [mg90s, mg90-s, metal-gear-9g]
+  body:
+    length: 22.8
+    width:  12.2
+    height: 28.5
+    unit:   mm
+  mount:
+    ear_width_total: 32.2
+    ear_thickness:    2.5
+    ear_z_offset:    15.5
+    screw_hole_d:     2.0
+    screw_pitch:     28.0
+  output:
+    shaft_height_from_body_top: 2.5
+    total_height: 31.0
+    spline: "25T"
+  torque_kg_cm: 1.8
+  weight_g: 13.4
+  source:
+    primary: https://servodatabase.com/servo/towerpro/mg90s
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.servos.standard_servo
+    fn: make_servo
+    args: {model: MG90S}
+    cache: cache/mg90s.step
+  notes: 金属齿轮版 SG90；安装孔位与 SG90 完全兼容。
+
+MG996R:
+  aliases: [mg996r, mg996-r, towerpro-mg996r, standard-servo-55g]
+  body:
+    length: 40.7
+    width:  19.7
+    height: 42.9
+    unit:   mm
+  mount:
+    ear_width_total: 54.0
+    ear_thickness:    4.0
+    ear_z_offset:    27.8
+    screw_hole_d:     3.0
+    screw_pitch:     49.5
+  output:
+    shaft_height_from_body_top: 5.6
+    total_height: 48.5
+    spline: "25T"
+  torque_kg_cm: 10.0
+  weight_g: 55.0
+  source:
+    primary: https://servodatabase.com/servo/towerpro/mg996r
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.servos.standard_servo
+    fn: make_servo
+    args: {model: MG996R}
+    cache: cache/mg996r.step
+  notes: 高扭矩金属齿轮舵机；常用于机器人关节。FDM 安装腔每侧留 +0.3mm 间隙。
+
+DS3218:
+  aliases: [ds3218, ds-3218, dsservo-ds3218, waterproof-servo]
+  body:
+    length: 40.0
+    width:  20.0
+    height: 40.5
+    unit:   mm
+  mount:
+    ear_width_total: 54.0
+    ear_thickness:    4.0
+    ear_z_offset:    27.0
+    screw_hole_d:     3.0
+    screw_pitch:     49.5
+  output:
+    shaft_height_from_body_top: 4.5
+    total_height: 45.0
+    spline: "25T"
+  torque_kg_cm: 20.0
+  weight_g: 60.0
+  source:
+    primary: https://servodatabase.com/servo/dsservo/ds3218
+    confidence: 3
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.servos.standard_servo
+    fn: make_servo
+    args: {model: DS3218}
+    cache: cache/ds3218.step
+  notes: 防水高扭矩舵机；安装尺寸与 MG996R 基本兼容。
+
+HORN_SINGLE:
+  aliases: [horn-single, servo-horn-single, single-arm-horn]
+  description: 25T 单臂舵机摇臂（hub + 1 个矩形臂 15mm）
+  hub:
+    od_mm: 7.0
+    center_bore_mm: 5.0
+    height_mm: 4.0
+    spline: "25T"
+  arm:
+    count: 1
+    length_mm: 15.0
+    width_mm: 4.0
+    thickness_mm: 2.0
+  hole_d_mm: 1.5
+  source:
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.servos.servo_horn
+    fn: make_servo_horn
+    args: {type_: single}
+    cache: cache/servo_horn_single.step
+
+HORN_DOUBLE:
+  aliases: [horn-double, servo-horn-double, double-arm-horn]
+  description: 25T 双臂舵机摇臂（hub + 2 个对称矩形臂各 15mm）
+  hub:
+    od_mm: 7.0
+    center_bore_mm: 5.0
+    height_mm: 4.0
+    spline: "25T"
+  arm:
+    count: 2
+    length_mm: 15.0
+    width_mm: 4.0
+    thickness_mm: 2.0
+  hole_d_mm: 1.5
+  source:
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.servos.servo_horn
+    fn: make_servo_horn
+    args: {type_: double}
+    cache: cache/servo_horn_double.step
+
+HORN_CROSS:
+  aliases: [horn-cross, servo-horn-cross, cross-horn, x-horn]
+  description: 25T 十字舵机摇臂（hub + 4 个均布矩形臂各 15mm）
+  hub:
+    od_mm: 7.0
+    center_bore_mm: 5.0
+    height_mm: 4.0
+    spline: "25T"
+  arm:
+    count: 4
+    length_mm: 15.0
+    width_mm: 3.0
+    thickness_mm: 2.0
+  hole_d_mm: 1.5
+  source:
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.servos.servo_horn
+    fn: make_servo_horn
+    args: {type_: cross}
+    cache: cache/servo_horn_cross.step
+
+HORN_DISC:
+  aliases: [horn-disc, servo-horn-disc, disc-horn, round-horn]
+  description: 25T 圆盘舵机摇臂（hub + OD20mm 圆盘，PCD15mm 均布 4 孔）
+  hub:
+    od_mm: 7.0
+    center_bore_mm: 5.0
+    height_mm: 4.0
+    spline: "25T"
+  disc:
+    od_mm: 20.0
+    thickness_mm: 2.0
+    hole_pcd_mm: 15.0
+    hole_count: 4
+    hole_d_mm: 1.5
+  source:
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.servos.servo_horn
+    fn: make_servo_horn
+    args: {type_: disc}
+    cache: cache/servo_horn_disc.step

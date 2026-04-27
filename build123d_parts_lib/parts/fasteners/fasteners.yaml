@@ -1,0 +1,882 @@
+# 内六角圆柱头螺丝（Hex Socket Head Cap Screw）
+# Standards: ISO 4762 / DIN 912
+# License: MIT
+
+M3_ISO4762:
+  aliases: [M3, m3, M3-ISO4762, M3-DIN912, m3-socket-head]
+  standard: "ISO 4762 / DIN 912"
+  type: hex-socket-head-cap-screw
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    dk: 5.5
+    k: 3.0
+    s: 2.5
+  clearance_hole:
+    close_fit: 3.2
+    medium_fit: 3.4
+    loose_fit: 3.6
+  counterbore:
+    diameter: 6.0
+    depth: 3.3
+  threaded_insert:
+    typical_od: 4.2
+    typical_length: 5.0
+    predrill_hole_d: 4.0
+  common_lengths_mm: [5, 6, 8, 10, 12, 14, 16, 20, 25, 30]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.socket_head_screw
+    fn: make_socket_head_screw
+    args: {size: "M3", length: 10}
+    cache: cache/m3_iso4762_L10.step
+  notes: 3D 打印界最常用规格；配热压铜螺母时预留 ⌀4.0mm 预孔。
+
+M2_5_ISO4762:
+  aliases: [M2.5, m2.5, M2.5-ISO4762, M2.5-DIN912]
+  standard: "ISO 4762 / DIN 912"
+  type: hex-socket-head-cap-screw
+  thread:
+    d: 2.5
+    pitch: 0.45
+    unit: mm
+  head:
+    dk: 4.5
+    k: 2.5
+    s: 2.0
+  clearance_hole:
+    close_fit: 2.7
+    medium_fit: 2.9
+    loose_fit: 3.1
+  counterbore:
+    diameter: 5.0
+    depth: 2.7
+  common_lengths_mm: [4, 5, 6, 8, 10, 12, 16, 20]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.socket_head_screw
+    fn: make_socket_head_screw
+    args: {size: "M2.5", length: 8}
+    cache: cache/m2_5_iso4762_L8.step
+  notes: 机器人/无人机常用；SolidWorks Toolbox DIN 912 M2.5，头径 4.5mm。
+
+M6_ISO4762:
+  aliases: [M6, m6, M6-ISO4762, M6-DIN912, m6-socket-head]
+  standard: "ISO 4762 / DIN 912"
+  type: hex-socket-head-cap-screw
+  thread:
+    d: 6.0
+    pitch: 1.0
+    unit: mm
+  head:
+    dk: 10.0
+    k: 6.0
+    s: 5.0
+  clearance_hole:
+    close_fit: 6.4
+    medium_fit: 6.6
+    loose_fit: 7.0
+  counterbore:
+    diameter: 11.0
+    depth: 6.5
+  common_lengths_mm: [10, 12, 16, 20, 25, 30, 35, 40, 50]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.socket_head_screw
+    fn: make_socket_head_screw
+    args: {size: "M6", length: 20}
+    cache: cache/m6_iso4762_L20.step
+  notes: ISO 4762 M6 内六角圆柱头螺丝；结构件常用规格。
+
+M8_ISO4762:
+  aliases: [M8, m8, M8-ISO4762, M8-DIN912, m8-socket-head]
+  standard: "ISO 4762 / DIN 912"
+  type: hex-socket-head-cap-screw
+  thread:
+    d: 8.0
+    pitch: 1.25
+    unit: mm
+  head:
+    dk: 13.0
+    k: 8.0
+    s: 6.0
+  clearance_hole:
+    close_fit: 8.4
+    medium_fit: 9.0
+    loose_fit: 10.0
+  counterbore:
+    diameter: 14.0
+    depth: 8.5
+  common_lengths_mm: [12, 16, 20, 25, 30, 35, 40, 50, 60]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.socket_head_screw
+    fn: make_socket_head_screw
+    args: {size: "M8", length: 25}
+    cache: cache/m8_iso4762_L25.step
+  notes: ISO 4762 M8 内六角圆柱头螺丝；重型结构连接常用。
+
+M10_ISO4762:
+  aliases: [M10, m10, M10-ISO4762, M10-DIN912, m10-socket-head]
+  standard: "ISO 4762 / DIN 912"
+  type: hex-socket-head-cap-screw
+  thread:
+    d: 10.0
+    pitch: 1.5
+    unit: mm
+  head:
+    dk: 16.0
+    k: 10.0
+    s: 8.0
+  clearance_hole:
+    close_fit: 10.5
+    medium_fit: 11.0
+    loose_fit: 12.0
+  counterbore:
+    diameter: 17.5
+    depth: 10.5
+  common_lengths_mm: [16, 20, 25, 30, 35, 40, 50, 60, 80]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.socket_head_screw
+    fn: make_socket_head_screw
+    args: {size: "M10", length: 30}
+    cache: cache/m10_iso4762_L30.step
+  notes: ISO 4762 M10 内六角圆柱头螺丝；大型结构件连接。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 内六角沉头螺丝（Hex Socket Countersunk Head Screw）
+# Standards: ISO 10642
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_ISO10642:
+  aliases: [M3-csk, m3-countersunk, M3-ISO10642, m3-csk-socket]
+  standard: "ISO 10642"
+  type: hex-socket-countersunk-head-screw
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    dk: 5.6
+    k: 1.65
+    angle_deg: 90
+  countersink:
+    diameter: 5.6
+    angle_deg: 90
+  common_lengths_mm: [5, 6, 8, 10, 12, 16, 20]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.countersunk_screw
+    fn: make_countersunk_screw
+    args: {size: "M3", length: 10}
+    cache: cache/m3_iso10642_L10.step
+  notes: ISO 10642 M3 内六角沉头；机器人面板固定常用。
+
+M4_ISO10642:
+  aliases: [M4-csk, m4-countersunk, M4-ISO10642]
+  standard: "ISO 10642"
+  type: hex-socket-countersunk-head-screw
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    dk: 7.5
+    k: 2.2
+    angle_deg: 90
+  countersink:
+    diameter: 7.5
+    angle_deg: 90
+  common_lengths_mm: [6, 8, 10, 12, 16, 20, 25]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.countersunk_screw
+    fn: make_countersunk_screw
+    args: {size: "M4", length: 12}
+    cache: cache/m4_iso10642_L12.step
+  notes: ISO 10642 M4 内六角沉头。
+
+M5_ISO10642:
+  aliases: [M5-csk, m5-countersunk, M5-ISO10642]
+  standard: "ISO 10642"
+  type: hex-socket-countersunk-head-screw
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    dk: 9.2
+    k: 2.75
+    angle_deg: 90
+  countersink:
+    diameter: 9.2
+    angle_deg: 90
+  common_lengths_mm: [8, 10, 12, 16, 20, 25, 30]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.countersunk_screw
+    fn: make_countersunk_screw
+    args: {size: "M5", length: 16}
+    cache: cache/m5_iso10642_L16.step
+  notes: ISO 10642 M5 内六角沉头。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 六角螺母（Hex Nut）
+# Standards: ISO 4032 / GB/T 6172.1 / DIN 985
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_NUT_ISO4032:
+  aliases: [M3-nut, M3-hex-nut, M3-ISO4032-nut]
+  standard: "ISO 4032"
+  type: hex-nut
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  dimensions:
+    s: 5.5
+    m: 2.4
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M3", standard: "ISO4032"}
+    cache: cache/m3_nut_iso4032.step
+  notes: ISO 4032 M3 标准六角螺母。
+
+M4_NUT_ISO4032:
+  aliases: [M4-nut, M4-hex-nut, M4-ISO4032-nut]
+  standard: "ISO 4032"
+  type: hex-nut
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  dimensions:
+    s: 7.0
+    m: 3.2
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M4", standard: "ISO4032"}
+    cache: cache/m4_nut_iso4032.step
+  notes: ISO 4032 M4 标准六角螺母。
+
+M5_NUT_ISO4032:
+  aliases: [M5-nut, M5-hex-nut, M5-ISO4032-nut]
+  standard: "ISO 4032"
+  type: hex-nut
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  dimensions:
+    s: 8.0
+    m: 4.7
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M5", standard: "ISO4032"}
+    cache: cache/m5_nut_iso4032.step
+  notes: ISO 4032 M5 标准六角螺母。
+
+M3_NUT_GB6172:
+  aliases: [M3-thin-nut, M3-GB6172-nut, M3-thin-hex]
+  standard: "GB/T 6172.1"
+  type: hex-thin-nut
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  dimensions:
+    s: 5.5
+    m: 1.8
+  source:
+    primary: https://www.gb688.cn
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M3", standard: "GB6172"}
+    cache: cache/m3_nut_gb6172.step
+  notes: GB/T 6172.1 M3 薄六角螺母；用于空间受限场合。
+
+M4_NUT_DIN985:
+  aliases: [M4-nyloc, M4-DIN985, M4-lock-nut]
+  standard: "DIN 985"
+  type: hex-nylon-insert-lock-nut
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  dimensions:
+    s: 7.0
+    m: 5.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M4", standard: "DIN985"}
+    cache: cache/m4_nut_din985.step
+  notes: DIN 985 M4 尼龙锁紧螺母；防松动，机器人振动场合常用。
+
+M5_NUT_DIN985:
+  aliases: [M5-nyloc, M5-DIN985, M5-lock-nut]
+  standard: "DIN 985"
+  type: hex-nylon-insert-lock-nut
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  dimensions:
+    s: 8.0
+    m: 5.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M5", standard: "DIN985"}
+    cache: cache/m5_nut_din985.step
+  notes: DIN 985 M5 尼龙锁紧螺母。
+
+M6_NUT_ISO4032:
+  aliases: [M6-nut, M6-hex-nut, M6-ISO4032-nut]
+  standard: "ISO 4032"
+  type: hex-nut
+  thread:
+    d: 6.0
+    pitch: 1.0
+    unit: mm
+  dimensions:
+    s: 10.0
+    m: 5.2
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M6", standard: "ISO4032"}
+    cache: cache/m6_nut_iso4032.step
+  notes: ISO 4032 M6 标准六角螺母。
+
+M8_NUT_ISO4032:
+  aliases: [M8-nut, M8-hex-nut, M8-ISO4032-nut]
+  standard: "ISO 4032"
+  type: hex-nut
+  thread:
+    d: 8.0
+    pitch: 1.25
+    unit: mm
+  dimensions:
+    s: 13.0
+    m: 6.8
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M8", standard: "ISO4032"}
+    cache: cache/m8_nut_iso4032.step
+  notes: ISO 4032 M8 标准六角螺母。
+
+M10_NUT_ISO4032:
+  aliases: [M10-nut, M10-hex-nut, M10-ISO4032-nut]
+  standard: "ISO 4032"
+  type: hex-nut
+  thread:
+    d: 10.0
+    pitch: 1.5
+    unit: mm
+  dimensions:
+    s: 16.0
+    m: 8.4
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M10", standard: "ISO4032"}
+    cache: cache/m10_nut_iso4032.step
+  notes: ISO 4032 M10 标准六角螺母。
+
+M6_NUT_GB6172:
+  aliases: [M6-thin-nut, M6-GB6172-nut, M6-thin-hex]
+  standard: "GB/T 6172.1"
+  type: hex-thin-nut
+  thread:
+    d: 6.0
+    pitch: 1.0
+    unit: mm
+  dimensions:
+    s: 10.0
+    m: 3.2
+  source:
+    primary: https://www.gb688.cn
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M6", standard: "GB6172"}
+    cache: cache/m6_nut_gb6172.step
+  notes: GB/T 6172.1 M6 薄六角螺母。
+
+M8_NUT_GB6172:
+  aliases: [M8-thin-nut, M8-GB6172-nut, M8-thin-hex]
+  standard: "GB/T 6172.1"
+  type: hex-thin-nut
+  thread:
+    d: 8.0
+    pitch: 1.25
+    unit: mm
+  dimensions:
+    s: 13.0
+    m: 4.0
+  source:
+    primary: https://www.gb688.cn
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M8", standard: "GB6172"}
+    cache: cache/m8_nut_gb6172.step
+  notes: GB/T 6172.1 M8 薄六角螺母。
+
+M10_NUT_GB6172:
+  aliases: [M10-thin-nut, M10-GB6172-nut, M10-thin-hex]
+  standard: "GB/T 6172.1"
+  type: hex-thin-nut
+  thread:
+    d: 10.0
+    pitch: 1.5
+    unit: mm
+  dimensions:
+    s: 16.0
+    m: 5.0
+  source:
+    primary: https://www.gb688.cn
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M10", standard: "GB6172"}
+    cache: cache/m10_nut_gb6172.step
+  notes: GB/T 6172.1 M10 薄六角螺母。
+
+M6_NUT_DIN985:
+  aliases: [M6-nyloc, M6-DIN985, M6-lock-nut]
+  standard: "DIN 985"
+  type: hex-nylon-insert-lock-nut
+  thread:
+    d: 6.0
+    pitch: 1.0
+    unit: mm
+  dimensions:
+    s: 10.0
+    m: 6.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M6", standard: "DIN985"}
+    cache: cache/m6_nut_din985.step
+  notes: DIN 985 M6 尼龙锁紧螺母。
+
+M8_NUT_DIN985:
+  aliases: [M8-nyloc, M8-DIN985, M8-lock-nut]
+  standard: "DIN 985"
+  type: hex-nylon-insert-lock-nut
+  thread:
+    d: 8.0
+    pitch: 1.25
+    unit: mm
+  dimensions:
+    s: 13.0
+    m: 8.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M8", standard: "DIN985"}
+    cache: cache/m8_nut_din985.step
+  notes: DIN 985 M8 尼龙锁紧螺母。
+
+M10_NUT_DIN985:
+  aliases: [M10-nyloc, M10-DIN985, M10-lock-nut]
+  standard: "DIN 985"
+  type: hex-nylon-insert-lock-nut
+  thread:
+    d: 10.0
+    pitch: 1.5
+    unit: mm
+  dimensions:
+    s: 16.0
+    m: 10.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M10", standard: "DIN985"}
+    cache: cache/m10_nut_din985.step
+  notes: DIN 985 M10 尼龙锁紧螺母。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 垫圈（Washer）
+# Standards: ISO 7089 / GB/T 93
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_WASHER_ISO7089:
+  aliases: [M3-washer, M3-flat-washer, M3-ISO7089]
+  standard: "ISO 7089"
+  type: plain-washer
+  thread_nominal: 3.0
+  dimensions:
+    id: 3.2
+    od: 7.0
+    t: 0.5
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.washer
+    fn: make_washer
+    args: {size: "M3", type_: "flat"}
+    cache: cache/m3_washer_iso7089.step
+  notes: ISO 7089 M3 平垫圈。
+
+M4_WASHER_ISO7089:
+  aliases: [M4-washer, M4-flat-washer, M4-ISO7089]
+  standard: "ISO 7089"
+  type: plain-washer
+  thread_nominal: 4.0
+  dimensions:
+    id: 4.3
+    od: 9.0
+    t: 0.8
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.washer
+    fn: make_washer
+    args: {size: "M4", type_: "flat"}
+    cache: cache/m4_washer_iso7089.step
+  notes: ISO 7089 M4 平垫圈。
+
+M5_WASHER_ISO7089:
+  aliases: [M5-washer, M5-flat-washer, M5-ISO7089]
+  standard: "ISO 7089"
+  type: plain-washer
+  thread_nominal: 5.0
+  dimensions:
+    id: 5.3
+    od: 10.0
+    t: 1.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.washer
+    fn: make_washer
+    args: {size: "M5", type_: "flat"}
+    cache: cache/m5_washer_iso7089.step
+  notes: ISO 7089 M5 平垫圈。
+
+M3_WASHER_GBT93:
+  aliases: [M3-spring-washer, M3-GBT93, M3-lock-washer]
+  standard: "GB/T 93"
+  type: spring-lock-washer
+  thread_nominal: 3.0
+  dimensions:
+    id: 3.1
+    od: 6.2
+    t: 0.8
+  source:
+    primary: https://www.gb688.cn
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.washer
+    fn: make_washer
+    args: {size: "M3", type_: "spring"}
+    cache: cache/m3_washer_gbt93.step
+  notes: GB/T 93 M3 弹簧垫圈（防松）。
+
+M4_WASHER_GBT93:
+  aliases: [M4-spring-washer, M4-GBT93, M4-lock-washer]
+  standard: "GB/T 93"
+  type: spring-lock-washer
+  thread_nominal: 4.0
+  dimensions:
+    id: 4.1
+    od: 7.6
+    t: 1.1
+  source:
+    primary: https://www.gb688.cn
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.washer
+    fn: make_washer
+    args: {size: "M4", type_: "spring"}
+    cache: cache/m4_washer_gbt93.step
+  notes: GB/T 93 M4 弹簧垫圈（防松）。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# FDM 热压铜螺母（Threaded Insert）
+# Standards: Ruthex / InsertEZ (de facto FDM standard)
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_INSERT_FDM:
+  aliases: [M3-insert, M3-heat-set, M3-brass-insert, M3-Ruthex]
+  standard: "Ruthex RX-M3x5.7"
+  type: fdm-heat-set-threaded-insert
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  dimensions:
+    od: 4.2
+    length: 5.0
+    predrill_hole_d: 4.0
+  source:
+    primary: https://www.ruthex.de
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.threaded_insert
+    fn: make_threaded_insert
+    args: {size: "M3"}
+    cache: cache/m3_insert_fdm.step
+  notes: FDM 热压铜螺母 M3；预孔 ⌀4.0mm，用于 3D 打印件内嵌螺纹。
+
+M4_INSERT_FDM:
+  aliases: [M4-insert, M4-heat-set, M4-brass-insert, M4-Ruthex]
+  standard: "Ruthex RX-M4x6"
+  type: fdm-heat-set-threaded-insert
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  dimensions:
+    od: 5.6
+    length: 6.0
+    predrill_hole_d: 5.4
+  source:
+    primary: https://www.ruthex.de
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.threaded_insert
+    fn: make_threaded_insert
+    args: {size: "M4"}
+    cache: cache/m4_insert_fdm.step
+  notes: FDM 热压铜螺母 M4；预孔 ⌀5.4mm。
+
+M5_INSERT_FDM:
+  aliases: [M5-insert, M5-heat-set, M5-brass-insert, M5-Ruthex]
+  standard: "Ruthex RX-M5x8"
+  type: fdm-heat-set-threaded-insert
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  dimensions:
+    od: 6.4
+    length: 8.0
+    predrill_hole_d: 6.2
+  source:
+    primary: https://www.ruthex.de
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.threaded_insert
+    fn: make_threaded_insert
+    args: {size: "M5"}
+    cache: cache/m5_insert_fdm.step
+  notes: FDM 热压铜螺母 M5；预孔 ⌀6.2mm。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 外六角螺栓（Hex Bolt, full thread）
+# Standards: DIN 933 / ISO 4017
+# ──────────────────────────────────────────────────────────────────────────────
+
+M4_DIN933:
+  aliases: [M4-bolt, M4-hex-bolt, M4-DIN933, M4-ISO4017]
+  standard: "DIN 933 / ISO 4017"
+  type: hex-bolt-full-thread
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    s: 7.0
+    k: 2.8
+  common_lengths_mm: [8, 10, 12, 16, 20, 25, 30]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.hex_bolt
+    fn: make_hex_bolt
+    args: {size: "M4", length: 12}
+    cache: cache/m4_din933_L12.step
+  notes: DIN 933 M4 外六角螺栓（全螺纹）。
+
+M5_DIN933:
+  aliases: [M5-bolt, M5-hex-bolt, M5-DIN933, M5-ISO4017]
+  standard: "DIN 933 / ISO 4017"
+  type: hex-bolt-full-thread
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    s: 8.0
+    k: 3.5
+  common_lengths_mm: [10, 12, 16, 20, 25, 30, 40]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.hex_bolt
+    fn: make_hex_bolt
+    args: {size: "M5", length: 16}
+    cache: cache/m5_din933_L16.step
+  notes: DIN 933 M5 外六角螺栓（全螺纹）。
+
+M6_DIN933:
+  aliases: [M6-bolt, M6-hex-bolt, M6-DIN933, M6-ISO4017]
+  standard: "DIN 933 / ISO 4017"
+  type: hex-bolt-full-thread
+  thread:
+    d: 6.0
+    pitch: 1.0
+    unit: mm
+  head:
+    s: 10.0
+    k: 4.0
+  common_lengths_mm: [10, 12, 16, 20, 25, 30, 40, 50]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.hex_bolt
+    fn: make_hex_bolt
+    args: {size: "M6", length: 20}
+    cache: cache/m6_din933_L20.step
+  notes: DIN 933 M6 外六角螺栓（全螺纹）。
+
+M8_DIN933:
+  aliases: [M8-bolt, M8-hex-bolt, M8-DIN933, M8-ISO4017]
+  standard: "DIN 933 / ISO 4017"
+  type: hex-bolt-full-thread
+  thread:
+    d: 8.0
+    pitch: 1.25
+    unit: mm
+  head:
+    s: 13.0
+    k: 5.3
+  common_lengths_mm: [16, 20, 25, 30, 35, 40, 50, 60]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.hex_bolt
+    fn: make_hex_bolt
+    args: {size: "M8", length: 25}
+    cache: cache/m8_din933_L25.step
+  notes: DIN 933 M8 外六角螺栓（全螺纹）。
+
+M10_DIN933:
+  aliases: [M10-bolt, M10-hex-bolt, M10-DIN933, M10-ISO4017]
+  standard: "DIN 933 / ISO 4017"
+  type: hex-bolt-full-thread
+  thread:
+    d: 10.0
+    pitch: 1.5
+    unit: mm
+  head:
+    s: 16.0
+    k: 6.4
+  common_lengths_mm: [20, 25, 30, 35, 40, 50, 60, 80]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.fasteners.hex_bolt
+    fn: make_hex_bolt
+    args: {size: "M10", length: 30}
+    cache: cache/m10_din933_L30.step
+  notes: DIN 933 M10 外六角螺栓（全螺纹）。

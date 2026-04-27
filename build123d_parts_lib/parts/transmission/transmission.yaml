@@ -1,0 +1,392 @@
+# GT2 同步传动件 + 平键（Parallel Key）
+# Standards: GT2 (Gates Rubber / RepRap) + ISO 2491 / DIN 6885
+# 适用场景：机器人传动轴、3D 打印机运动系统
+# License: MIT
+#
+# 字段说明：
+#   teeth      = 齿数
+#   bore_d     = 中心孔径（mm）
+#   pitch_d    = 节径（mm）
+#   od         = 外径（mm）
+#   flange_od  = 法兰外径（mm）
+#   total_h    = 总高 = 8.0mm（2×法兰1.0 + 带宽6.0）
+#   length     = 带周长 / 键长（mm）
+
+# ──────────────────────────────────────────────────────
+# GT2 同步带轮（Timing Pulley）2mm 齿距
+# ──────────────────────────────────────────────────────
+
+GT2_PULLEY_16T_BORE5:
+  aliases: [gt2_pulley_16t_bore5, gt2-16t-5mm, gt2_16t_d5]
+  dimensions:
+    teeth: 16
+    bore_d: 5.0
+    pitch_d: 10.186
+    od: 9.678
+    flange_od: 12.178
+    belt_width: 6.0
+    total_h: 8.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_pulley_gt2
+    fn: make_gt2_pulley
+    args: {teeth: 16, bore_d: 5.0}
+    cache: cache/gt2_pulley_16t_bore5.step
+  notes: 16T GT2 带轮 ⌀5孔；小型机器人传动主动轮，电机轴 ⌀5 配套。
+
+GT2_PULLEY_16T_BORE8:
+  aliases: [gt2_pulley_16t_bore8, gt2-16t-8mm, gt2_16t_d8]
+  dimensions:
+    teeth: 16
+    bore_d: 8.0
+    pitch_d: 10.186
+    od: 9.678
+    flange_od: 12.178
+    belt_width: 6.0
+    total_h: 8.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_pulley_gt2
+    fn: make_gt2_pulley
+    args: {teeth: 16, bore_d: 8.0}
+    cache: cache/gt2_pulley_16t_bore8.step
+  notes: 16T GT2 带轮 ⌀8孔；NEMA17 电机轴（⌀5）需套筒时选此规格。
+
+GT2_PULLEY_20T_BORE5:
+  aliases: [gt2_pulley_20t_bore5, gt2-20t-5mm, gt2_20t_d5]
+  dimensions:
+    teeth: 20
+    bore_d: 5.0
+    pitch_d: 12.732
+    od: 12.224
+    flange_od: 14.724
+    belt_width: 6.0
+    total_h: 8.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_pulley_gt2
+    fn: make_gt2_pulley
+    args: {teeth: 20, bore_d: 5.0}
+    cache: cache/gt2_pulley_20t_bore5.step
+  notes: 20T GT2 带轮 ⌀5孔；3D 打印机 X/Y 轴标准主动轮，最常用规格。
+
+GT2_PULLEY_20T_BORE8:
+  aliases: [gt2_pulley_20t_bore8, gt2-20t-8mm, gt2_20t_d8]
+  dimensions:
+    teeth: 20
+    bore_d: 8.0
+    pitch_d: 12.732
+    od: 12.224
+    flange_od: 14.724
+    belt_width: 6.0
+    total_h: 8.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_pulley_gt2
+    fn: make_gt2_pulley
+    args: {teeth: 20, bore_d: 8.0}
+    cache: cache/gt2_pulley_20t_bore8.step
+  notes: 20T GT2 带轮 ⌀8孔；大功率步进/伺服电机传动常用。
+
+GT2_PULLEY_30T_BORE5:
+  aliases: [gt2_pulley_30t_bore5, gt2-30t-5mm, gt2_30t_d5]
+  dimensions:
+    teeth: 30
+    bore_d: 5.0
+    pitch_d: 19.099
+    od: 18.591
+    flange_od: 21.091
+    belt_width: 6.0
+    total_h: 8.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_pulley_gt2
+    fn: make_gt2_pulley
+    args: {teeth: 30, bore_d: 5.0}
+    cache: cache/gt2_pulley_30t_bore5.step
+  notes: 30T GT2 带轮 ⌀5孔；减速传动从动轮，速比 30/20=1.5x。
+
+GT2_PULLEY_30T_BORE8:
+  aliases: [gt2_pulley_30t_bore8, gt2-30t-8mm, gt2_30t_d8]
+  dimensions:
+    teeth: 30
+    bore_d: 8.0
+    pitch_d: 19.099
+    od: 18.591
+    flange_od: 21.091
+    belt_width: 6.0
+    total_h: 8.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_pulley_gt2
+    fn: make_gt2_pulley
+    args: {teeth: 30, bore_d: 8.0}
+    cache: cache/gt2_pulley_30t_bore8.step
+  notes: 30T GT2 带轮 ⌀8孔；机器人关节减速带轮，⌀8 中间轴。
+
+GT2_PULLEY_40T_BORE5:
+  aliases: [gt2_pulley_40t_bore5, gt2-40t-5mm, gt2_40t_d5]
+  dimensions:
+    teeth: 40
+    bore_d: 5.0
+    pitch_d: 25.465
+    od: 24.957
+    flange_od: 27.457
+    belt_width: 6.0
+    total_h: 8.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_pulley_gt2
+    fn: make_gt2_pulley
+    args: {teeth: 40, bore_d: 5.0}
+    cache: cache/gt2_pulley_40t_bore5.step
+  notes: 40T GT2 带轮 ⌀5孔；大减速比从动轮，速比 40/20=2x。
+
+GT2_PULLEY_40T_BORE8:
+  aliases: [gt2_pulley_40t_bore8, gt2-40t-8mm, gt2_40t_d8]
+  dimensions:
+    teeth: 40
+    bore_d: 8.0
+    pitch_d: 25.465
+    od: 24.957
+    flange_od: 27.457
+    belt_width: 6.0
+    total_h: 8.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_pulley_gt2
+    fn: make_gt2_pulley
+    args: {teeth: 40, bore_d: 8.0}
+    cache: cache/gt2_pulley_40t_bore8.step
+  notes: 40T GT2 带轮 ⌀8孔；大功率减速传动主轴，中型机器人传动轴。
+
+# ──────────────────────────────────────────────────────
+# GT2 同步带（Timing Belt）闭环，2mm 齿距，6mm 宽
+# ──────────────────────────────────────────────────────
+
+GT2_BELT_L110:
+  aliases: [gt2_belt_110, gt2-110, gt2_belt_l110]
+  dimensions:
+    length: 110.0
+    width: 6.0
+    thickness: 1.38
+    teeth_count: 55
+    pitch: 2.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_belt_gt2
+    fn: make_gt2_belt
+    args: {length: 110.0, width: 6.0, pulley_d: 12.7}
+    cache: cache/gt2_belt_l110.step
+  notes: 110mm 闭环 GT2 带；55T；适配小型机器人关节短传动。
+
+GT2_BELT_L158:
+  aliases: [gt2_belt_158, gt2-158, gt2_belt_l158]
+  dimensions:
+    length: 158.0
+    width: 6.0
+    thickness: 1.38
+    teeth_count: 79
+    pitch: 2.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_belt_gt2
+    fn: make_gt2_belt
+    args: {length: 158.0, width: 6.0, pulley_d: 12.7}
+    cache: cache/gt2_belt_l158.step
+  notes: 158mm 闭环 GT2 带；79T；Ender-3 等入门 FDM 打印机 X 轴常用。
+
+GT2_BELT_L200:
+  aliases: [gt2_belt_200, gt2-200, gt2_belt_l200]
+  dimensions:
+    length: 200.0
+    width: 6.0
+    thickness: 1.38
+    teeth_count: 100
+    pitch: 2.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_belt_gt2
+    fn: make_gt2_belt
+    args: {length: 200.0, width: 6.0, pulley_d: 12.7}
+    cache: cache/gt2_belt_l200.step
+  notes: 200mm 闭环 GT2 带；100T；最常见规格，3D 打印机/机器人通用。
+
+GT2_BELT_L280:
+  aliases: [gt2_belt_280, gt2-280, gt2_belt_l280]
+  dimensions:
+    length: 280.0
+    width: 6.0
+    thickness: 1.38
+    teeth_count: 140
+    pitch: 2.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_belt_gt2
+    fn: make_gt2_belt
+    args: {length: 280.0, width: 6.0, pulley_d: 12.7}
+    cache: cache/gt2_belt_l280.step
+  notes: 280mm 闭环 GT2 带；140T；中型机器人摆臂/底盘传动。
+
+GT2_BELT_L380:
+  aliases: [gt2_belt_380, gt2-380, gt2_belt_l380]
+  dimensions:
+    length: 380.0
+    width: 6.0
+    thickness: 1.38
+    teeth_count: 190
+    pitch: 2.0
+    unit: mm
+  source:
+    primary: https://www.gates.com/us/en/engineering-resources/engineering-tools/gt2-belt-and-pulley.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.timing_belt_gt2
+    fn: make_gt2_belt
+    args: {length: 380.0, width: 6.0, pulley_d: 12.7}
+    cache: cache/gt2_belt_l380.step
+  notes: 380mm 闭环 GT2 带；190T；大型机器人底盘长传动路径。
+
+# ──────────────────────────────────────────────────────
+# 平键 ISO 2491 / DIN 6885A（Parallel Key，圆头形）
+# ──────────────────────────────────────────────────────
+# 字段：width = 键宽 b，height = 键高 h，length = 键长 L（mm）
+
+KEY_3X3:
+  aliases: [key_3x3, parallel_key_3x3, din6885_3x3]
+  dimensions:
+    width: 3.0
+    height: 3.0
+    standard_lengths: [10, 12, 16, 20]
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/73975.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.key_parallel
+    fn: make_parallel_key
+    args: {width: 3.0, height: 3.0, length: 16.0}
+    cache: cache/key_3x3_l16.step
+  notes: ISO 2491 平键 3×3；适配 ⌀6~⌀8 轴；微型机器人关节传扭。
+
+KEY_4X4:
+  aliases: [key_4x4, parallel_key_4x4, din6885_4x4]
+  dimensions:
+    width: 4.0
+    height: 4.0
+    standard_lengths: [10, 12, 16, 20, 25]
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/73975.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.key_parallel
+    fn: make_parallel_key
+    args: {width: 4.0, height: 4.0, length: 16.0}
+    cache: cache/key_4x4_l16.step
+  notes: ISO 2491 平键 4×4；适配 ⌀8~⌀10 轴；小型传动轴标准配套。
+
+KEY_5X5:
+  aliases: [key_5x5, parallel_key_5x5, din6885_5x5]
+  dimensions:
+    width: 5.0
+    height: 5.0
+    standard_lengths: [16, 20, 25, 32, 40]
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/73975.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.key_parallel
+    fn: make_parallel_key
+    args: {width: 5.0, height: 5.0, length: 20.0}
+    cache: cache/key_5x5_l20.step
+  notes: ISO 2491 平键 5×5；适配 ⌀10~⌀12 轴；机器人传动轴最常用规格。
+
+KEY_6X6:
+  aliases: [key_6x6, parallel_key_6x6, din6885_6x6]
+  dimensions:
+    width: 6.0
+    height: 6.0
+    standard_lengths: [20, 25, 32, 40, 50]
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/73975.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.key_parallel
+    fn: make_parallel_key
+    args: {width: 6.0, height: 6.0, length: 25.0}
+    cache: cache/key_6x6_l25.step
+  notes: ISO 2491 平键 6×6；适配 ⌀14~⌀16 轴；中型减速机输出轴配套。
+
+KEY_8X7:
+  aliases: [key_8x7, parallel_key_8x7, din6885_8x7]
+  dimensions:
+    width: 8.0
+    height: 7.0
+    standard_lengths: [25, 32, 40, 50]
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/73975.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.transmission.key_parallel
+    fn: make_parallel_key
+    args: {width: 8.0, height: 7.0, length: 32.0}
+    cache: cache/key_8x7_l32.step
+  notes: ISO 2491 平键 8×7（宽≠高）；适配 ⌀18~⌀22 轴；大扭矩传动轴。

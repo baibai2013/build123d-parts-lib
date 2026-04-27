@@ -1,0 +1,492 @@
+# MR 系列微型深沟球轴承（Miniature Deep-Groove Ball Bearing）
+# Standards: ISO 15 / JIS B1521
+# 适用场景：四足机器人关节轴，D3/D4/D5 转轴配套
+# License: MIT
+#
+# 字段说明：
+#   d  = 内径（inner diameter）
+#   D  = 外径（outer diameter）
+#   B  = 宽度（width）
+#   dynamic_c_n  = 基本额定动载荷 C（N）
+#   static_c0_n  = 基本额定静载荷 C0（N）
+#   max_rpm_grease = 脂润滑极限转速
+
+MR63ZZ:
+  aliases: [mr63zz, mr63-zz, mr63-2z, mr-63zz]
+  shielding: 2Z
+  dimensions:
+    d: 3.0
+    D: 6.0
+    B: 2.5
+    unit: mm
+  load:
+    dynamic_c_n: 270
+    static_c0_n: 100
+    max_rpm_grease: 55000
+  weight_g: 0.3
+  fit:
+    press_fit_housing_d: 5.8   # 3D 打印压入孔推荐（过盈 0.2mm）
+    shaft_d: 3.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/thinwall/mr/index.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.mr_bearing
+    fn: make_mr_bearing
+    args: {model: "MR63ZZ"}
+    cache: cache/mr63zz.step
+  notes: D3 轴专用；四足机器人脚踝/指节首选。
+
+MR74ZZ:
+  aliases: [mr74zz, mr74-zz, mr74-2z]
+  shielding: 2Z
+  dimensions:
+    d: 4.0
+    D: 7.0
+    B: 2.5
+    unit: mm
+  load:
+    dynamic_c_n: 370
+    static_c0_n: 148
+    max_rpm_grease: 48000
+  weight_g: 0.4
+  fit:
+    press_fit_housing_d: 6.8
+    shaft_d: 4.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/thinwall/mr/index.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.mr_bearing
+    fn: make_mr_bearing
+    args: {model: "MR74ZZ"}
+    cache: cache/mr74zz.step
+  notes: D4 轴配套；机器狗膝关节/髋关节常用。
+
+MR84ZZ:
+  aliases: [mr84zz, mr84-zz, mr84-2z]
+  shielding: 2Z
+  dimensions:
+    d: 4.0
+    D: 8.0
+    B: 3.0
+    unit: mm
+  load:
+    dynamic_c_n: 490
+    static_c0_n: 196
+    max_rpm_grease: 44000
+  weight_g: 0.6
+  fit:
+    press_fit_housing_d: 7.8
+    shaft_d: 4.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/thinwall/mr/index.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.mr_bearing
+    fn: make_mr_bearing
+    args: {model: "MR84ZZ"}
+    cache: cache/mr84zz.step
+  notes: D4 轴，比 MR74ZZ 外径更大承载更高；大扭矩舵机关节推荐。
+
+MR85ZZ:
+  aliases: [mr85zz, mr85-zz, mr85-2z]
+  shielding: 2Z
+  dimensions:
+    d: 5.0
+    D: 8.0
+    B: 2.5
+    unit: mm
+  load:
+    dynamic_c_n: 490
+    static_c0_n: 196
+    max_rpm_grease: 40000
+  weight_g: 0.5
+  fit:
+    press_fit_housing_d: 7.8
+    shaft_d: 5.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/thinwall/mr/index.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.mr_bearing
+    fn: make_mr_bearing
+    args: {model: "MR85ZZ"}
+    cache: cache/mr85zz.step
+  notes: D5 轴专用；机器狗大腿/小腿主轴，配合 D5 精密钢销。
+
+MR104ZZ:
+  aliases: [mr104zz, mr104-zz, mr104-2z]
+  shielding: 2Z
+  dimensions:
+    d: 4.0
+    D: 10.0
+    B: 4.0
+    unit: mm
+  load:
+    dynamic_c_n: 780
+    static_c0_n: 340
+    max_rpm_grease: 34000
+  weight_g: 1.0
+  fit:
+    press_fit_housing_d: 9.8
+    shaft_d: 4.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/thinwall/mr/index.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.mr_bearing
+    fn: make_mr_bearing
+    args: {model: "MR104ZZ"}
+    cache: cache/mr104zz.step
+  notes: D4 轴，宽 4mm，承载为 MR74ZZ 两倍；髋部主轴推荐。
+
+# ──────────────────────────────────────────────────────
+# ISO 15 深沟球轴承（Deep-Groove Ball Bearing）
+# ──────────────────────────────────────────────────────
+
+608ZZ:
+  aliases: [608zz, 608-2z, 608-zz, 608rs]
+  shielding: 2Z
+  dimensions:
+    d: 8.0
+    D: 22.0
+    B: 7.0
+    unit: mm
+  load:
+    dynamic_c_n: 3350
+    static_c0_n: 1370
+    max_rpm_grease: 17000
+  weight_g: 12.0
+  fit:
+    press_fit_housing_d: 21.8
+    shaft_d: 8.0
+  source:
+    primary: https://www.skf.com/sg/products/rolling-bearings/ball-bearings/deep-groove-ball-bearings/productid-608-2Z
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.ball_bearing
+    fn: make_ball_bearing
+    args: {model: "608ZZ"}
+    cache: cache/608zz.step
+  notes: 滑板轮毂标准轴承；D8 轴，机器人关节/传动轮常用。
+
+624ZZ:
+  aliases: [624zz, 624-2z, 624-zz]
+  shielding: 2Z
+  dimensions:
+    d: 4.0
+    D: 13.0
+    B: 5.0
+    unit: mm
+  load:
+    dynamic_c_n: 1050
+    static_c0_n: 360
+    max_rpm_grease: 34000
+  weight_g: 2.5
+  fit:
+    press_fit_housing_d: 12.8
+    shaft_d: 4.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/deepgroove/index.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.ball_bearing
+    fn: make_ball_bearing
+    args: {model: "624ZZ"}
+    cache: cache/624zz.step
+  notes: D4 轴微型深沟球；四足机器人关节/小型减速机输出轴常用。
+
+625ZZ:
+  aliases: [625zz, 625-2z, 625-zz]
+  shielding: 2Z
+  dimensions:
+    d: 5.0
+    D: 16.0
+    B: 5.0
+    unit: mm
+  load:
+    dynamic_c_n: 1730
+    static_c0_n: 680
+    max_rpm_grease: 28000
+  weight_g: 4.0
+  fit:
+    press_fit_housing_d: 15.8
+    shaft_d: 5.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/deepgroove/index.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.ball_bearing
+    fn: make_ball_bearing
+    args: {model: "625ZZ"}
+    cache: cache/625zz.step
+  notes: D5 轴，3D 打印传动轮与舵机输出轴常配此型。
+
+626ZZ:
+  aliases: [626zz, 626-2z, 626-zz]
+  shielding: 2Z
+  dimensions:
+    d: 6.0
+    D: 19.0
+    B: 6.0
+    unit: mm
+  load:
+    dynamic_c_n: 2340
+    static_c0_n: 980
+    max_rpm_grease: 24000
+  weight_g: 7.0
+  fit:
+    press_fit_housing_d: 18.8
+    shaft_d: 6.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/deepgroove/index.html
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.ball_bearing
+    fn: make_ball_bearing
+    args: {model: "626ZZ"}
+    cache: cache/626zz.step
+  notes: D6 轴，中型机器人驱动关节常用。
+
+6000ZZ:
+  aliases: [6000zz, 6000-2z, 6000-zz]
+  shielding: 2Z
+  dimensions:
+    d: 10.0
+    D: 26.0
+    B: 8.0
+    unit: mm
+  load:
+    dynamic_c_n: 4620
+    static_c0_n: 1960
+    max_rpm_grease: 15000
+  weight_g: 18.0
+  fit:
+    press_fit_housing_d: 25.8
+    shaft_d: 10.0
+  source:
+    primary: https://www.skf.com/sg/products/rolling-bearings/ball-bearings/deep-groove-ball-bearings/productid-6000-2Z
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.ball_bearing
+    fn: make_ball_bearing
+    args: {model: "6000ZZ"}
+    cache: cache/6000zz.step
+  notes: D10 轴，步行机器人髋部/膝部主轴承。
+
+6001-2RS:
+  aliases: [6001-2rs, 60012rs, 6001rs, 6001-rs]
+  shielding: 2RS
+  dimensions:
+    d: 12.0
+    D: 28.0
+    B: 8.0
+    unit: mm
+  load:
+    dynamic_c_n: 5590
+    static_c0_n: 2550
+    max_rpm_grease: 13000
+  weight_g: 22.0
+  fit:
+    press_fit_housing_d: 27.8
+    shaft_d: 12.0
+  source:
+    primary: https://www.skf.com/sg/products/rolling-bearings/ball-bearings/deep-groove-ball-bearings/productid-6001-2RSH
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.ball_bearing
+    fn: make_ball_bearing
+    args: {model: "6001-2RS"}
+    cache: cache/6001_2rs.step
+  notes: D12 轴，橡胶密封（2RS）防尘防水；户外机器人关节推荐。
+
+6002ZZ:
+  aliases: [6002zz, 6002-2z, 6002-zz]
+  shielding: 2Z
+  dimensions:
+    d: 15.0
+    D: 32.0
+    B: 9.0
+    unit: mm
+  load:
+    dynamic_c_n: 7280
+    static_c0_n: 3400
+    max_rpm_grease: 11000
+  weight_g: 35.0
+  fit:
+    press_fit_housing_d: 31.8
+    shaft_d: 15.0
+  source:
+    primary: https://www.skf.com/sg/products/rolling-bearings/ball-bearings/deep-groove-ball-bearings/productid-6002-2Z
+    confidence: 5
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.ball_bearing
+    fn: make_ball_bearing
+    args: {model: "6002ZZ"}
+    cache: cache/6002zz.step
+  notes: D15 轴，大型机器人腰部/底盘主轴承。
+
+# ──────────────────────────────────────────────────────
+# 法兰微型深沟球轴承（Flanged Miniature Deep-Groove Ball Bearing）
+# ──────────────────────────────────────────────────────
+# 额外字段：
+#   flange_D = 法兰外径（mm）
+#   flange_t = 法兰厚度（mm）
+# ──────────────────────────────────────────────────────
+
+F688ZZ:
+  aliases: [f688zz, f688-zz, f688-2z]
+  shielding: 2Z
+  dimensions:
+    d: 8.0
+    D: 16.0
+    B: 5.0
+    flange_D: 17.5
+    flange_t: 1.0
+    unit: mm
+  fit:
+    press_fit_housing_d: 15.8
+    shaft_d: 8.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/flanged/index.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.flanged_bearing
+    fn: make_flanged_bearing
+    args: {model: "F688ZZ"}
+    cache: cache/f688zz.step
+  notes: D8 法兰轴承；法兰定位方便装配，免孔肩挡圈。
+
+F693ZZ:
+  aliases: [f693zz, f693-zz, f693-2z]
+  shielding: 2Z
+  dimensions:
+    d: 3.0
+    D: 8.0
+    B: 3.0
+    flange_D: 9.2
+    flange_t: 0.6
+    unit: mm
+  fit:
+    press_fit_housing_d: 7.8
+    shaft_d: 3.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/flanged/index.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.flanged_bearing
+    fn: make_flanged_bearing
+    args: {model: "F693ZZ"}
+    cache: cache/f693zz.step
+  notes: D3 最小法兰轴承；四足机器人指节/脚踝超小空间适用。
+
+F623ZZ:
+  aliases: [f623zz, f623-zz, f623-2z]
+  shielding: 2Z
+  dimensions:
+    d: 3.0
+    D: 10.0
+    B: 4.0
+    flange_D: 11.2
+    flange_t: 0.8
+    unit: mm
+  fit:
+    press_fit_housing_d: 9.8
+    shaft_d: 3.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/flanged/index.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.flanged_bearing
+    fn: make_flanged_bearing
+    args: {model: "F623ZZ"}
+    cache: cache/f623zz.step
+  notes: D3 轴，D10 外壳，比 F693ZZ 承载更高；关节轴端定位。
+
+F624ZZ:
+  aliases: [f624zz, f624-zz, f624-2z]
+  shielding: 2Z
+  dimensions:
+    d: 4.0
+    D: 13.0
+    B: 5.0
+    flange_D: 14.5
+    flange_t: 1.0
+    unit: mm
+  fit:
+    press_fit_housing_d: 12.8
+    shaft_d: 4.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/flanged/index.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.flanged_bearing
+    fn: make_flanged_bearing
+    args: {model: "F624ZZ"}
+    cache: cache/f624zz.step
+  notes: D4 法兰轴承；适合薄壁 3D 打印关节件轴向限位。
+
+F625ZZ:
+  aliases: [f625zz, f625-zz, f625-2z]
+  shielding: 2Z
+  dimensions:
+    d: 5.0
+    D: 16.0
+    B: 5.0
+    flange_D: 17.5
+    flange_t: 1.0
+    unit: mm
+  fit:
+    press_fit_housing_d: 15.8
+    shaft_d: 5.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/flanged/index.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.flanged_bearing
+    fn: make_flanged_bearing
+    args: {model: "F625ZZ"}
+    cache: cache/f625zz.step
+  notes: D5 法兰轴承；舵机输出轴侧板压入定位首选。
+
+F684ZZ:
+  aliases: [f684zz, f684-zz, f684-2z]
+  shielding: 2Z
+  dimensions:
+    d: 4.0
+    D: 9.0
+    B: 2.5
+    flange_D: 10.3
+    flange_t: 0.6
+    unit: mm
+  fit:
+    press_fit_housing_d: 8.8
+    shaft_d: 4.0
+  source:
+    primary: https://www.nsk.com/products/miniaturebearing/flanged/index.html
+    confidence: 4
+    last_verified: 2026-04-27
+  factory:
+    module: build123d_parts_lib.parts.bearings.flanged_bearing
+    fn: make_flanged_bearing
+    args: {model: "F684ZZ"}
+    cache: cache/f684zz.step
+  notes: D4 超薄法兰轴承（B=2.5mm）；紧凑轴向空间首选。
