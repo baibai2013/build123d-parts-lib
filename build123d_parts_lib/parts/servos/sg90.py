@@ -63,12 +63,6 @@ def make_sg90() -> Part:
                 Circle(SCREW_D / 2)
         extrude(amount=-(EAR_T + 0.2), mode=Mode.SUBTRACT)
 
-        # 衬套圈（嵌入机体顶面，不凸出）
-        with BuildSketch(Plane.XY.offset(BODY_H)):
-            Circle(COLLAR_R)
-            Circle(SHAFT_R, mode=Mode.SUBTRACT)
-        extrude(amount=-COLLAR_DEPTH, mode=Mode.SUBTRACT)
-
         # 输出轴
         with BuildSketch(Plane.XY.offset(BODY_H)):
             with Locations((SHAFT_X_OFF, 0)):
