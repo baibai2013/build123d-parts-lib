@@ -68,6 +68,18 @@ mass_g = servo.volume / 1000 * densities["plastics"]["PLA"]
 |------|---------|------------|
 | SG90 舵机 | `parts.servos.sg90:make_sg90` | `parts/servos/cache/sg90.step` |
 | M3 ISO 4762 螺丝 | `parts.fasteners.m3_iso4762:make_m3_screw` | `parts/fasteners/cache/m3_iso4762_L10.step` |
+| Hex Bolt DIN 933 | `parts.fasteners.hex_bolt:make_hex_bolt` | `parts/fasteners/cache/hex_bolt.step` |
+
+> **紧固件几何简化说明**：本库所有紧固件（螺栓、螺钉等）均采用**光杆**表示，不建模真实螺纹。
+> YAML 中保留 `pitch` 参数供螺纹孔计算用，装配仿真精度足够。
+> 如需带螺纹的标准 STEP 文件，可从以下来源下载：
+>
+> | 平台 | 地址 | 说明 |
+> |------|------|------|
+> | McMaster-Carr | [mcmaster.com](https://www.mcmaster.com) | 质量最高，带真实螺纹，推荐首选 |
+> | TraceParts | [traceparts.com](https://www.traceparts.com) | 注册免费，规格最全 |
+> | PARTcommunity | [partcommunity.com](https://partcommunity.com) | 免费，多格式支持 |
+> | 3DFindit | [3dfindit.com](https://www.3dfindit.com) | 聚合多厂商含 Bossard |
 
 ### 🔧 B. `modules/` — 功能模块
 
