@@ -1,0 +1,51 @@
+# 材料密度表（g/cm³）
+# 用于体积→重量估算：mass_g = volume_cm3 × density
+# 注意：build123d 的 part.volume 单位是 mm³，换算 volume_cm3 = volume_mm3 / 1000
+#
+# 来源：标准工程手册 + 厂商 datasheet 均值
+# License: MIT
+
+plastics:
+  PLA:    1.24
+  ABS:    1.05
+  PETG:   1.27
+  TPU:    1.21
+  NYLON:  1.14
+  PC:     1.20    # PolyCarbonate
+  ASA:    1.07
+  POM:    1.41    # Delrin / Acetal
+  PEEK:   1.32
+
+photopolymers:
+  standard_sla:  1.12
+  tough_sla:     1.15
+  flexible_sla:  1.10
+  castable_sla:  1.05
+
+metals:
+  aluminum_6061:  2.70
+  aluminum_7075:  2.81
+  steel_304:      7.93
+  steel_carbon:   7.85
+  stainless_316:  8.00
+  brass:          8.50
+  copper:         8.96
+  titanium_gr2:   4.51
+  zinc:           7.14
+
+woods:          # kg/m³ ÷ 1000
+  plywood:       0.60
+  mdf:           0.75
+  pine:          0.50
+  bamboo:        0.75
+
+notes: |
+  使用示例（build123d）:
+      import yaml, pathlib
+      from build123d_parts_lib.parts.servos.sg90 import make_sg90
+      servo = make_sg90()
+      densities = yaml.safe_load(
+          pathlib.Path(__file__).parent.parent.joinpath("materials/densities.yaml").read_text()
+      )
+      mass_g = servo.volume / 1000 * densities["plastics"]["PLA"]
+      print(f"PLA 打印 SG90 仿真件重量 ≈ {mass_g:.1f} g")
