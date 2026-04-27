@@ -4,32 +4,37 @@
 SG90:
   aliases: [sg90, tower-pro-sg90, mini-servo-9g, 9g-servo]
   body:
-    length: 22.8
-    width:  12.2
-    height: 22.7
+    length: 23.0    # ref STEP 实测（规格书 22.8）
+    width:  12.6    # ref STEP 实测（规格书 12.2）
+    height: 27.9    # ref STEP 实测含底部连接器凸台（规格书仅电机壳 22.7）
     unit:   mm
   mount:
-    ear_width_total: 32.2
-    ear_thickness:    2.5
-    ear_z_offset:    15.5
-    screw_hole_d:     2.0
-    screw_pitch:     28.0
+    ear_width_total: 29.9   # ref STEP 实测（规格书 32.2）
+    ear_thickness:    2.4   # ref STEP 实测（规格书 2.5）
+    ear_z_from_body_top: 8.5   # 耳朵上表面距机体顶面（实测）
+    screw_hole_d:     2.1   # ref STEP 实测（规格书 2.0）
+    screw_pitch:     27.8   # ref STEP 实测（规格书 28.0）
   output:
-    shaft_height_from_body_top: 5.0
-    total_height: 27.7
+    shaft_r:    2.5
+    shaft_height_from_body_top: 3.2   # ref STEP 实测（规格书 5.0）
+    shaft_x_offset: -1.8              # 从机体中心偏移（负=偏向连接器侧）
+    collar_r:   6.3                   # 输出轴衬套外径（实测）
+    collar_depth: 4.2                 # 衬套嵌入机体顶面深度（实测）
+    total_height: 31.1                # 含输出轴总高（ref STEP bbox）
     spline: "25T"
   torque_kg_cm: 1.2
   weight_g: 9.0
   source:
     primary: https://servodatabase.com/servo/towerpro/sg-90
-    confidence: 4
-    last_verified: 2026-04-27
+    ref_step: references/sg90-step/sg90_ref.step
+    ref_step_tool: "Autodesk Translation Framework v14.24 / ST-Developer v20.1"
+    confidence: 5
+    last_verified: 2026-04-28
   factory:
-    module: build123d_parts_lib.parts.servos.standard_servo
-    fn: make_servo
-    args: {model: SG90}
+    module: build123d_parts_lib.parts.servos.sg90
+    fn: make_sg90
     cache: cache/sg90.step
-  notes: 量产公差 ±0.3mm；FDM 安装腔每侧留 +0.2~0.3mm 间隙。
+  notes: 参数已据 ref STEP 实测更新；量产公差 ±0.3mm；FDM 安装腔每侧留 +0.2~0.3mm 间隙。
 
 MG90S:
   aliases: [mg90s, mg90-s, metal-gear-9g]
