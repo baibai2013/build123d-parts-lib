@@ -33,6 +33,7 @@ build123d 参数化紧固件库，用于 CAD 装配预览、3D 打印参考与�
 | 模块 | 标准 | 规格 | 入口函数 |
 |------|------|------|---------|
 | `hex_bolt.py` | DIN 933 / ISO 4017 | M4 – M10 | `make_hex_bolt(size, length)` |
+| `screw_carriage.py` | DIN 603 / ISO 8678 | M4 / M5 | `make_carriage_bolt(size, length)` |
 
 ### 螺母 · Nuts
 
@@ -57,6 +58,25 @@ build123d 参数化紧固件库，用于 CAD 装配预览、3D 打印参考与�
 |------|------|------|---------|
 | `threaded_insert.py` | Ruthex RX / InsertEZ（FDM 热熔） | M2.5 – M5 | `make_threaded_insert(size)` |
 
+### 隔离柱 · Standoffs
+
+| 模块 | 标准 | 规格 | 入口函数 |
+|------|------|------|---------|
+| `standoff_hex.py` | 市场惯例 | M3 / M4，FF / MF | `make_hex_standoff(size, length, style)` |
+
+### 紧定螺丝 · Set Screws / Grub Screws
+
+| 模块 | 标准 | 端型 | 规格 | 入口函数 |
+|------|------|------|------|---------|
+| `screw_set.py` | ISO 4026 / 4028 / 4029 | flat / cone / cup | M3 / M4 / M5 | `make_set_screw(size, tip, length)` |
+
+### 其他 · Others
+
+| 模块 | 标准 | 规格 | 入口函数 |
+|------|------|------|---------|
+| `rivet_nut.py` | 市场惯例 | M3 / M4 | `make_rivet_nut(size)` |
+| `pin_spring.py` | DIN 1481 | D3 / D4 | `make_spring_pin(nominal_d, length)` |
+
 ---
 
 ## 3. 快速上手 · Quick Start
@@ -68,6 +88,11 @@ from build123d_parts_lib.parts.fasteners.nut_hex           import make_hex_nut
 from build123d_parts_lib.parts.fasteners.nut_cap           import make_cap_nut
 from build123d_parts_lib.parts.fasteners.nut_tslot         import make_tslot_nut
 from build123d_parts_lib.parts.fasteners.washer            import make_washer
+from build123d_parts_lib.parts.fasteners.screw_carriage import make_carriage_bolt
+from build123d_parts_lib.parts.fasteners.standoff_hex   import make_hex_standoff
+from build123d_parts_lib.parts.fasteners.screw_set      import make_set_screw
+from build123d_parts_lib.parts.fasteners.rivet_nut      import make_rivet_nut
+from build123d_parts_lib.parts.fasteners.pin_spring     import make_spring_pin
 from build123d import export_step
 
 # ISO 4762 内六角圆柱头螺丝
@@ -88,6 +113,17 @@ tnut = make_tslot_nut(size="M4")
 
 # 平垫
 washer = make_washer(size="M4", type_="flat")
+
+# 马车螺栓
+carriage = make_carriage_bolt(size="M4", length=20)
+# 六角铜柱
+standoff = make_hex_standoff(size="M4", length=10, style="FF")
+# 紧定螺丝（杯端）
+set_s = make_set_screw(size="M4", tip="cup", length=8)
+# 拉铆螺母
+rivet = make_rivet_nut(size="M4")
+# 弹簧销
+spring = make_spring_pin(nominal_d=4, length=12)
 ```
 
 几何约定（所有零件通用）：
@@ -119,6 +155,11 @@ washer = make_washer(size="M4", type_="flat")
 | `nut_tslot.py` | 2020/3030 铝型材 T 型螺母（T 截面体：宽头 + 窄茎 + 贯通内螺纹） |
 | `washer.py` | 垫圈：ISO 7089 平垫 / GB/T 93 弹垫（对角切口） |
 | `threaded_insert.py` | FDM 热熔嵌件（阶梯外形 + 上段环形倒刺 + 内螺纹） |
+| `screw_carriage.py` | DIN 603 马车螺栓（圆头蘑菇顶 + 方颈防转 + ISO 螺纹杆） |
+| `standoff_hex.py` | 六角铜柱：FF（双通内螺纹）/ MF（一端内螺纹 + 一端外螺纹杆） |
+| `screw_set.py` | 内六角紧定螺丝：flat（平端）/ cone（锥端）/ cup（杯端） |
+| `rivet_nut.py` | 拉铆螺母（安装前形态：圆柱主体 + 顶部法兰盘 + 内螺纹） |
+| `pin_spring.py` | 弹簧销 DIN 1481（C 形截面，纵向缝隙，开口圆管） |
 | `fasteners.yaml` | 规格数据 + factory 注册表（数据源 + 置信度 + 生成路径） |
 | `cache/` | `rebuild_cache.py` 生成的 STEP / PNG 产物 |
 
@@ -230,39 +271,6 @@ python3 scripts/rebuild_cache.py --filter M4 --preview
 **共用工具**：
 - 内 / 外螺纹 → `from ._thread_utils import make_external_thread, make_internal_thread`
 - 六角外接圆半径 → `r = s / math.sqrt(3)`
-
----
-
-## 8. 计划支持的类型（待补齐）· Planned Additions
-
-以下类型在实际装配建模中较常见，尚未实现：
-
-### 紧定螺丝 · Set Screws / Grub Screws
-
-| 类型 | 标准 | 端部形式 |
-|------|------|---------|
-| 内六角紧定螺丝（平端） | ISO 4026 | 平头 |
-| 内六角紧定螺丝（锥端） | ISO 4028 | 锥尖 |
-| 内六角紧定螺丝（杯形端） | ISO 4029 | 杯形凹 |
-
-> 常见于电机轴联轴器、皮带轮等轴孔固定场景，M3/M4/M5 高频使用。
-
-### 六角铜柱隔离柱 · Hex Standoffs / Spacers
-
-| 类型 | 说明 |
-|------|------|
-| 双通（内螺纹两端） | 用于 PCB 叠层、面板固定 |
-| 单通（一端内螺纹 + 一端外螺纹） | 用于螺丝柱延伸 |
-
-> 3D 打印 + PCB 装配中极高频使用（M3 铜柱 H=5/8/10/12mm）。
-
-### 其他紧固件
-
-| 类型 | 标准 | 说明 |
-|------|------|------|
-| 圆头方颈螺栓（马车螺栓） | DIN 603 | 圆头 + 方颈防转，木结构与型材连接 |
-| 盲孔铆螺母（拉铆螺母） | — | 薄板件内螺纹，M3/M4 常用 |
-| 弹簧销（卷销） | DIN 1481 | 轴向弹性定位销 |
 
 ---
 
