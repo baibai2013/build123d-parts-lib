@@ -69,8 +69,7 @@ def _load_specs() -> dict[str, CarriageBoltSpec]:
     """从 _entries_standoff.yaml 读取 DIN 603 规格。
     Load DIN 603 carriage bolt specs from _entries_standoff.yaml.
     """
-    repo_root = Path(__file__).parent.parent.parent.parent
-    yaml_path = repo_root / "_entries_standoff.yaml"
+    yaml_path = Path(__file__).parent / "fasteners.yaml"
 
     try:
         raw = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))

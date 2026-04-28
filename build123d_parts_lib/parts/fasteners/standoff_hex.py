@@ -71,8 +71,7 @@ def _load_specs() -> dict[str, StandoffSpec]:
     """
     # _entries_standoff.yaml is at repo root, two levels above this file
     # _entries_standoff.yaml 位于仓库根目录，本文件向上两级
-    repo_root = Path(__file__).parent.parent.parent.parent
-    yaml_path = repo_root / "_entries_standoff.yaml"
+    yaml_path = Path(__file__).parent / "fasteners.yaml"
 
     try:
         raw = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))

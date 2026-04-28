@@ -1782,3 +1782,467 @@ M5_NUT_TSLOT2020:
     args: {size: "M5"}
     cache: cache/m5_nut_tslot2020.step
   notes: 3030 铝型材 T 型螺母 M5；适配 8mm 槽口。
+
+# ─────────────────────────────────────────────────────────────────
+# 内六角紧定螺丝  ISO 4026 / 4028 / 4029  (set screws)
+# ─────────────────────────────────────────────────────────────────
+M3_ISO4026:
+  aliases: [M3-set-flat, M3-ISO4026, M3-DIN913, m3-grub-flat]
+  standard: "ISO 4026 / DIN 913"
+  type: socket-set-screw-flat
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    s: 1.5        # 内六角对边宽 / hex socket across-flats
+  tip:
+    style: flat
+    dp_max: 2.00  # 平端面外径上限 / flat face dp max
+  common_lengths_mm: [4, 6, 8, 10]
+  source:
+    primary: https://fullerfasteners.com/tech/iso-4026-specifications-hex-socket-set-screws-with-flat-point/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_set
+    fn: make_set_screw
+    args: {size: "M3", tip: "flat", length: 6}
+    cache: cache/m3_set_flat_L6.step
+  notes: ISO 4026 M3 内六角平端紧定螺丝。
+M4_ISO4026:
+  aliases: [M4-set-flat, M4-ISO4026, M4-DIN913, m4-grub-flat]
+  standard: "ISO 4026 / DIN 913"
+  type: socket-set-screw-flat
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    s: 2.0
+  tip:
+    style: flat
+    dp_max: 2.50
+  common_lengths_mm: [4, 6, 8, 10, 12]
+  source:
+    primary: https://fullerfasteners.com/tech/iso-4026-specifications-hex-socket-set-screws-with-flat-point/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_set
+    fn: make_set_screw
+    args: {size: "M4", tip: "flat", length: 8}
+    cache: cache/m4_set_flat_L8.step
+  notes: ISO 4026 M4 内六角平端紧定螺丝。
+M5_ISO4026:
+  aliases: [M5-set-flat, M5-ISO4026, M5-DIN913, m5-grub-flat]
+  standard: "ISO 4026 / DIN 913"
+  type: socket-set-screw-flat
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    s: 2.5
+  tip:
+    style: flat
+    dp_max: 3.50
+  common_lengths_mm: [5, 8, 10, 12, 16]
+  source:
+    primary: https://fullerfasteners.com/tech/iso-4026-specifications-hex-socket-set-screws-with-flat-point/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_set
+    fn: make_set_screw
+    args: {size: "M5", tip: "flat", length: 8}
+    cache: cache/m5_set_flat_L8.step
+  notes: ISO 4026 M5 内六角平端紧定螺丝。
+M3_ISO4028:
+  aliases: [M3-set-cone, M3-ISO4028, m3-grub-cone]
+  standard: "ISO 4028 (per user task) / cone point"
+  type: socket-set-screw-cone
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    s: 1.5
+  tip:
+    style: cone
+    included_angle_deg: 90
+  common_lengths_mm: [4, 6, 8, 10]
+  source:
+    primary: https://fullerfasteners.com/tech/iso-4027-specifications-hex-socket-set-screws-with-cone-point/
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_set
+    fn: make_set_screw
+    args: {size: "M3", tip: "cone", length: 6}
+    cache: cache/m3_set_cone_L6.step
+  notes: ISO 4028 M3 内六角锥端紧定螺丝（注：ISO 官方 cone point 为 ISO 4027 / DIN 914）。
+M4_ISO4028:
+  aliases: [M4-set-cone, M4-ISO4028, m4-grub-cone]
+  standard: "ISO 4028 (per user task) / cone point"
+  type: socket-set-screw-cone
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    s: 2.0
+  tip:
+    style: cone
+    included_angle_deg: 90
+  common_lengths_mm: [4, 6, 8, 10, 12]
+  source:
+    primary: https://fullerfasteners.com/tech/iso-4027-specifications-hex-socket-set-screws-with-cone-point/
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_set
+    fn: make_set_screw
+    args: {size: "M4", tip: "cone", length: 8}
+    cache: cache/m4_set_cone_L8.step
+  notes: ISO 4028 M4 内六角锥端紧定螺丝（注：ISO 官方 cone point 为 ISO 4027 / DIN 914）。
+M5_ISO4028:
+  aliases: [M5-set-cone, M5-ISO4028, m5-grub-cone]
+  standard: "ISO 4028 (per user task) / cone point"
+  type: socket-set-screw-cone
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    s: 2.5
+  tip:
+    style: cone
+    included_angle_deg: 90
+  common_lengths_mm: [5, 8, 10, 12, 16]
+  source:
+    primary: https://fullerfasteners.com/tech/iso-4027-specifications-hex-socket-set-screws-with-cone-point/
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_set
+    fn: make_set_screw
+    args: {size: "M5", tip: "cone", length: 8}
+    cache: cache/m5_set_cone_L8.step
+  notes: ISO 4028 M5 内六角锥端紧定螺丝（注：ISO 官方 cone point 为 ISO 4027 / DIN 914）。
+M3_ISO4029:
+  aliases: [M3-set-cup, M3-ISO4029, M3-DIN916, m3-grub-cup]
+  standard: "ISO 4029 / DIN 916"
+  type: socket-set-screw-cup
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    s: 1.5
+  tip:
+    style: cup
+    dv_max: 1.4
+  common_lengths_mm: [4, 6, 8, 10]
+  source:
+    primary: https://fullerfasteners.com/tech/iso-4029-specifications-hex-socket-set-screws-with-cup-point/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_set
+    fn: make_set_screw
+    args: {size: "M3", tip: "cup", length: 6}
+    cache: cache/m3_set_cup_L6.step
+  notes: ISO 4029 M3 内六角杯端紧定螺丝。
+M4_ISO4029:
+  aliases: [M4-set-cup, M4-ISO4029, M4-DIN916, m4-grub-cup]
+  standard: "ISO 4029 / DIN 916"
+  type: socket-set-screw-cup
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    s: 2.0
+  tip:
+    style: cup
+    dv_max: 2.0
+  common_lengths_mm: [4, 6, 8, 10, 12]
+  source:
+    primary: https://fullerfasteners.com/tech/iso-4029-specifications-hex-socket-set-screws-with-cup-point/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_set
+    fn: make_set_screw
+    args: {size: "M4", tip: "cup", length: 8}
+    cache: cache/m4_set_cup_L8.step
+  notes: ISO 4029 M4 内六角杯端紧定螺丝；机器人/伺服臂常用规格。
+M5_ISO4029:
+  aliases: [M5-set-cup, M5-ISO4029, M5-DIN916, m5-grub-cup]
+  standard: "ISO 4029 / DIN 916"
+  type: socket-set-screw-cup
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    s: 2.5
+  tip:
+    style: cup
+    dv_max: 2.5
+  common_lengths_mm: [5, 8, 10, 12, 16]
+  source:
+    primary: https://fullerfasteners.com/tech/iso-4029-specifications-hex-socket-set-screws-with-cup-point/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_set
+    fn: make_set_screw
+    args: {size: "M5", tip: "cup", length: 8}
+    cache: cache/m5_set_cup_L8.step
+  notes: ISO 4029 M5 内六角杯端紧定螺丝。
+
+# ─────────────────────────────────────────────────────────────────
+# 六角铜柱  /  马车螺栓 DIN 603  (standoffs + carriage bolt)
+# ─────────────────────────────────────────────────────────────────
+M3_STANDOFF_FF_L10:
+  aliases: [M3-standoff-FF-10, M3-spacer-FF-10]
+  standard: "Market convention"
+  type: hex-standoff-ff
+  thread:
+    d: 3.0
+    pitch: 0.50
+    unit: mm
+  dimensions:
+    s: 5.5            # 对边宽 / across-flats
+    length: 10.0      # 总长 / total length
+  common_lengths_mm: [5, 8, 10, 12, 16, 20]
+  factory:
+    module: build123d_parts_lib.parts.fasteners.standoff_hex
+    fn: make_hex_standoff
+    args: {size: "M3", length: 10.0, style: "FF"}
+    cache: cache/m3_standoff_ff_L10.step
+  source:
+    primary: https://bulkman3d.com/product/hd0042-1/
+    confidence: 3
+    last_verified: 2026-04-28
+  notes: "M3 hex standoff, female-female (双通), L=10mm. [unverified — market convention]"
+M3_STANDOFF_MF_L10:
+  aliases: [M3-standoff-MF-10]
+  standard: "Market convention"
+  type: hex-standoff-mf
+  thread:
+    d: 3.0
+    pitch: 0.50
+    unit: mm
+  dimensions:
+    s: 5.5
+    length: 10.0
+    stud_length: 6.0   # 外螺纹小杆长度
+  common_lengths_mm: [5, 8, 10, 12, 16, 20]
+  factory:
+    module: build123d_parts_lib.parts.fasteners.standoff_hex
+    fn: make_hex_standoff
+    args: {size: "M3", length: 10.0, style: "MF"}
+    cache: cache/m3_standoff_mf_L10.step
+  source:
+    primary: https://bulkman3d.com/product/hd0042-1/
+    confidence: 3
+    last_verified: 2026-04-28
+  notes: "M3 hex standoff, male-female (单通), L=10mm + 6mm male stud. [unverified — market convention]"
+M4_STANDOFF_FF_L10:
+  aliases: [M4-standoff-FF-10]
+  standard: "Market convention"
+  type: hex-standoff-ff
+  thread:
+    d: 4.0
+    pitch: 0.70
+    unit: mm
+  dimensions:
+    s: 7.0
+    length: 10.0
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+  factory:
+    module: build123d_parts_lib.parts.fasteners.standoff_hex
+    fn: make_hex_standoff
+    args: {size: "M4", length: 10.0, style: "FF"}
+    cache: cache/m4_standoff_ff_L10.step
+  source:
+    primary: https://bulkman3d.com/product/hd0042-1/
+    confidence: 3
+    last_verified: 2026-04-28
+  notes: "M4 hex standoff, female-female (双通), L=10mm. [unverified — market convention]"
+M4_STANDOFF_MF_L10:
+  aliases: [M4-standoff-MF-10]
+  standard: "Market convention"
+  type: hex-standoff-mf
+  thread:
+    d: 4.0
+    pitch: 0.70
+    unit: mm
+  dimensions:
+    s: 7.0
+    length: 10.0
+    stud_length: 8.0
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+  factory:
+    module: build123d_parts_lib.parts.fasteners.standoff_hex
+    fn: make_hex_standoff
+    args: {size: "M4", length: 10.0, style: "MF"}
+    cache: cache/m4_standoff_mf_L10.step
+  source:
+    primary: https://bulkman3d.com/product/hd0042-1/
+    confidence: 3
+    last_verified: 2026-04-28
+  notes: "M4 hex standoff, male-female (单通), L=10mm + 8mm male stud. [unverified — market convention]"
+M4_DIN603:
+  aliases: [M4-DIN603, M4-carriage-bolt, M4-coach-bolt]
+  standard: "DIN 603 (extended, market convention)"
+  type: carriage-bolt
+  thread:
+    d: 4.0
+    pitch: 0.70
+    unit: mm
+  head:
+    dk: 8.0       # 圆头外径 / round head outer diameter
+    k:  2.4       # 头高 / head height
+  dimensions:
+    sq:   4.0     # 方颈对边 / square neck side length
+    sq_h: 2.4     # 方颈高度 / square neck depth
+  common_lengths_mm: [16, 20, 25, 30]
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_carriage
+    fn: make_carriage_bolt
+    args: {size: "M4", length: 20.0}
+    cache: cache/m4_din603_L20.step
+  source:
+    primary: https://www.aspenfasteners.com/content/pdf/Metric_DIN_603_spec.pdf
+    confidence: 3
+    last_verified: 2026-04-28
+  notes: "M4 carriage bolt — non-standard size (DIN 603 starts at M5). [unverified — market convention]"
+M5_DIN603:
+  aliases: [M5-DIN603, M5-carriage-bolt, M5-coach-bolt]
+  standard: "DIN 603 / ISO 8678"
+  type: carriage-bolt
+  thread:
+    d: 5.0
+    pitch: 0.80
+    unit: mm
+  head:
+    dk: 13.0      # ISO 8678 / DIN 603: dk = 12.45–13.55, mid 13.0
+    k:  3.0       # head height (k_min=2.7, market median ~3.0)
+  dimensions:
+    sq:   5.0     # square neck max = thread d
+    sq_h: 3.5     # square neck depth (f_min=2.9, f_max=4.1, mid 3.5)
+  common_lengths_mm: [20, 25, 30, 40]
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_carriage
+    fn: make_carriage_bolt
+    args: {size: "M5", length: 20.0}
+    cache: cache/m5_din603_L20.step
+  source:
+    primary: https://www.aspenfasteners.com/content/pdf/Metric_DIN_603_spec.pdf
+    confidence: 5
+    last_verified: 2026-04-28
+  notes: "M5 carriage bolt per DIN 603 / ISO 8678."
+
+# ─────────────────────────────────────────────────────────────────
+# 拉铆螺母  /  弹簧销 DIN 1481  (rivet nuts + spring pins)
+# ─────────────────────────────────────────────────────────────────
+M3_NUT_RIVET:
+  aliases: [M3-rivet-nut, M3-nutsert, M3-blind-rivet-nut]
+  standard: "rivet-nut (market convention)"
+  type: rivet-nut
+  thread:
+    d: 3.0
+    pitch: 0.50
+    unit: mm
+  dimensions:
+    od: 5.0          # 主体圆柱外径 / barrel OD
+    length: 12.0     # 安装前总长 / pre-install length
+    flange_d: 7.0    # 法兰盘外径 / flange OD
+    flange_t: 1.0    # 法兰盘厚度 / flange thickness
+  grip_range_mm: [0.0, 3.0]
+  clearance_hole:
+    medium_fit: 5.1  # 安装预孔（外径 + 0.1）
+  source:
+    primary: https://www.bossard.com
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.rivet_nut
+    fn: make_rivet_nut
+    args: {size: "M3"}
+    cache: cache/m3_rivet_nut.step
+  notes: "M3 拉铆螺母（安装前形态：圆柱主体 + 顶部法兰）；薄板内螺纹应用。"
+M4_NUT_RIVET:
+  aliases: [M4-rivet-nut, M4-nutsert, M4-blind-rivet-nut]
+  standard: "rivet-nut (market convention)"
+  type: rivet-nut
+  thread:
+    d: 4.0
+    pitch: 0.70
+    unit: mm
+  dimensions:
+    od: 6.0
+    length: 13.5
+    flange_d: 9.0
+    flange_t: 1.2
+  grip_range_mm: [0.0, 3.5]
+  clearance_hole:
+    medium_fit: 6.1
+  source:
+    primary: https://www.bossard.com
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.rivet_nut
+    fn: make_rivet_nut
+    args: {size: "M4"}
+    cache: cache/m4_rivet_nut.step
+  notes: "M4 拉铆螺母（安装前形态：圆柱主体 + 顶部法兰）；薄板内螺纹应用。"
+D3_DIN1481:
+  aliases: [d3-spring-pin, d3-DIN1481, 3mm-spring-pin]
+  standard: "DIN 1481"
+  type: spring-pin
+  nominal:
+    d: 3.0
+    unit: mm
+  dimensions:
+    od_free: 3.15    # 自由状态外径（公称 × 1.05）/ free-state OD
+    wall_t: 0.8      # 壁厚 / wall thickness
+    slit_w: 1.0      # 缝宽 / slit width
+  common_lengths_mm: [8, 10, 12, 14, 16, 20]
+  source:
+    primary: https://www.bossard.com
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.pin_spring
+    fn: make_spring_pin
+    args: {nominal_d: 3, length: 12}
+    cache: cache/d3_din1481_L12.step
+  notes: "DIN 1481 弹簧销（开口圆形截面）；无螺纹，按公称直径查询。"
+D4_DIN1481:
+  aliases: [d4-spring-pin, d4-DIN1481, 4mm-spring-pin]
+  standard: "DIN 1481"
+  type: spring-pin
+  nominal:
+    d: 4.0
+    unit: mm
+  dimensions:
+    od_free: 4.20    # 自由状态外径（公称 × 1.05）/ free-state OD
+    wall_t: 1.0
+    slit_w: 1.2
+  common_lengths_mm: [10, 12, 14, 16, 20, 25]
+  source:
+    primary: https://www.bossard.com
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.pin_spring
+    fn: make_spring_pin
+    args: {nominal_d: 4, length: 12}
+    cache: cache/d4_din1481_L12.step
+  notes: "DIN 1481 弹簧销（开口圆形截面）；无螺纹，按公称直径查询。"
