@@ -8,7 +8,14 @@ License: MIT
 from __future__ import annotations
 
 from build123d import (
-    Align, Axis, BuildPart, BuildSketch, Box, Rectangle, Mode, Part, Plane,
+    Align,
+    Axis,
+    Box,
+    BuildPart,
+    BuildSketch,
+    Mode,
+    Part,
+    Rectangle,
     extrude,
 )
 

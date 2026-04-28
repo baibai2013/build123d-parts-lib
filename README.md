@@ -62,13 +62,21 @@ mass_g = servo.volume / 1000 * densities["plastics"]["PLA"]
 
 ### 📦 A. `parts/` — 标准件实体
 
-完整 3D 实体，可直接 `import_step()` 或通过 factory 函数调用。
+完整 3D 实体，可直接调用 factory 函数或 `import_step()`。
 
-| 零件 | Factory | Cache STEP |
-|------|---------|------------|
-| SG90 舵机 | `parts.servos.sg90:make_sg90` | `parts/servos/cache/sg90.step` |
-| M3 ISO 4762 螺丝 | `parts.fasteners.m3_iso4762:make_m3_screw` | `parts/fasteners/cache/m3_iso4762_L10.step` |
-| Hex Bolt DIN 933 | `parts.fasteners.hex_bolt:make_hex_bolt` | `parts/fasteners/cache/hex_bolt.step` |
+> **完整零件清单**：见 **[docs/parts-index.md](docs/parts-index.md)**（含每类预览图、Factory 签名、覆盖规格）。
+
+当前覆盖 7 大类、38 个 factory 文件、200+ 参数化规格：
+
+| 类别 | 代表零件 | 模块前缀 |
+|------|---------|---------|
+| 🔩 Fasteners（紧固件） | 内六角/沉头/圆头/十字螺丝、六角/法兰/蝶形螺母、弹簧垫 · 铜柱 · 拉铆螺母… | `parts.fasteners` |
+| ⚙️ Bearings（轴承） | 深沟球轴承 / MR 微型 / 法兰 / 直线轴承 LM series | `parts.bearings` |
+| 📍 Pins & Shafts（销轴） | 圆柱销 / 开口销 / 弹性销 / 光轴 | `parts.pins` |
+| 🤖 Servos（舵机） | SG90 / MG90S / MG996R / DS3218 + 舵盘 | `parts.servos` |
+| ⚙️ Transmission（传动） | GT2 皮带轮 / 皮带 / 平行键 | `parts.transmission` |
+| 🔘 Retainers（卡簧） | 轴用 / 孔用弹性挡圈 | `parts.retainers` |
+| 🔵 Seals（密封） | O 型圈（ISO 3601-1 / GB/T 3452.1） | `parts.seals` |
 
 > **紧固件几何简化说明**：本库所有紧固件（螺栓、螺钉等）均采用**光杆**表示，不建模真实螺纹。
 > YAML 中保留 `pitch` 参数供螺纹孔计算用，装配仿真精度足够。
