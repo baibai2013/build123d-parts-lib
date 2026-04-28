@@ -9,12 +9,14 @@ Usage:
     python3 scripts/rebuild_cache.py
     python3 scripts/rebuild_cache.py --verify-only
     python3 scripts/rebuild_cache.py --filter bearings
+    python3 scripts/rebuild_cache.py --preview   # render PNG for parts missing one
 """
 from __future__ import annotations
 
 import argparse
 import importlib
 import sys
+import time
 from pathlib import Path
 
 import yaml
@@ -48,7 +50,10 @@ def discover_parts(filter_cat: str | None = None) -> list[dict]:
             cache_rel = factory.get("cache", "")
             if not cache_rel:
                 continue
-            if filter_cat and filter_cat not in str(yaml_file):
+            if filter_cat and (
+                filter_cat.upper() not in key.upper()
+                and filter_cat.lower() not in str(yaml_file).lower()
+            ):
                 continue
             parts.append({
                 "name": key,
@@ -91,11 +96,98 @@ def rebuild(verify_only: bool = False, filter_cat: str | None = None) -> int:
     return failed
 
 
+def preview_missing(filter_cat: str | None = None) -> int:
+    """为 cache 中有 STEP 但无 PNG 的零件渲染缩略图，最后汇总为一张图。
+    Render PNG thumbnails for parts that have a STEP file but no PNG,
+    then save a single combined summary image.
+
+    Returns the number of parts rendered.
+    """
+    try:
+        import ocp_vscode
+        from build123d import import_step
+    except ImportError as e:
+        print(f"  ✗  preview requires ocp_vscode and build123d: {e}")
+        return 0
+
+    ocp_vscode.set_port(3939)
+
+    # 扫描所有 cache 目录下的 STEP 文件 / scan all STEP files under cache dirs
+    new_parts: list[tuple[str, object]] = []
+    for step_file in sorted(PARTS_DIR.rglob("cache/*.step")):
+        if filter_cat and filter_cat.lower() not in str(step_file).lower():
+            continue
+        png_file = step_file.with_suffix(".png")
+        if png_file.exists():
+            continue
+        try:
+            part = import_step(str(step_file))
+            ocp_vscode.show(part, names=[step_file.stem],
+                            reset_camera=ocp_vscode.Camera.RESET)
+            time.sleep(1.5)
+            ocp_vscode.save_screenshot(str(png_file))
+            print(f"  ✓ PNG  {step_file.stem}")
+            new_parts.append((step_file.stem, part))
+        except Exception as e:
+            print(f"  ✗ PNG  {step_file.stem}: {e}")
+
+    if not new_parts:
+        print("  (no new parts to preview)")
+        return 0
+
+    # 汇总图：用 PIL 拼贴各零件的个人 PNG，避免 3D 等轴相机导致对角线布局
+    # Summary: tile individual part PNGs with PIL — avoids isometric-camera diagonal
+    png_paths = []
+    for name, _part in new_parts:
+        for step_file in PARTS_DIR.rglob(f"cache/{name}.step"):
+            candidate = step_file.with_suffix(".png")
+            if candidate.exists():
+                png_paths.append(candidate)
+                break
+
+    summary_path = REPO_ROOT / "preview_new.png"
+    try:
+        from PIL import Image as PILImage
+        COLS = 8
+        def _white_bg(im: "PILImage.Image") -> "PILImage.Image":
+            """Replace near-black OCP background pixels with white."""
+            import numpy as np
+            arr = np.array(im.convert("RGB"))
+            dark = (arr[:, :, 0] < 30) & (arr[:, :, 1] < 30) & (arr[:, :, 2] < 30)
+            arr[dark] = 255
+            return PILImage.fromarray(arr)
+
+        imgs = [_white_bg(PILImage.open(p)) for p in png_paths]
+        tile_w = max(img.width  for img in imgs)
+        tile_h = max(img.height for img in imgs)
+        rows = (len(imgs) + COLS - 1) // COLS
+        grid = PILImage.new("RGB", (COLS * tile_w, rows * tile_h), color=(255, 255, 255))
+        for idx, img in enumerate(imgs):
+            col = idx % COLS
+            row = idx // COLS
+            x = col * tile_w + (tile_w - img.width)  // 2
+            y = row * tile_h + (tile_h - img.height) // 2
+            grid.paste(img, (x, y))
+        grid.save(str(summary_path))
+    except Exception as e:
+        print(f"  ✗ PIL summary failed: {e}")
+
+    print(f"\n  Summary → {summary_path}")
+    return len(new_parts)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Rebuild all cache/*.step files")
     parser.add_argument("--verify-only", action="store_true", help="仅检查 cache 是否存在")
     parser.add_argument("--filter", metavar="CATEGORY", help="只处理含此字符串的分类路径")
+    parser.add_argument("--preview", action="store_true",
+                        help="为无 PNG 的 STEP 缓存件渲染缩略图，输出一张汇总图")
     args = parser.parse_args(argv)
+
+    if args.preview:
+        n = preview_missing(filter_cat=args.filter)
+        print(f"\n✅ previewed {n} new parts")
+        return 0
 
     failed = rebuild(verify_only=args.verify_only, filter_cat=args.filter)
     if failed:

@@ -433,6 +433,28 @@ M3_NUT_GB6172:
     cache: cache/m3_nut_gb6172.step
   notes: GB/T 6172.1 M3 薄六角螺母；用于空间受限场合。
 
+M3_NUT_DIN985:
+  aliases: [M3-nyloc, M3-DIN985, M3-lock-nut]
+  standard: "DIN 985"
+  type: hex-nylon-insert-lock-nut
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  dimensions:
+    s: 5.5
+    m: 4.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_hex
+    fn: make_hex_nut
+    args: {size: "M3", standard: "DIN985"}
+    cache: cache/m3_nut_din985.step
+  notes: DIN 985 M3 尼龙锁紧螺母；防松动，机器人振动场合常用。
+
 M4_NUT_DIN985:
   aliases: [M4-nyloc, M4-DIN985, M4-lock-nut]
   standard: "DIN 985"
@@ -973,3 +995,790 @@ M10_DIN933:
     args: {size: "M10", length: 30}
     cache: cache/m10_din933_L30.step
   notes: DIN 933 M10 外六角螺栓（全螺纹）。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 内六角圆头螺丝（Hex Socket Button Head Screw）
+# Standards: ISO 7380-1
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_ISO7380:
+  aliases: [M3-button, M3-ISO7380, m3-button-head]
+  standard: "ISO 7380-1"
+  type: screw-button-head-hex-socket
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    dk: 5.7
+    k: 1.65
+    s: 2.0
+  common_lengths_mm: [5, 6, 8, 10, 12, 16]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_button_hex
+    fn: make_button_head_screw
+    args: {size: "M3", length: 10}
+    cache: cache/m3_iso7380_L10.step
+  notes: ISO 7380-1 M3 内六角圆头螺丝；低剖面球面冠头。
+
+M4_ISO7380:
+  aliases: [M4-button, M4-ISO7380, m4-button-head]
+  standard: "ISO 7380-1"
+  type: screw-button-head-hex-socket
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    dk: 7.6
+    k: 2.2
+    s: 2.5
+  common_lengths_mm: [6, 8, 10, 12, 16, 20]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_button_hex
+    fn: make_button_head_screw
+    args: {size: "M4", length: 12}
+    cache: cache/m4_iso7380_L12.step
+  notes: ISO 7380-1 M4 内六角圆头螺丝。
+
+M5_ISO7380:
+  aliases: [M5-button, M5-ISO7380, m5-button-head]
+  standard: "ISO 7380-1"
+  type: screw-button-head-hex-socket
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    dk: 9.5
+    k: 2.75
+    s: 3.0
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_button_hex
+    fn: make_button_head_screw
+    args: {size: "M5", length: 16}
+    cache: cache/m5_iso7380_L16.step
+  notes: ISO 7380-1 M5 内六角圆头螺丝。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 十字沉头螺丝（Phillips Countersunk Head Screw）
+# Standards: ISO 7046
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_ISO7046:
+  aliases: [M3-csk-phillips, M3-ISO7046, m3-phillips-csk]
+  standard: "ISO 7046"
+  type: screw-csk-head-phillips
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    dk: 5.6
+    k: 1.65
+    angle_deg: 90
+  countersink:
+    diameter: 5.6
+    angle_deg: 90
+  common_lengths_mm: [5, 6, 8, 10, 12, 16]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_csk_phillips
+    fn: make_csk_phillips_screw
+    args: {size: "M3", length: 10}
+    cache: cache/m3_iso7046_L10.step
+  notes: ISO 7046 M3 十字沉头螺丝。
+
+M4_ISO7046:
+  aliases: [M4-csk-phillips, M4-ISO7046, m4-phillips-csk]
+  standard: "ISO 7046"
+  type: screw-csk-head-phillips
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    dk: 7.5
+    k: 2.2
+    angle_deg: 90
+  countersink:
+    diameter: 7.5
+    angle_deg: 90
+  common_lengths_mm: [6, 8, 10, 12, 16, 20]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_csk_phillips
+    fn: make_csk_phillips_screw
+    args: {size: "M4", length: 12}
+    cache: cache/m4_iso7046_L12.step
+  notes: ISO 7046 M4 十字沉头螺丝。
+
+M5_ISO7046:
+  aliases: [M5-csk-phillips, M5-ISO7046, m5-phillips-csk]
+  standard: "ISO 7046"
+  type: screw-csk-head-phillips
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    dk: 9.2
+    k: 2.75
+    angle_deg: 90
+  countersink:
+    diameter: 9.2
+    angle_deg: 90
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_csk_phillips
+    fn: make_csk_phillips_screw
+    args: {size: "M5", length: 16}
+    cache: cache/m5_iso7046_L16.step
+  notes: ISO 7046 M5 十字沉头螺丝。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 一字沉头螺丝（Slotted Countersunk Head Screw）
+# Standards: ISO 2009
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_ISO2009:
+  aliases: [M3-csk-slotted, M3-ISO2009, m3-slotted-csk]
+  standard: "ISO 2009"
+  type: screw-csk-head-slotted
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    dk: 5.6
+    k: 1.65
+    angle_deg: 90
+    slot_w: 0.8
+    slot_d: 0.7
+  countersink:
+    diameter: 5.6
+    angle_deg: 90
+  common_lengths_mm: [5, 6, 8, 10, 12, 16]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_csk_slotted
+    fn: make_csk_slotted_screw
+    args: {size: "M3", length: 10}
+    cache: cache/m3_iso2009_L10.step
+  notes: ISO 2009 M3 一字沉头螺丝。
+
+M4_ISO2009:
+  aliases: [M4-csk-slotted, M4-ISO2009, m4-slotted-csk]
+  standard: "ISO 2009"
+  type: screw-csk-head-slotted
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    dk: 7.5
+    k: 2.2
+    angle_deg: 90
+    slot_w: 1.0
+    slot_d: 0.9
+  countersink:
+    diameter: 7.5
+    angle_deg: 90
+  common_lengths_mm: [6, 8, 10, 12, 16, 20]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_csk_slotted
+    fn: make_csk_slotted_screw
+    args: {size: "M4", length: 12}
+    cache: cache/m4_iso2009_L12.step
+  notes: ISO 2009 M4 一字沉头螺丝。
+
+M5_ISO2009:
+  aliases: [M5-csk-slotted, M5-ISO2009, m5-slotted-csk]
+  standard: "ISO 2009"
+  type: screw-csk-head-slotted
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    dk: 9.2
+    k: 2.75
+    angle_deg: 90
+    slot_w: 1.2
+    slot_d: 1.1
+  countersink:
+    diameter: 9.2
+    angle_deg: 90
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_csk_slotted
+    fn: make_csk_slotted_screw
+    args: {size: "M5", length: 16}
+    cache: cache/m5_iso2009_L16.step
+  notes: ISO 2009 M5 一字沉头螺丝。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 十字圆头螺丝（Phillips Pan Head Screw）
+# Standards: ISO 7045
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_ISO7045:
+  aliases: [M3-pan-phillips, M3-ISO7045, m3-phillips-pan]
+  standard: "ISO 7045"
+  type: screw-pan-head-phillips
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    dk: 6.0
+    k: 2.4
+  common_lengths_mm: [5, 6, 8, 10, 12, 16]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_pan_phillips
+    fn: make_pan_phillips_screw
+    args: {size: "M3", length: 10}
+    cache: cache/m3_iso7045_L10.step
+  notes: ISO 7045 M3 十字圆头螺丝。
+
+M4_ISO7045:
+  aliases: [M4-pan-phillips, M4-ISO7045, m4-phillips-pan]
+  standard: "ISO 7045"
+  type: screw-pan-head-phillips
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    dk: 8.0
+    k: 3.1
+  common_lengths_mm: [6, 8, 10, 12, 16, 20]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_pan_phillips
+    fn: make_pan_phillips_screw
+    args: {size: "M4", length: 12}
+    cache: cache/m4_iso7045_L12.step
+  notes: ISO 7045 M4 十字圆头螺丝。
+
+M5_ISO7045:
+  aliases: [M5-pan-phillips, M5-ISO7045, m5-phillips-pan]
+  standard: "ISO 7045"
+  type: screw-pan-head-phillips
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    dk: 9.5
+    k: 3.7
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_pan_phillips
+    fn: make_pan_phillips_screw
+    args: {size: "M5", length: 16}
+    cache: cache/m5_iso7045_L16.step
+  notes: ISO 7045 M5 十字圆头螺丝。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 一字圆头螺丝（Slotted Pan Head Screw）
+# Standards: ISO 1580
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_ISO1580:
+  aliases: [M3-pan-slotted, M3-ISO1580, m3-slotted-pan]
+  standard: "ISO 1580"
+  type: screw-pan-head-slotted
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  head:
+    dk: 6.0
+    k: 2.4
+    slot_w: 0.8
+    slot_d: 1.0
+  common_lengths_mm: [5, 6, 8, 10, 12, 16]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_pan_slotted
+    fn: make_pan_slotted_screw
+    args: {size: "M3", length: 10}
+    cache: cache/m3_iso1580_L10.step
+  notes: ISO 1580 M3 一字圆头螺丝。
+
+M4_ISO1580:
+  aliases: [M4-pan-slotted, M4-ISO1580, m4-slotted-pan]
+  standard: "ISO 1580"
+  type: screw-pan-head-slotted
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  head:
+    dk: 8.0
+    k: 3.1
+    slot_w: 1.0
+    slot_d: 1.3
+  common_lengths_mm: [6, 8, 10, 12, 16, 20]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_pan_slotted
+    fn: make_pan_slotted_screw
+    args: {size: "M4", length: 12}
+    cache: cache/m4_iso1580_L12.step
+  notes: ISO 1580 M4 一字圆头螺丝。
+
+M5_ISO1580:
+  aliases: [M5-pan-slotted, M5-ISO1580, m5-slotted-pan]
+  standard: "ISO 1580"
+  type: screw-pan-head-slotted
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  head:
+    dk: 9.5
+    k: 3.7
+    slot_w: 1.2
+    slot_d: 1.5
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_pan_slotted
+    fn: make_pan_slotted_screw
+    args: {size: "M5", length: 16}
+    cache: cache/m5_iso1580_L16.step
+  notes: ISO 1580 M5 一字圆头螺丝。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 盖形螺母（Cap Nut / Acorn Nut）
+# Standards: DIN 1587
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_NUT_DIN1587:
+  aliases: [M3-cap-nut, M3-acorn-nut, M3-DIN1587]
+  standard: "DIN 1587"
+  type: nut-cap
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  dimensions:
+    s: 5.5
+    m: 5.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_cap
+    fn: make_cap_nut
+    args: {size: "M3"}
+    cache: cache/m3_nut_din1587.step
+  notes: DIN 1587 M3 盖形螺母（球面穹顶保护螺纹端）。
+
+M4_NUT_DIN1587:
+  aliases: [M4-cap-nut, M4-acorn-nut, M4-DIN1587]
+  standard: "DIN 1587"
+  type: nut-cap
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  dimensions:
+    s: 7.0
+    m: 6.5
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_cap
+    fn: make_cap_nut
+    args: {size: "M4"}
+    cache: cache/m4_nut_din1587.step
+  notes: DIN 1587 M4 盖形螺母。
+
+M5_NUT_DIN1587:
+  aliases: [M5-cap-nut, M5-acorn-nut, M5-DIN1587]
+  standard: "DIN 1587"
+  type: nut-cap
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  dimensions:
+    s: 8.0
+    m: 8.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_cap
+    fn: make_cap_nut
+    args: {size: "M5"}
+    cache: cache/m5_nut_din1587.step
+  notes: DIN 1587 M5 盖形螺母。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 法兰螺母（Flange Nut）
+# Standards: DIN 6923
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_NUT_DIN6923:
+  aliases: [M3-flange-nut, M3-DIN6923]
+  standard: "DIN 6923"
+  type: nut-flange
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  dimensions:
+    s: 5.5
+    m: 4.0
+    flange_d: 9.0
+    flange_t: 1.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_flange
+    fn: make_flange_nut
+    args: {size: "M3"}
+    cache: cache/m3_nut_din6923.step
+  notes: DIN 6923 M3 法兰螺母；底部法兰增大接触面积。
+
+M4_NUT_DIN6923:
+  aliases: [M4-flange-nut, M4-DIN6923]
+  standard: "DIN 6923"
+  type: nut-flange
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  dimensions:
+    s: 7.0
+    m: 5.0
+    flange_d: 11.0
+    flange_t: 1.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_flange
+    fn: make_flange_nut
+    args: {size: "M4"}
+    cache: cache/m4_nut_din6923.step
+  notes: DIN 6923 M4 法兰螺母。
+
+M5_NUT_DIN6923:
+  aliases: [M5-flange-nut, M5-DIN6923]
+  standard: "DIN 6923"
+  type: nut-flange
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  dimensions:
+    s: 8.0
+    m: 6.5
+    flange_d: 13.5
+    flange_t: 1.2
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_flange
+    fn: make_flange_nut
+    args: {size: "M5"}
+    cache: cache/m5_nut_din6923.step
+  notes: DIN 6923 M5 法兰螺母。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 蝶形螺母（Wing Nut）
+# Standards: DIN 315
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_NUT_DIN315:
+  aliases: [M3-wing-nut, M3-DIN315, M3-butterfly-nut]
+  standard: "DIN 315"
+  type: nut-wing
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  dimensions:
+    hub_d: 10.0
+    m: 11.0
+    wing_span: 24.0
+    wing_h: 9.5
+    wing_w: 2.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_wing
+    fn: make_wing_nut
+    args: {size: "M3"}
+    cache: cache/m3_nut_din315.step
+  notes: DIN 315 M3 蝶形螺母；手拧，无需工具。
+
+M4_NUT_DIN315:
+  aliases: [M4-wing-nut, M4-DIN315, M4-butterfly-nut]
+  standard: "DIN 315"
+  type: nut-wing
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  dimensions:
+    hub_d: 12.0
+    m: 13.0
+    wing_span: 28.0
+    wing_h: 11.0
+    wing_w: 2.5
+  source:
+    primary: https://www.bossard.com
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_wing
+    fn: make_wing_nut
+    args: {size: "M4"}
+    cache: cache/m4_nut_din315.step
+  notes: DIN 315 M4 蝶形螺母。
+
+M5_NUT_DIN315:
+  aliases: [M5-wing-nut, M5-DIN315, M5-butterfly-nut]
+  standard: "DIN 315"
+  type: nut-wing
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  dimensions:
+    hub_d: 14.0
+    m: 15.0
+    wing_span: 32.0
+    wing_h: 13.0
+    wing_w: 3.0
+  source:
+    primary: https://www.bossard.com
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_wing
+    fn: make_wing_nut
+    args: {size: "M5"}
+    cache: cache/m5_nut_din315.step
+  notes: DIN 315 M5 蝶形螺母。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 方形螺母（Square Nut）
+# Standards: DIN 562
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_NUT_DIN562:
+  aliases: [M3-square-nut, M3-DIN562]
+  standard: "DIN 562"
+  type: nut-square
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  dimensions:
+    a: 5.5
+    m: 1.8
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_square
+    fn: make_square_nut
+    args: {size: "M3"}
+    cache: cache/m3_nut_din562.step
+  notes: DIN 562 M3 方形螺母；适合T槽或内嵌安装。
+
+M4_NUT_DIN562:
+  aliases: [M4-square-nut, M4-DIN562]
+  standard: "DIN 562"
+  type: nut-square
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  dimensions:
+    a: 7.0
+    m: 2.2
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_square
+    fn: make_square_nut
+    args: {size: "M4"}
+    cache: cache/m4_nut_din562.step
+  notes: DIN 562 M4 方形螺母。
+
+M5_NUT_DIN562:
+  aliases: [M5-square-nut, M5-DIN562]
+  standard: "DIN 562"
+  type: nut-square
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  dimensions:
+    a: 8.0
+    m: 2.7
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_square
+    fn: make_square_nut
+    args: {size: "M5"}
+    cache: cache/m5_nut_din562.step
+  notes: DIN 562 M5 方形螺母。
+
+# ──────────────────────────────────────────────────────────────────────────────
+# T 型螺母（T-Slot Nut for 2020 Extrusion）
+# ──────────────────────────────────────────────────────────────────────────────
+
+M3_NUT_TSLOT2020:
+  aliases: [M3-tslot-nut, M3-2020-nut, M3-hammer-nut]
+  standard: "2020 T-slot (market practice)"
+  type: nut-tslot
+  thread:
+    d: 3.0
+    pitch: 0.5
+    unit: mm
+  dimensions:
+    head_w: 5.75
+    head_h: 1.8
+    stem_w: 3.0
+    stem_h: 0.9
+    length: 10.0
+  source:
+    primary: https://www.aliexpress.com
+    confidence: 3
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_tslot
+    fn: make_tslot_nut
+    args: {size: "M3"}
+    cache: cache/m3_nut_tslot2020.step
+  notes: 2020 铝型材 T 型螺母 M3；滑入式，锁紧后固定。
+
+M4_NUT_TSLOT2020:
+  aliases: [M4-tslot-nut, M4-2020-nut, M4-hammer-nut]
+  standard: "2020 T-slot (market practice)"
+  type: nut-tslot
+  thread:
+    d: 4.0
+    pitch: 0.7
+    unit: mm
+  dimensions:
+    head_w: 5.75
+    head_h: 1.8
+    stem_w: 3.8
+    stem_h: 0.9
+    length: 10.0
+  source:
+    primary: https://www.aliexpress.com
+    confidence: 3
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_tslot
+    fn: make_tslot_nut
+    args: {size: "M4"}
+    cache: cache/m4_nut_tslot2020.step
+  notes: 2020 铝型材 T 型螺母 M4；最常用规格。
+
+M5_NUT_TSLOT2020:
+  aliases: [M5-tslot-nut, M5-3030-nut, M5-hammer-nut]
+  standard: "3030 T-slot (market practice)"
+  type: nut-tslot
+  thread:
+    d: 5.0
+    pitch: 0.8
+    unit: mm
+  dimensions:
+    head_w: 7.75
+    head_h: 2.0
+    stem_w: 4.8
+    stem_h: 1.0
+    length: 10.0
+  source:
+    primary: https://www.aliexpress.com
+    confidence: 3
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.nut_tslot
+    fn: make_tslot_nut
+    args: {size: "M5"}
+    cache: cache/m5_nut_tslot2020.step
+  notes: 3030 铝型材 T 型螺母 M5；适配 8mm 槽口。

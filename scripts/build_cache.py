@@ -12,7 +12,6 @@ License: MIT
 """
 from __future__ import annotations
 
-import shutil
 import sys
 from pathlib import Path
 
@@ -31,42 +30,42 @@ from build123d_parts_lib._preview import save_preview_png  # noqa: E402
 
 def _rep_bundle():
     """延迟 import，避免启动时就全加载。"""
-    from build123d_parts_lib.parts.fasteners.socket_head_screw import (
-        make_socket_head_screw,
+    from build123d_parts_lib.parts.bearings.ball_bearing import make_ball_bearing
+    from build123d_parts_lib.parts.bearings.flanged_bearing import (
+        make_flanged_bearing,
     )
+    from build123d_parts_lib.parts.bearings.mr_bearing import make_mr_bearing
     from build123d_parts_lib.parts.fasteners.countersunk_screw import (
         make_countersunk_screw,
     )
     from build123d_parts_lib.parts.fasteners.hex_bolt import make_hex_bolt
     from build123d_parts_lib.parts.fasteners.nut_hex import make_hex_nut
-    from build123d_parts_lib.parts.fasteners.washer import make_washer
+    from build123d_parts_lib.parts.fasteners.socket_head_screw import (
+        make_socket_head_screw,
+    )
     from build123d_parts_lib.parts.fasteners.threaded_insert import (
         make_threaded_insert,
     )
-    from build123d_parts_lib.parts.bearings.ball_bearing import make_ball_bearing
-    from build123d_parts_lib.parts.bearings.mr_bearing import make_mr_bearing
-    from build123d_parts_lib.parts.bearings.flanged_bearing import (
-        make_flanged_bearing,
-    )
+    from build123d_parts_lib.parts.fasteners.washer import make_washer
     from build123d_parts_lib.parts.pins.pin_cylindrical import make_cylindrical_pin
     from build123d_parts_lib.parts.pins.pin_split import make_split_pin
     from build123d_parts_lib.parts.pins.pin_spring import make_spring_pin
     from build123d_parts_lib.parts.pins.shaft_smooth import make_smooth_shaft
-    from build123d_parts_lib.parts.servos.standard_servo import make_servo
-    from build123d_parts_lib.parts.servos.servo_horn import make_servo_horn
-    from build123d_parts_lib.parts.servos.sg90 import make_sg90
-    from build123d_parts_lib.parts.transmission.timing_pulley_gt2 import (
-        make_gt2_pulley,
-    )
-    from build123d_parts_lib.parts.transmission.timing_belt_gt2 import make_gt2_belt
-    from build123d_parts_lib.parts.transmission.key_parallel import (
-        make_parallel_key,
+    from build123d_parts_lib.parts.retainers.retaining_ring_hole import (
+        make_retaining_ring_hole,
     )
     from build123d_parts_lib.parts.retainers.retaining_ring_shaft import (
         make_retaining_ring_shaft,
     )
-    from build123d_parts_lib.parts.retainers.retaining_ring_hole import (
-        make_retaining_ring_hole,
+    from build123d_parts_lib.parts.servos.servo_horn import make_servo_horn
+    from build123d_parts_lib.parts.servos.sg90 import make_sg90
+    from build123d_parts_lib.parts.servos.standard_servo import make_servo
+    from build123d_parts_lib.parts.transmission.key_parallel import (
+        make_parallel_key,
+    )
+    from build123d_parts_lib.parts.transmission.timing_belt_gt2 import make_gt2_belt
+    from build123d_parts_lib.parts.transmission.timing_pulley_gt2 import (
+        make_gt2_pulley,
     )
 
     # (category, slug, callable, kwargs, title)

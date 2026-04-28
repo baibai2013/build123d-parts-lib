@@ -8,10 +8,9 @@ Supported sizes:
   GB/T 6172.1 (thin):            M2, M2.5, M3, M4, M5, M6, M8, M10
   DIN 985 (nylon insert lock):   M3, M4, M5, M6, M8, M10
 
-Simplification:
-- Hexagonal prism + central through-hole (nominal thread diameter)
-- DIN 985 modelled as slightly taller hex prism to represent nylon ring section
-- No chamfer, no thread
+几何：
+- 六棱柱主体 + ISO 旋转内螺纹（revolve 锯齿减料）
+- 无倒角；DIN 985 建模为略高六棱柱
 """
 from __future__ import annotations
 
@@ -25,6 +24,8 @@ from build123d import (
     BuildPart,
     BuildSketch,
     Cylinder,
+    Location,
+    Locations,
     Mode,
     Part,
     Plane,
@@ -33,34 +34,40 @@ from build123d import (
     extrude,
 )
 
+from ._thread_utils import make_internal_thread
+
+# 标准粗牙螺距表 / standard coarse thread pitch table
+_COARSE_PITCH: dict[str, float] = {
+    "M2": 0.40, "M2.5": 0.45, "M3": 0.50, "M4": 0.70,
+    "M5": 0.80, "M6": 1.00,  "M8": 1.25, "M10": 1.50,
+}
+
 
 class NutSpec(NamedTuple):
-    d: float   # 公称螺纹直径（内孔） / nominal thread diameter (bore)
-    s: float   # 对边宽（扳手宽） / wrench width (across flats)
-    m: float   # 螺母高度 / nut height/thickness
+    d:     float   # 公称螺纹直径（孔径大径） / nominal thread diameter (major)
+    s:     float   # 对边宽（扳手宽） / wrench width (across flats)
+    m:     float   # 螺母高度 / nut height/thickness
+    pitch: float   # 粗牙螺距 / coarse thread pitch
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 静态后备数据 —— 涵盖 YAML 中尚未收录的规格（M2 / M2.5）
-# Static fallback data for sizes absent from YAML (M2, M2.5)
+# 静态后备数据（含螺距） / static fallback data including pitch
 # ─────────────────────────────────────────────────────────────────────────────
 
 _FALLBACK_ISO4032: dict[str, NutSpec] = {
-    "M2":   NutSpec(d=2.0, s=4.0, m=1.6),
-    "M2.5": NutSpec(d=2.5, s=5.0, m=2.0),
+    "M2":   NutSpec(d=2.0, s=4.0, m=1.6, pitch=0.40),
+    "M2.5": NutSpec(d=2.5, s=5.0, m=2.0, pitch=0.45),
 }
 
 _FALLBACK_GB6172: dict[str, NutSpec] = {
-    "M2":   NutSpec(d=2.0, s=4.0, m=1.2),
-    "M2.5": NutSpec(d=2.5, s=5.0, m=1.6),
-    # M4 / M5 also absent from YAML — include here
-    "M4":   NutSpec(d=4.0, s=7.0, m=2.2),
-    "M5":   NutSpec(d=5.0, s=8.0, m=2.7),
+    "M2":   NutSpec(d=2.0, s=4.0, m=1.2, pitch=0.40),
+    "M2.5": NutSpec(d=2.5, s=5.0, m=1.6, pitch=0.45),
+    "M4":   NutSpec(d=4.0, s=7.0, m=2.2, pitch=0.70),
+    "M5":   NutSpec(d=5.0, s=8.0, m=2.7, pitch=0.80),
 }
 
-# DIN 985 M3 absent from YAML
 _FALLBACK_DIN985: dict[str, NutSpec] = {
-    "M3":   NutSpec(d=3.0, s=5.5, m=4.0),
+    "M3":   NutSpec(d=3.0, s=5.5, m=4.0, pitch=0.50),
 }
 
 
@@ -70,10 +77,6 @@ def _load_nut_specs() -> dict[str, dict[str, NutSpec]]:
     """
     yaml_path = Path(__file__).parent / "fasteners.yaml"
 
-    # 标准名称映射：YAML type → 内部键 / type → internal key
-    # hex-nut          → ISO4032
-    # hex-thin-nut     → GB6172
-    # hex-nylon-insert-lock-nut → DIN985
     type_to_std: dict[str, str] = {
         "hex-nut":                      "ISO4032",
         "hex-thin-nut":                 "GB6172",
@@ -89,7 +92,6 @@ def _load_nut_specs() -> dict[str, dict[str, NutSpec]]:
     try:
         raw = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
     except Exception:
-        # YAML 读取失败 → 完全使用后备数据 / fall back to static data entirely
         raw = {}
 
     if isinstance(raw, dict):
@@ -100,23 +102,24 @@ def _load_nut_specs() -> dict[str, dict[str, NutSpec]]:
             std_key = type_to_std.get(nut_type)
             if std_key is None:
                 continue
-            # 从 factory.args.size 提取规格键 / extract size key from factory.args.size
             size = entry.get("factory", {}).get("args", {}).get("size", "")
             if not size:
                 continue
             thread = entry.get("thread", {})
             dims = entry.get("dimensions", {})
             try:
-                result[std_key][size.upper()] = NutSpec(
-                    d=float(thread["d"]),
+                d = float(thread["d"])
+                size_key = size.upper()
+                pitch = float(thread.get("pitch", _COARSE_PITCH.get(size_key, 1.0)))
+                result[std_key][size_key] = NutSpec(
+                    d=d,
                     s=float(dims["s"]),
                     m=float(dims["m"]),
+                    pitch=pitch,
                 )
             except (KeyError, TypeError, ValueError):
                 continue
 
-    # 合并后备数据（仅填充 YAML 中不存在的规格）
-    # Merge fallback data for sizes absent from YAML
     for size, spec in _FALLBACK_ISO4032.items():
         if size not in result["ISO4032"]:
             result["ISO4032"][size] = spec
@@ -132,10 +135,8 @@ def _load_nut_specs() -> dict[str, dict[str, NutSpec]]:
     return result
 
 
-# 模块级单例 —— 仅在导入时加载一次 / module-level singleton, loaded once at import
+# 模块级单例 / module-level singleton
 _NUT_SPECS = _load_nut_specs()
-
-# 公开各标准的独立视图，与模块旧 API 兼容 / expose per-standard views for backward compat
 _SPECS_ISO4032 = _NUT_SPECS["ISO4032"]
 _SPECS_GB6172  = _NUT_SPECS["GB6172"]
 _SPECS_DIN985  = _NUT_SPECS["DIN985"]
@@ -151,13 +152,12 @@ def _hex_circumradius(s: float) -> float:
     """Convert across-flats width s to circumradius (vertex-to-center).
     将对边宽 s 转换为外接圆半径（顶点到圆心距离）。
     """
-    # For regular hexagon: s = 2 * r * cos(30°) = r * sqrt(3)
     return s / math.sqrt(3)
 
 
 def make_hex_nut(size: str, standard: str = "ISO4032") -> Part:
-    """Generate a simplified hex nut solid.
-    生成六角螺母简化实体。
+    """生成六角螺母实体（六棱柱 + ISO 内螺纹）。
+    Generate a hex nut solid with ISO internal thread geometry.
 
     Args:
         size:     Size string, e.g. "M3", "M4".
@@ -166,10 +166,9 @@ def make_hex_nut(size: str, standard: str = "ISO4032") -> Part:
     Geometry:
         - Origin at bottom face centre
         - Nut height along +Z
-        - Central through-hole diameter = nominal thread diameter
+        - Internal thread via revolve subtract
     """
     std_key = standard.upper().replace(" ", "").replace("/", "").replace(".", "")
-    # 规范化常见别名 / normalise common aliases
     _alias = {
         "ISO4032": "ISO4032", "ISO 4032": "ISO4032",
         "GB6172":  "GB6172",  "GBT61721": "GB6172",
@@ -188,19 +187,42 @@ def make_hex_nut(size: str, standard: str = "ISO4032") -> Part:
     spec = specs[key]
     r_hex = _hex_circumradius(spec.s)
 
+    # DIN 985: hex metal section + cylindrical nylon cap on top
+    # DIN 985：六角金属段 + 顶部圆柱尼龙圈（无六角、无内螺纹）
+    if std_key == "DIN985":
+        nylon_h = min(1.5, spec.m * 0.375)
+        metal_h = spec.m - nylon_h
+        r_nylon = spec.s / 2      # nylon cap radius = inscribed circle (across-flats / 2)
+
+        with BuildPart() as nut_body:
+            with BuildSketch(Plane.XY):
+                RegularPolygon(radius=r_hex, side_count=6)
+            extrude(amount=metal_h)
+            with Locations(Location((0, 0, metal_h))):
+                Cylinder(
+                    radius=r_nylon, height=nylon_h,
+                    align=(Align.CENTER, Align.CENTER, Align.MIN),
+                )
+            # through-bore subtract (full height) / 通孔减料（全高）
+            Cylinder(
+                radius=spec.d / 2, height=spec.m,
+                align=(Align.CENTER, Align.CENTER, Align.MIN),
+                mode=Mode.SUBTRACT,
+            )
+
+        # internal thread only in metal section / 内螺纹仅在金属段
+        thread_sub = make_internal_thread(spec.d, spec.pitch, metal_h)
+        return nut_body.part.cut(thread_sub)
+
     with BuildPart() as nut:
-        # 六棱柱主体 / hexagonal prism
         with BuildSketch(Plane.XY):
             RegularPolygon(radius=r_hex, side_count=6)
         extrude(amount=spec.m)
-        # 中心通孔 / central through-hole
-        Cylinder(
-            radius=spec.d / 2, height=spec.m,
-            align=(Align.CENTER, Align.CENTER, Align.MIN),
-            mode=Mode.SUBTRACT,
-        )
 
-    return nut.part
+    # 减去内螺纹旋转体（锯齿轮廓从轴到大径，在螺距半处缩至小径形成牙形）
+    # Subtract internal thread solid (sawtooth ridges protrude inward into bore)
+    thread_sub = make_internal_thread(spec.d, spec.pitch, spec.m)
+    return nut.part.cut(thread_sub)
 
 
 if __name__ == "__main__":

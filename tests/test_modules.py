@@ -1,8 +1,8 @@
 """Smoke tests for modules/ (functional multi-part combinations)."""
+from build123d_parts_lib.modules.foot_cap import make_foot_cap
+from build123d_parts_lib.modules.leg_segment import make_leg_segment
 from build123d_parts_lib.modules.snap_fit_latch import make_snap_latch
 from build123d_parts_lib.modules.threaded_insert_boss import make_m3_boss
-from build123d_parts_lib.modules.leg_segment import make_leg_segment
-from build123d_parts_lib.modules.foot_cap import make_foot_cap
 
 
 def test_m3_boss_default():

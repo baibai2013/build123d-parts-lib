@@ -1,4 +1,4 @@
-"""DIN 933 / ISO 4017 hex bolt, full thread (simplified).
+"""DIN 933 / ISO 4017 hex bolt with ISO metric thread geometry.
 
 Source: DIN 933 / ISO 4017 standard dimensions
 Standards: DIN 933 / ISO 4017
@@ -6,9 +6,10 @@ License: MIT
 
 支持规格：M4 / M5 / M6 / M8 / M10
 
-简化程度：
+几何：
 - 头部六棱柱（不建模倒角、滚花）
-- 杆部光杆（不建螺纹；装配用足够）
+- 杆部 = 小径圆柱 + ISO 旋转锯齿螺纹牙（revolve）
+- 杆端（Z=0）45° 倒角，宽度 = 0.5 * pitch / end chamfer at Z=0, width = 0.5*pitch
 """
 from __future__ import annotations
 
@@ -22,6 +23,7 @@ from build123d import (
     BuildPart,
     BuildSketch,
     Cylinder,
+    Edge,
     Location,
     Locations,
     Part,
@@ -31,6 +33,8 @@ from build123d import (
     extrude,
 )
 
+from ._thread_utils import make_external_thread
+
 
 class BoltSpec(NamedTuple):
     d:      float   # 螺纹大径（公称直径） / nominal thread diameter
@@ -39,8 +43,7 @@ class BoltSpec(NamedTuple):
     pitch:  float   # 粗牙螺距 / coarse thread pitch
 
 
-# 静态后备数据 —— YAML 全量覆盖 M4/M5/M6/M8/M10，通常不需要后备
-# Static fallback — YAML covers M4/M5/M6/M8/M10 fully; kept for resilience
+# 静态后备数据 / static fallback
 _FALLBACK_SPECS: dict[str, BoltSpec] = {
     "M4":  BoltSpec(d=4.0,  s=7.0,  k=2.8, pitch=0.70),
     "M5":  BoltSpec(d=5.0,  s=8.0,  k=3.5, pitch=0.80),
@@ -67,7 +70,6 @@ def _load_specs() -> dict[str, BoltSpec]:
                 continue
             if entry.get("type") != "hex-bolt-full-thread":
                 continue
-            # 从 factory.args.size 提取规格键 / extract size key from factory.args.size
             size = entry.get("factory", {}).get("args", {}).get("size", "")
             if not size:
                 continue
@@ -83,8 +85,6 @@ def _load_specs() -> dict[str, BoltSpec]:
             except (KeyError, TypeError, ValueError):
                 continue
 
-    # 合并后备数据（仅填充 YAML 中不存在的规格）
-    # Merge fallback for any sizes missing from YAML
     for size, spec in _FALLBACK_SPECS.items():
         if size not in specs:
             specs[size] = spec
@@ -126,33 +126,33 @@ def _build_default_lengths(specs: dict[str, BoltSpec]) -> dict[str, float]:
     return lengths
 
 
-# 模块级单例 —— 仅在导入时加载一次 / module-level singletons, loaded once at import
+# 模块级单例 / module-level singletons
 _SPECS: dict[str, BoltSpec] = _load_specs()
 DEFAULT_LENGTHS: dict[str, float] = _build_default_lengths(_SPECS)
 
 
 def _hex_major_radius(s: float) -> float:
     """Convert across-flats width s to major radius (vertex-to-centre).
-    将对边宽 s 转换为外接圆半径（顶点到圆心距离）。
-
-    For a regular hexagon: s (across flats) = 2 * r_minor = r_major * sqrt(3)
-    Therefore: r_major = s / sqrt(3)
-    BBox in X direction = 2 * r_major = 2 * s / sqrt(3)  ≈ 1.1547 * s
+    将对边宽 s 转换为外接圆半径。
     """
     return s / math.sqrt(3)
 
 
 def make_hex_bolt(size: str = "M6", length: float | None = None) -> Part:
-    """生成 DIN 933 外六角螺栓简化实体（六角头 + 光杆）。
+    """生成 DIN 933 外六角螺栓实体（六角头 + ISO 螺纹杆 + 杆端倒角）。
+    Generate DIN 933 hex bolt solid (hex head + ISO threaded shank + end chamfer).
 
     Args:
-        size:   规格字符串，如 "M6"、"M8"。
+        size:   规格字符串，如 "M6"、"M8"。 / Size string, e.g. "M6", "M8".
         length: 螺杆长度（不含头部）。None 时取各规格默认值。
+                Shank length (excluding head). None uses per-size defaults.
 
-    几何：
-        - 原点在杆底面中心
-        - 杆沿 +Z 伸出 `length`
-        - 六角头在杆顶面向上再伸出 `k`
+    几何 / Geometry:
+        - 原点在杆底面中心 / Origin at bottom of shank
+        - 杆沿 +Z 伸出 `length` / Shank extends along +Z by `length`
+        - 六角头在杆顶面向上再伸出 `k` / Hex head sits atop shank
+        - 杆部建模为小径圆柱 + 旋转锯齿螺纹牙 / Shank = minor-cylinder + revolve thread
+        - 杆端 Z=0 施加 45° 倒角，宽度 = 0.5*pitch / 45° chamfer at shank tip (Z=0), width=0.5*pitch
     """
     key = size.upper().replace(" ", "").strip()
     if key not in _SPECS:
@@ -165,11 +165,12 @@ def make_hex_bolt(size: str = "M6", length: float | None = None) -> Part:
         raise ValueError(f"length 必须 > 0，得到 {l}")
 
     r_major = _hex_major_radius(spec.s)
+    r_minor = (spec.d - 1.2269 * spec.pitch) / 2   # 小径 / minor radius
 
     with BuildPart() as bolt:
-        # 螺杆（光杆）/ shank (plain cylinder)
+        # 小径杆体 / minor-diameter shank cylinder
         Cylinder(
-            radius=spec.d / 2, height=l,
+            radius=r_minor, height=l,
             align=(Align.CENTER, Align.CENTER, Align.MIN),
         )
         # 六角头（在杆顶面）/ hexagonal head (at shank top)
@@ -178,7 +179,21 @@ def make_hex_bolt(size: str = "M6", length: float | None = None) -> Part:
                 RegularPolygon(radius=r_major, side_count=6)
             extrude(amount=spec.k)
 
-    return bolt.part
+    # 叠加螺纹牙 / fuse external thread solid
+    thread = make_external_thread(spec.d, spec.pitch, l)
+    fused = bolt.part.fuse(thread)
+
+    # 杆端倒角：选取 Z≈0 底面的圆形闭合边缘施加 45° 倒角
+    # End chamfer: apply 45° chamfer to circular closed edge at Z≈0 (shank tip)
+    chamfer_size = 0.5 * spec.pitch
+    tol = 1e-4
+    bottom_edges: list[Edge] = [
+        e for e in fused.edges()
+        if e.is_closed and abs(e.center().Z) < tol
+    ]
+    if bottom_edges:
+        return fused.chamfer(chamfer_size, None, bottom_edges)
+    return fused
 
 
 if __name__ == "__main__":
@@ -191,7 +206,6 @@ if __name__ == "__main__":
         out_path = cache_dir / f"{slug}_din933_L{int(default_l)}.step"
         export_step(part, str(out_path))
 
-        # 验证六角头 bbox X 方向 ≈ 2 * s / sqrt(3)
         spec = _SPECS[size]
         expected_bbox_x = 2 * spec.s / math.sqrt(3)
         print(

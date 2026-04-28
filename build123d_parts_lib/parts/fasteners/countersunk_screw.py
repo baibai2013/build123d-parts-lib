@@ -1,17 +1,18 @@
-"""ISO 10642 hex socket countersunk head screw (simplified).
+"""ISO 10642 hex socket countersunk head screw with ISO metric thread geometry.
 
 Standards: ISO 10642
 License: MIT
 
 Supported sizes: M2 / M2.5 / M3 / M4 / M5
 
-Simplification:
-- Conical head (90° included angle), no internal hex recess modelled
-- Plain shank (no thread; sufficient for assembly use)
+几何 / Geometry:
+- Conical head (90° included angle) + hex socket recess cut from top flat face
+- Shank with ISO external thread (revolve sawtooth profile)
 - Origin at bottom of shank, shank along +Z, head flares upward at top
 """
 from __future__ import annotations
 
+import math
 from pathlib import Path
 from typing import NamedTuple
 
@@ -19,27 +20,41 @@ import yaml
 from build123d import (
     Align,
     BuildPart,
+    BuildSketch,
     Cone,
     Cylinder,
     Location,
     Locations,
+    Mode,
     Part,
+    Plane,
+    RegularPolygon,
     export_step,
+    extrude,
 )
+
+from ._thread_utils import make_external_thread
 
 
 class ScrewSpec(NamedTuple):
-    d:  float   # 公称螺纹直径 / nominal thread diameter
-    dk: float   # 头部最大直径（与安装面齐平处） / head top diameter (flush with surface)
-    k:  float   # 头部高度 / head height
-    pitch: float  # 粗牙螺距 / coarse thread pitch
+    d:     float   # 公称螺纹直径 / nominal thread diameter
+    dk:    float   # 头部最大直径（与安装面齐平处） / head top diameter (flush with surface)
+    k:     float   # 头部高度 / head height
+    pitch: float   # 粗牙螺距 / coarse thread pitch
+    s:     float   # 内六角扳手对边宽 / hex socket key across-flats width
 
+
+# ISO 10642 hex socket key sizes (across-flats) by nominal size
+# 内六角沉头螺丝扳手对边宽（ISO 10642 标准值）
+_HEX_KEY_S: dict[str, float] = {
+    "M2":   1.5, "M2.5": 1.5, "M3": 2.0, "M4": 2.5, "M5": 3.0,
+}
 
 # 静态后备数据 —— 涵盖 YAML 中尚未收录的规格（M2 / M2.5）
 # Static fallback for sizes absent from YAML (M2, M2.5)
 _FALLBACK_SPECS: dict[str, ScrewSpec] = {
-    "M2":   ScrewSpec(d=2.0, dk=3.8,  k=1.1,  pitch=0.40),
-    "M2.5": ScrewSpec(d=2.5, dk=4.7,  k=1.5,  pitch=0.45),
+    "M2":   ScrewSpec(d=2.0, dk=3.8,  k=1.1,  pitch=0.40, s=1.5),
+    "M2.5": ScrewSpec(d=2.5, dk=4.7,  k=1.5,  pitch=0.45, s=1.5),
 }
 
 
@@ -66,12 +81,17 @@ def _load_specs() -> dict[str, ScrewSpec]:
                 continue
             thread = entry.get("thread", {})
             head = entry.get("head", {})
+            size_key = size.upper()
+            # head.s 不在 ISO 10642 YAML 中，用 _HEX_KEY_S 表补全
+            # head.s absent from ISO 10642 YAML; fall back to _HEX_KEY_S lookup
+            s_val = float(head.get("s", _HEX_KEY_S.get(size_key, 2.0)))
             try:
-                specs[size.upper()] = ScrewSpec(
+                specs[size_key] = ScrewSpec(
                     d=float(thread["d"]),
                     dk=float(head["dk"]),
                     k=float(head["k"]),
                     pitch=float(thread["pitch"]),
+                    s=s_val,
                 )
             except (KeyError, TypeError, ValueError):
                 continue
@@ -125,18 +145,21 @@ DEFAULT_LENGTHS: dict[str, float] = _build_default_lengths(_SPECS)
 
 
 def make_countersunk_screw(size: str = "M3", length: float | None = None) -> Part:
-    """Generate an ISO 10642 countersunk screw simplified solid (cone head + plain shank).
-    生成 ISO 10642 内六角沉头螺丝简化实体（锥形头 + 光杆）。
+    """Generate an ISO 10642 countersunk screw solid (cone head + hex recess + ISO threaded shank).
+    生成 ISO 10642 内六角沉头螺丝实体（锥形头 + 内六角凹槽 + ISO 螺纹杆）。
 
     Args:
-        size:   Size string, e.g. "M3", "M2.5".
+        size:   Size string, e.g. "M3", "M2.5". / 规格字符串，如 "M3"、"M2.5"。
         length: Shank length (excluding head). None uses per-size defaults.
+                螺杆长度（不含头部），None 时取各规格默认值。
 
-    Geometry:
-        - Origin at bottom of shank
-        - Shank extends along +Z by `length`
-        - Conical head sits atop the shank: base diameter = d (shank OD),
-          top diameter = dk, height = k (cone flares outward as Z increases)
+    Geometry / 几何:
+        - Origin at bottom of shank / 原点在杆底面中心
+        - Shank extends along +Z by `length` / 杆沿 +Z 伸出 `length`
+        - Conical head: bottom_radius=dk/2, top_radius=d/2, height=k
+          (flares outward as Z increases; top face is flush with installation surface)
+        - Hex socket recess cut into the top flat face of the cone head, depth 0.6*k
+        - ISO external thread fused onto shank / ISO 外螺纹叠加到杆部
     """
     key = size.upper().replace(" ", "").strip()
     if key not in _SPECS:
@@ -148,15 +171,19 @@ def make_countersunk_screw(size: str = "M3", length: float | None = None) -> Par
     if l <= 0:
         raise ValueError(f"length must be > 0, got {l}")
 
+    hex_r = spec.s / math.sqrt(3)       # 内六角外接圆半径 / hex socket circumradius
+    recess_depth = 0.6 * spec.k         # 沉头内六角凹槽深度 / hex recess depth in cone head
+    head_top_z = l + spec.k             # 头顶面 Z 坐标 / Z of cone head top face (flat)
+
     with BuildPart() as screw:
-        # 光杆 / Shank (plain cylinder)
+        # 杆部（小径圆柱，螺纹根部）/ shank cylinder (minor diameter, thread root)
+        r_minor = (spec.d - 1.2269 * spec.pitch) / 2
         Cylinder(
-            radius=spec.d / 2, height=l,
+            radius=r_minor, height=l,
             align=(Align.CENTER, Align.CENTER, Align.MIN),
         )
-        # 锥形头：底面半径 = d/2（与杆相接），顶面半径 = dk/2
-        # Conical head: bottom radius = d/2 (joins shank), top radius = dk/2
-        # Cone in build123d: bottom_radius, top_radius, height, placed at shank top
+        # 锥形头：底面半径 = dk/2（沉孔边缘），顶面半径 = d/2（与杆相接）
+        # Conical head: bottom_radius=dk/2 (outer edge), top_radius=d/2 (joins shank)
         with Locations(Location((0, 0, l))):
             Cone(
                 bottom_radius=spec.dk / 2,
@@ -164,8 +191,14 @@ def make_countersunk_screw(size: str = "M3", length: float | None = None) -> Par
                 height=spec.k,
                 align=(Align.CENTER, Align.CENTER, Align.MIN),
             )
+        # 内六角凹槽：从头顶平面向下减料 / hex socket recess cut down from head top face
+        with BuildSketch(Plane.XY.offset(head_top_z)):
+            RegularPolygon(radius=hex_r, side_count=6)
+        extrude(amount=-recess_depth, mode=Mode.SUBTRACT)
 
-    return screw.part
+    # 叠加 ISO 外螺纹 / fuse ISO external thread onto shank
+    thread = make_external_thread(spec.d, spec.pitch, l)
+    return screw.part.fuse(thread)
 
 
 if __name__ == "__main__":
