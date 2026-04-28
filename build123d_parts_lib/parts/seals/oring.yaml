@@ -1,0 +1,312 @@
+# O 型圈（O-Ring）规格表
+# Standards: ISO 3601-1 / GB/T 3452.1
+# Source: ISO 3601-1:2012  https://www.iso.org/standard/60058.html
+#         GB/T 3452.1-2005 https://openstd.samr.gov.cn
+# Confidence: 5（标准文档原文数值）
+# License: MIT（ISO/GB 标准尺寸为公知数据）
+#
+# 字段说明（ISO 3601-1 术语）：
+#   d1   = 内径 inside diameter (mm)
+#   d2   = 截面直径 cross-section diameter / cord diameter (mm)
+#   tol_d1_plus / minus = 内径公差 (mm)
+#   tol_d2_plus / minus = 截面公差 (mm)
+#
+# 常用截面直径系列 d2:
+#   1.5mm / 2.0mm / 2.5mm / 3.5mm
+#   （GB/T 3452.1 国标常用系列）
+
+# ── d2 = 1.5mm 系列（GB/T 3452.1 常用细截面）──────────────────
+
+OR_03x15:
+  aliases: [o-ring-3x1.5, or-3-15, o3x1.5, gb3452-3-15]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 3.0
+    d2: 1.5
+    unit: mm
+  tolerance:
+    d1_plus: 0.13
+    d1_minus: 0.13
+    d2_plus: 0.09
+    d2_minus: 0.09
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 3.0, d2: 1.5}
+    cache: cache/oring_d3_cs15.step
+  notes: 内径 3mm 截面 1.5mm O 型圈；密封小孔（⌀3~5mm）。
+
+OR_05x15:
+  aliases: [o-ring-5x1.5, or-5-15, o5x1.5]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 5.0
+    d2: 1.5
+    unit: mm
+  tolerance:
+    d1_plus: 0.13
+    d1_minus: 0.13
+    d2_plus: 0.09
+    d2_minus: 0.09
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 5.0, d2: 1.5}
+    cache: cache/oring_d5_cs15.step
+  notes: 内径 5mm 截面 1.5mm；机器人液冷管路小接头常用。
+
+OR_08x15:
+  aliases: [o-ring-8x1.5, or-8-15, o8x1.5]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 8.0
+    d2: 1.5
+    unit: mm
+  tolerance:
+    d1_plus: 0.15
+    d1_minus: 0.15
+    d2_plus: 0.09
+    d2_minus: 0.09
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 8.0, d2: 1.5}
+    cache: cache/oring_d8_cs15.step
+  notes: 内径 8mm 截面 1.5mm。
+
+# ── d2 = 2.0mm 系列 ──────────────────────────────────────────────
+
+OR_05x20:
+  aliases: [o-ring-5x2, or-5-20, o5x2.0]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 5.0
+    d2: 2.0
+    unit: mm
+  tolerance:
+    d1_plus: 0.13
+    d1_minus: 0.13
+    d2_plus: 0.10
+    d2_minus: 0.10
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 5.0, d2: 2.0}
+    cache: cache/oring_d5_cs20.step
+  notes: 内径 5mm 截面 2mm；防水密封常用截面。
+
+OR_10x20:
+  aliases: [o-ring-10x2, or-10-20, o10x2.0]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 10.0
+    d2: 2.0
+    unit: mm
+  tolerance:
+    d1_plus: 0.15
+    d1_minus: 0.15
+    d2_plus: 0.10
+    d2_minus: 0.10
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 10.0, d2: 2.0}
+    cache: cache/oring_d10_cs20.step
+  notes: 内径 10mm 截面 2mm；防水机器人关节密封。
+
+OR_15x20:
+  aliases: [o-ring-15x2, or-15-20, o15x2.0]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 15.0
+    d2: 2.0
+    unit: mm
+  tolerance:
+    d1_plus: 0.18
+    d1_minus: 0.18
+    d2_plus: 0.10
+    d2_minus: 0.10
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 15.0, d2: 2.0}
+    cache: cache/oring_d15_cs20.step
+  notes: 内径 15mm 截面 2mm。
+
+# ── d2 = 2.5mm 系列 ──────────────────────────────────────────────
+
+OR_20x25:
+  aliases: [o-ring-20x2.5, or-20-25, o20x2.5]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 20.0
+    d2: 2.5
+    unit: mm
+  tolerance:
+    d1_plus: 0.21
+    d1_minus: 0.21
+    d2_plus: 0.11
+    d2_minus: 0.11
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 20.0, d2: 2.5}
+    cache: cache/oring_d20_cs25.step
+  notes: 内径 20mm 截面 2.5mm；中型管路法兰密封。
+
+OR_30x25:
+  aliases: [o-ring-30x2.5, or-30-25, o30x2.5]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 30.0
+    d2: 2.5
+    unit: mm
+  tolerance:
+    d1_plus: 0.26
+    d1_minus: 0.26
+    d2_plus: 0.11
+    d2_minus: 0.11
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 30.0, d2: 2.5}
+    cache: cache/oring_d30_cs25.step
+  notes: 内径 30mm 截面 2.5mm；大型液冷/气动系统密封。
+
+# ── d2 = 3.5mm 系列（大截面，高压/重载密封）─────────────────────
+
+OR_10x35:
+  aliases: [o-ring-10x3.5, or-10-35, o10x3.5]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 10.0
+    d2: 3.5
+    unit: mm
+  tolerance:
+    d1_plus: 0.18
+    d1_minus: 0.18
+    d2_plus: 0.13
+    d2_minus: 0.13
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 10.0, d2: 3.5}
+    cache: cache/oring_d10_cs35.step
+  notes: 内径 10mm 截面 3.5mm O 型圈 / O-ring ID 10mm cord 3.5mm.
+
+OR_20x35:
+  aliases: [o-ring-20x3.5, or-20-35, o20x3.5]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 20.0
+    d2: 3.5
+    unit: mm
+  tolerance:
+    d1_plus: 0.21
+    d1_minus: 0.21
+    d2_plus: 0.13
+    d2_minus: 0.13
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 20.0, d2: 3.5}
+    cache: cache/oring_d20_cs35.step
+  notes: 内径 20mm 截面 3.5mm O 型圈 / O-ring ID 20mm cord 3.5mm.
+
+OR_30x35:
+  aliases: [o-ring-30x3.5, or-30-35, o30x3.5]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 30.0
+    d2: 3.5
+    unit: mm
+  tolerance:
+    d1_plus: 0.26
+    d1_minus: 0.26
+    d2_plus: 0.13
+    d2_minus: 0.13
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 30.0, d2: 3.5}
+    cache: cache/oring_d30_cs35.step
+  notes: 内径 30mm 截面 3.5mm O 型圈 / O-ring ID 30mm cord 3.5mm.
+
+OR_50x35:
+  aliases: [o-ring-50x3.5, or-50-35, o50x3.5]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 50.0
+    d2: 3.5
+    unit: mm
+  tolerance:
+    d1_plus: 0.36
+    d1_minus: 0.36
+    d2_plus: 0.13
+    d2_minus: 0.13
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 50.0, d2: 3.5}
+    cache: cache/oring_d50_cs35.step
+  notes: 内径 50mm 截面 3.5mm O 型圈 / O-ring ID 50mm cord 3.5mm.

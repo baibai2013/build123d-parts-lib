@@ -1,41 +1,60 @@
 """MR series miniature deep-groove ball bearing (simplified).
+MR 系列微型深沟球轴承（简化版）。
 
-Source: data-sources/bearings.yaml:MR63ZZ~MR104ZZ (skill build123d-cad)
+Source: bearings.yaml (YAML single source of truth / YAML 单一数据源)
 Standards: ISO 15 / JIS B1521
 License: MIT
 
-支持型号：MR63ZZ / MR74ZZ / MR84ZZ / MR85ZZ / MR104ZZ
+支持型号 / Supported models:
+    MR63ZZ / MR74ZZ / MR84ZZ / MR85ZZ / MR104ZZ
 
-简化程度：
-- 外圈 + 内圈 + 保持架（用中径圆柱近似）
-- 不建模滚球；足够装配定位与 bbox 占位
-- 两端盖用浅槽区分（ZZ 双金属盖）
+简化程度 / Simplification level:
+- 外圈 + 内圈 + 保持架（用中径圆柱近似）/ outer ring + inner ring + cage (mid-diameter cylinder approx)
+- 不建模滚球；足够装配定位与 bbox 占位 / no balls modeled; sufficient for assembly and bbox
+- 两端盖用浅槽区分（ZZ 双金属盖）/ end shields approximated
 """
 from __future__ import annotations
 
 from pathlib import Path
 from typing import NamedTuple
 
+import yaml
 from build123d import (
-    Align, Axis, BuildPart, Cylinder, Locations, Location,
-    Mode, Part, export_step,
+    Align,
+    BuildPart,
+    Cylinder,
+    Mode,
+    Part,
+    export_step,
 )
 
 
 class MRSpec(NamedTuple):
-    d: float   # inner diameter
-    D: float   # outer diameter
-    B: float   # width
+    d: float   # inner diameter / 内径
+    D: float   # outer diameter / 外径
+    B: float   # width / 宽度
 
 
-# 参数表（与 data-sources/bearings.yaml 对应）
-_SPECS: dict[str, MRSpec] = {
-    "MR63ZZ":  MRSpec(d=3.0,  D=6.0,  B=2.5),
-    "MR74ZZ":  MRSpec(d=4.0,  D=7.0,  B=2.5),
-    "MR84ZZ":  MRSpec(d=4.0,  D=8.0,  B=3.0),
-    "MR85ZZ":  MRSpec(d=5.0,  D=8.0,  B=2.5),
-    "MR104ZZ": MRSpec(d=4.0,  D=10.0, B=4.0),
-}
+def _load_specs() -> dict[str, MRSpec]:
+    """Load MR bearing specs from bearings.yaml.
+    从 bearings.yaml 加载 MR 系列微型轴承规格（仅 miniature-deep-groove-ball-bearing 类型）。
+    """
+    yaml_path = Path(__file__).parent / "bearings.yaml"
+    raw = yaml.safe_load(yaml_path.read_text())
+    specs: dict[str, MRSpec] = {}
+    for key, entry in raw.items():
+        if not isinstance(entry, dict):
+            continue
+        # 仅加载微型深沟球轴承 / only load miniature deep-groove type
+        if entry.get("type") != "miniature-deep-groove-ball-bearing":
+            continue
+        dims = entry.get("dimensions", {})
+        specs[key] = MRSpec(d=dims["d"], D=dims["D"], B=dims["B"])
+    return specs
+
+
+# 参数表（从 bearings.yaml 动态加载 / loaded dynamically from bearings.yaml）
+_SPECS: dict[str, MRSpec] = _load_specs()
 
 SHIELD_DEPTH = 0.4   # ZZ 防尘盖槽深（近似值）
 CAGE_RATIO   = 0.55  # 保持架中径 = (d + D) / 2 × ratio（视觉近似）
@@ -55,7 +74,7 @@ def make_mr_bearing(model: str = "MR85ZZ") -> Part:
     key = model.upper()
     if key not in _SPECS:
         available = ", ".join(_SPECS.keys())
-        raise ValueError(f"未知型号 {model!r}，可用型号：{available}")
+        raise ValueError(f"unknown model / 未知型号 {model!r}. Available / 可用型号：{available}")
 
     spec = _SPECS[key]
     r_inner = spec.d / 2

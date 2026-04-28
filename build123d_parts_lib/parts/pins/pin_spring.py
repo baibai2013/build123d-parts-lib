@@ -15,7 +15,11 @@ from __future__ import annotations
 from pathlib import Path
 
 from build123d import (
-    Align, Axis, BuildPart, Cylinder, Part, export_step,
+    Align,
+    BuildPart,
+    Cylinder,
+    Part,
+    export_step,
 )
 
 # 外径 -> 壁厚（ISO 8752 轻型系列）

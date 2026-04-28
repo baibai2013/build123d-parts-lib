@@ -16,8 +16,15 @@ from __future__ import annotations
 from pathlib import Path
 
 from build123d import (
-    Align, Axis, BuildPart, Cylinder, Part, Torus, export_step,
-    Location, Mode, add,
+    Align,
+    BuildPart,
+    Cylinder,
+    Location,
+    Mode,
+    Part,
+    Torus,
+    add,
+    export_step,
 )
 
 # 环头参数：(major_radius, minor_radius, ring_thickness)

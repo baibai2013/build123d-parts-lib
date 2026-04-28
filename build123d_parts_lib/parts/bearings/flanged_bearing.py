@@ -1,44 +1,72 @@
 """法兰微型深沟球轴承（Flanged Miniature Deep-Groove Ball Bearing），简化版。
+Flanged miniature deep-groove ball bearing, simplified.
 
-Source: data-sources/bearings.yaml (skill build123d-cad)
+Source: bearings.yaml (YAML single source of truth / YAML 单一数据源)
 Standards: ISO 15 / JIS B1521（法兰系列）
 License: MIT
 
-支持型号：F688ZZ / F693ZZ / F623ZZ / F624ZZ / F625ZZ / F684ZZ
+支持型号 / Supported models:
+    F688ZZ / F693ZZ / F623ZZ / F624ZZ / F625ZZ / F684ZZ
 
-简化程度：
+简化程度 / Simplification level:
 - 外圈 + 内圈 + 保持架（用中径圆柱近似）+ 法兰圆盘
-- 不建模滚球；足够装配定位与 bbox 占位
+  outer ring + inner ring + cage (mid-diameter cylinder approx) + flange disc
+- 不建模滚球；足够装配定位与 bbox 占位 / no balls modeled; sufficient for assembly and bbox
 - 法兰贴在外圈 +Z 端（主体 Z 居中，法兰往 +Z 伸出）
+  flange at +Z end of body (body Z-centered, flange protrudes +Z)
 """
 from __future__ import annotations
 
 from pathlib import Path
 from typing import NamedTuple
 
+import yaml
 from build123d import (
-    Align, BuildPart, Cylinder, Location, Locations,
-    Mode, Part, export_step,
+    Align,
+    BuildPart,
+    Cylinder,
+    Location,
+    Locations,
+    Mode,
+    Part,
+    export_step,
 )
 
 
 class FlangedBearingSpec(NamedTuple):
-    d: float         # inner diameter
-    D: float         # outer diameter
-    B: float         # width (body only, excluding flange)
-    flange_D: float  # flange outer diameter
-    flange_t: float  # flange thickness
+    d: float         # inner diameter / 内径
+    D: float         # outer diameter / 外径
+    B: float         # width (body only, excluding flange) / 宽度（不含法兰）
+    flange_D: float  # flange outer diameter / 法兰外径
+    flange_t: float  # flange thickness / 法兰厚度
 
 
-# 参数表（与 data-sources/bearings.yaml 对应）
-_SPECS: dict[str, FlangedBearingSpec] = {
-    "F688ZZ": FlangedBearingSpec(d=8.0, D=16.0, B=5.0,   flange_D=17.5, flange_t=1.0),
-    "F693ZZ": FlangedBearingSpec(d=3.0, D=8.0,  B=3.0,   flange_D=9.2,  flange_t=0.6),
-    "F623ZZ": FlangedBearingSpec(d=3.0, D=10.0, B=4.0,   flange_D=11.2, flange_t=0.8),
-    "F624ZZ": FlangedBearingSpec(d=4.0, D=13.0, B=5.0,   flange_D=14.5, flange_t=1.0),
-    "F625ZZ": FlangedBearingSpec(d=5.0, D=16.0, B=5.0,   flange_D=17.5, flange_t=1.0),
-    "F684ZZ": FlangedBearingSpec(d=4.0, D=9.0,  B=2.5,   flange_D=10.3, flange_t=0.6),
-}
+def _load_specs() -> dict[str, FlangedBearingSpec]:
+    """Load flanged bearing specs from bearings.yaml.
+    从 bearings.yaml 加载法兰轴承规格（仅 flanged-deep-groove-ball-bearing 类型）。
+    """
+    yaml_path = Path(__file__).parent / "bearings.yaml"
+    raw = yaml.safe_load(yaml_path.read_text())
+    specs: dict[str, FlangedBearingSpec] = {}
+    for key, entry in raw.items():
+        if not isinstance(entry, dict):
+            continue
+        # 仅加载法兰深沟球轴承 / only load flanged deep-groove type
+        if entry.get("type") != "flanged-deep-groove-ball-bearing":
+            continue
+        dims = entry.get("dimensions", {})
+        specs[key] = FlangedBearingSpec(
+            d=dims["d"],
+            D=dims["D"],
+            B=dims["B"],
+            flange_D=dims["flange_D"],
+            flange_t=dims["flange_t"],
+        )
+    return specs
+
+
+# 参数表（从 bearings.yaml 动态加载 / loaded dynamically from bearings.yaml）
+_SPECS: dict[str, FlangedBearingSpec] = _load_specs()
 
 
 def make_flanged_bearing(model: str = "F688ZZ") -> Part:
@@ -55,7 +83,7 @@ def make_flanged_bearing(model: str = "F688ZZ") -> Part:
     key = model.upper()
     if key not in _SPECS:
         available = ", ".join(_SPECS.keys())
-        raise ValueError(f"未知型号 {model!r}，可用型号：{available}")
+        raise ValueError(f"unknown model / 未知型号 {model!r}. Available / 可用型号：{available}")
 
     spec = _SPECS[key]
     r_inner   = spec.d / 2

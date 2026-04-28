@@ -1,0 +1,41 @@
+# BOLTS → 本库 YAML 字段映射表
+# 用于 bolts_to_yaml.py 的转换规则
+# License: MIT
+
+field_mapping:
+  # BOLTS .blt 字段 → 本库 schema 字段
+  "id":                         "key"           # YAML 顶层 key，转大写
+  "names.name.nice":            "aliases[0]"    # 主名称
+  "names.name.short":           "aliases[1]"    # 缩写
+  "names.name.versions":        "aliases[2:]"   # 其他版本名
+  "standards[].body+standard":  "standard"      # 拼接为 "ISO XXXX / DIN XXX"
+  "parameters.tables[0]":       "dimensions"    # 第一个参数表展开为 dimensions
+  "source.url":                 "source.primary"
+  "source.description":         "notes"
+
+confidence_defaults:
+  # 若 BOLTS 标注了 ISO/DIN/ANSI 则给 5，否则 4
+  iso: 5
+  din: 5
+  ansi: 5
+  jis: 5
+  gb: 5
+  default: 4
+
+factory_template:
+  # 根据 BOLTS 类别自动推断 factory 路径
+  hex_socket_head:
+    module: "build123d_parts_lib.parts.fasteners.socket_head_screw"
+    fn: "make_socket_head_screw"
+  hex_bolt:
+    module: "build123d_parts_lib.parts.fasteners.hex_bolt"
+    fn: "make_hex_bolt"
+  hex_nut:
+    module: "build123d_parts_lib.parts.fasteners.nut_hex"
+    fn: "make_hex_nut"
+  washer:
+    module: "build123d_parts_lib.parts.fasteners.washer"
+    fn: "make_washer"
+  extrusion:
+    module: "build123d_parts_lib.parts.extrusions.aluminum_extrusion"
+    fn: "make_aluminum_extrusion"

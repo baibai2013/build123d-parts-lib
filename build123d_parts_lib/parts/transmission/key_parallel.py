@@ -17,9 +17,15 @@ from pathlib import Path
 from typing import NamedTuple
 
 from build123d import (
-    Align, Axis, BuildPart, BuildSketch,
-    Circle, Cylinder, Location, Locations,
-    Mode, Part, Plane, Rectangle,
+    Align,
+    BuildPart,
+    BuildSketch,
+    Circle,
+    Location,
+    Locations,
+    Part,
+    Plane,
+    Rectangle,
     export_step,
 )
 from build123d import extrude as bd_extrude

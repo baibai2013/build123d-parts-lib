@@ -13,7 +13,13 @@ from __future__ import annotations
 from pathlib import Path
 
 from build123d import (
-    Align, BuildPart, Cylinder, Location, Locations, Part, export_step,
+    Align,
+    BuildPart,
+    Cylinder,
+    Location,
+    Locations,
+    Part,
+    export_step,
 )
 
 # ===== M2.5 ISO 4762 参数 =====

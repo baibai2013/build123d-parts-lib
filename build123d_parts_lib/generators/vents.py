@@ -8,7 +8,12 @@ License: MIT
 from __future__ import annotations
 
 from build123d import (
-    BuildSketch, Circle, Face, GridLocations, Rectangle, Sketch,
+    BuildSketch,
+    Circle,
+    Face,
+    GridLocations,
+    Rectangle,
+    Sketch,
 )
 
 
@@ -58,7 +63,7 @@ def make_vent_pattern(
 
 
 if __name__ == "__main__":
-    from build123d import BuildPart, Box, Axis, Mode, extrude, export_step
+    from build123d import Axis, Box, BuildPart
     with BuildPart() as demo:
         Box(60, 40, 5)
         top = demo.faces().sort_by(Axis.Z)[-1]

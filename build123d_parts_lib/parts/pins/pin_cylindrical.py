@@ -15,7 +15,13 @@ from __future__ import annotations
 from pathlib import Path
 
 from build123d import (
-    Align, Axis, BuildPart, chamfer, Cylinder, Part, export_step,
+    Align,
+    Axis,
+    BuildPart,
+    Cylinder,
+    Part,
+    chamfer,
+    export_step,
 )
 
 # 标准倒角长度（GB/T 119.1）

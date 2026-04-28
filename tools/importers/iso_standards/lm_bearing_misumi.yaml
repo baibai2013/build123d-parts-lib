@@ -1,0 +1,178 @@
+# 直线球轴承（Linear Ball Bearing）规格表
+# Standards: ISO 10736 / JIS B 2604（尺寸系列）
+# Source: MISUMI LMUU 系列 https://us.misumi-ec.com  + ISO 10736
+# Confidence: 5（与 ISO 10736 标准一致）
+# License: MIT（ISO 标准尺寸为公知数据）
+#
+# 字段说明：
+#   d   = 内径（轴径）bore diameter (mm)
+#   D   = 外径 outer diameter (mm)
+#   L   = 总长 overall length (mm)
+#   B   = 螺纹间距 thread spacing (mm)
+#   d1  = 挡圈槽位置 retaining groove position (mm)
+#   dynamic_c_n  = 动载额定负荷 dynamic load rating (N)
+#   static_c0_n  = 静载额定负荷 static load rating (N)
+
+LM6UU:
+  aliases: [lm6uu, lm6-uu, lm6, linear-bearing-6mm]
+  standard: "ISO 10736 / JIS B 2604"
+  type: linear-ball-bearing
+  dimensions:
+    d: 6.0
+    D: 12.0
+    L: 19.0
+    unit: mm
+  load:
+    dynamic_c_n: 58
+    static_c0_n: 25
+  weight_g: 7
+  fit:
+    shaft_d: 6.0
+    housing_D: 12.0
+  source:
+    primary: https://us.misumi-ec.com/vona2/detail/110300026540/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.bearings.linear_bushing
+    fn: make_linear_bushing
+    args: {model: "LM6UU"}
+    cache: cache/lm6uu.step
+  notes: D6 轴直线轴承；3D 打印机 X/Y 轴最常用规格。
+
+LM8UU:
+  aliases: [lm8uu, lm8-uu, lm8, linear-bearing-8mm]
+  standard: "ISO 10736 / JIS B 2604"
+  type: linear-ball-bearing
+  dimensions:
+    d: 8.0
+    D: 15.0
+    L: 24.0
+    unit: mm
+  load:
+    dynamic_c_n: 137
+    static_c0_n: 62
+  weight_g: 15
+  fit:
+    shaft_d: 8.0
+    housing_D: 15.0
+  source:
+    primary: https://us.misumi-ec.com/vona2/detail/110300026540/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.bearings.linear_bushing
+    fn: make_linear_bushing
+    args: {model: "LM8UU"}
+    cache: cache/lm8uu.step
+  notes: D8 轴直线轴承；RepRap/Prusa 标准件，机器人滑台常用。
+
+LM10UU:
+  aliases: [lm10uu, lm10-uu, lm10, linear-bearing-10mm]
+  standard: "ISO 10736 / JIS B 2604"
+  type: linear-ball-bearing
+  dimensions:
+    d: 10.0
+    D: 19.0
+    L: 29.0
+    unit: mm
+  load:
+    dynamic_c_n: 208
+    static_c0_n: 95
+  weight_g: 30
+  fit:
+    shaft_d: 10.0
+    housing_D: 19.0
+  source:
+    primary: https://us.misumi-ec.com/vona2/detail/110300026540/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.bearings.linear_bushing
+    fn: make_linear_bushing
+    args: {model: "LM10UU"}
+    cache: cache/lm10uu.step
+  notes: D10 轴直线轴承；中型机器人 Z 轴滑台。
+
+LM12UU:
+  aliases: [lm12uu, lm12-uu, lm12, linear-bearing-12mm]
+  standard: "ISO 10736 / JIS B 2604"
+  type: linear-ball-bearing
+  dimensions:
+    d: 12.0
+    D: 21.0
+    L: 30.0
+    unit: mm
+  load:
+    dynamic_c_n: 290
+    static_c0_n: 140
+  weight_g: 35
+  fit:
+    shaft_d: 12.0
+    housing_D: 21.0
+  source:
+    primary: https://us.misumi-ec.com/vona2/detail/110300026540/
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.bearings.linear_bushing
+    fn: make_linear_bushing
+    args: {model: "LM12UU"}
+    cache: cache/lm12uu.step
+  notes: D12 轴直线轴承；大型 3D 打印机/CNC。
+
+LMF8UU:
+  aliases: [lmf8uu, lmf8-uu, lmf8, flanged-linear-bearing-8mm]
+  standard: "JIS B 2604（法兰型）"
+  type: flanged-linear-ball-bearing
+  dimensions:
+    d: 8.0
+    D: 15.0
+    L: 24.0
+    flange_D: 22.0
+    flange_t: 1.6
+    unit: mm
+  load:
+    dynamic_c_n: 137
+    static_c0_n: 62
+  fit:
+    shaft_d: 8.0
+    housing_D: 15.0
+  source:
+    primary: https://us.misumi-ec.com/vona2/detail/110300026540/
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.bearings.linear_bushing
+    fn: make_linear_bushing
+    args: {model: "LMF8UU"}
+    cache: cache/lmf8uu.step
+  notes: D8 法兰直线轴承；法兰定位，免轴向挡圈，安装更方便。
+
+LMF10UU:
+  aliases: [lmf10uu, lmf10-uu, lmf10, flanged-linear-bearing-10mm]
+  standard: "JIS B 2604（法兰型）"
+  type: flanged-linear-ball-bearing
+  dimensions:
+    d: 10.0
+    D: 19.0
+    L: 29.0
+    flange_D: 26.0
+    flange_t: 1.8
+    unit: mm
+  load:
+    dynamic_c_n: 208
+    static_c0_n: 95
+  fit:
+    shaft_d: 10.0
+    housing_D: 19.0
+  source:
+    primary: https://us.misumi-ec.com/vona2/detail/110300026540/
+    confidence: 4
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.bearings.linear_bushing
+    fn: make_linear_bushing
+    args: {model: "LMF10UU"}
+    cache: cache/lmf10uu.step
+  notes: D10 法兰直线轴承。

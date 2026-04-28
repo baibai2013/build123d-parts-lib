@@ -12,8 +12,18 @@ from __future__ import annotations
 from pathlib import Path
 
 from build123d import (
-    Align, Axis, Box, BuildPart, BuildSketch, Circle, Cylinder,
-    Locations, Mode, Part, Plane, Rectangle, export_step, extrude,
+    Align,
+    Box,
+    BuildPart,
+    BuildSketch,
+    Circle,
+    Locations,
+    Mode,
+    Part,
+    Plane,
+    Rectangle,
+    export_step,
+    extrude,
 )
 
 # ── 机体 ──────────────────────────────────────────────────────────────────
@@ -25,6 +35,7 @@ BODY_H = 27.9    # Z 高含底部连接器凸台（实测，规格书仅壳体 2
 EAR_W_TOTAL   = 29.9   # 含两侧耳朵总 X 宽（实测，规格书 32.2）
 EAR_T         = 2.4    # 耳朵板厚（实测）
 EAR_Z_FROM_TOP = 8.5   # 耳朵上表面距机体顶面（实测）
+EAR_Z_OFFSET  = BODY_H - EAR_Z_FROM_TOP - EAR_T / 2  # 耳中心距机体底面 / ear center Z from body bottom
 SCREW_D       = 2.1    # 螺孔直径（实测）
 SCREW_PITCH   = 27.8   # 两螺孔间距（实测）
 

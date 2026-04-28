@@ -13,6 +13,8 @@
 
 MR63ZZ:
   aliases: [mr63zz, mr63-zz, mr63-2z, mr-63zz]
+  standard: "ISO 15 / JIS B1521"
+  type: miniature-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 3.0
@@ -40,6 +42,8 @@ MR63ZZ:
 
 MR74ZZ:
   aliases: [mr74zz, mr74-zz, mr74-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: miniature-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 4.0
@@ -67,6 +71,8 @@ MR74ZZ:
 
 MR84ZZ:
   aliases: [mr84zz, mr84-zz, mr84-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: miniature-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 4.0
@@ -94,6 +100,8 @@ MR84ZZ:
 
 MR85ZZ:
   aliases: [mr85zz, mr85-zz, mr85-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: miniature-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 5.0
@@ -121,6 +129,8 @@ MR85ZZ:
 
 MR104ZZ:
   aliases: [mr104zz, mr104-zz, mr104-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: miniature-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 4.0
@@ -152,6 +162,8 @@ MR104ZZ:
 
 608ZZ:
   aliases: [608zz, 608-2z, 608-zz, 608rs]
+  standard: "ISO 15 / DIN 625"
+  type: deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 8.0
@@ -179,6 +191,8 @@ MR104ZZ:
 
 624ZZ:
   aliases: [624zz, 624-2z, 624-zz]
+  standard: "ISO 15 / DIN 625"
+  type: deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 4.0
@@ -206,6 +220,8 @@ MR104ZZ:
 
 625ZZ:
   aliases: [625zz, 625-2z, 625-zz]
+  standard: "ISO 15 / DIN 625"
+  type: deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 5.0
@@ -233,6 +249,8 @@ MR104ZZ:
 
 626ZZ:
   aliases: [626zz, 626-2z, 626-zz]
+  standard: "ISO 15 / DIN 625"
+  type: deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 6.0
@@ -260,6 +278,8 @@ MR104ZZ:
 
 6000ZZ:
   aliases: [6000zz, 6000-2z, 6000-zz]
+  standard: "ISO 15 / DIN 625"
+  type: deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 10.0
@@ -287,6 +307,8 @@ MR104ZZ:
 
 6001-2RS:
   aliases: [6001-2rs, 60012rs, 6001rs, 6001-rs]
+  standard: "ISO 15 / DIN 625"
+  type: deep-groove-ball-bearing
   shielding: 2RS
   dimensions:
     d: 12.0
@@ -314,6 +336,8 @@ MR104ZZ:
 
 6002ZZ:
   aliases: [6002zz, 6002-2z, 6002-zz]
+  standard: "ISO 15 / DIN 625"
+  type: deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 15.0
@@ -349,6 +373,8 @@ MR104ZZ:
 
 F688ZZ:
   aliases: [f688zz, f688-zz, f688-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: flanged-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 8.0
@@ -373,6 +399,8 @@ F688ZZ:
 
 F693ZZ:
   aliases: [f693zz, f693-zz, f693-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: flanged-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 3.0
@@ -397,6 +425,8 @@ F693ZZ:
 
 F623ZZ:
   aliases: [f623zz, f623-zz, f623-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: flanged-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 3.0
@@ -421,6 +451,8 @@ F623ZZ:
 
 F624ZZ:
   aliases: [f624zz, f624-zz, f624-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: flanged-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 4.0
@@ -445,6 +477,8 @@ F624ZZ:
 
 F625ZZ:
   aliases: [f625zz, f625-zz, f625-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: flanged-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 5.0
@@ -469,6 +503,8 @@ F625ZZ:
 
 F684ZZ:
   aliases: [f684zz, f684-zz, f684-2z]
+  standard: "ISO 15 / JIS B1521"
+  type: flanged-deep-groove-ball-bearing
   shielding: 2Z
   dimensions:
     d: 4.0

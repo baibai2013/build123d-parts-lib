@@ -2,6 +2,37 @@
 # Standards: ISO 4762 / DIN 912
 # License: MIT
 
+M2_ISO4762:
+  aliases: [M2, m2, M2-ISO4762, M2-DIN912, m2-socket-head]
+  standard: "ISO 4762 / DIN 912"
+  type: hex-socket-head-cap-screw
+  thread:
+    d: 2.0
+    pitch: 0.40
+    unit: mm
+  head:
+    dk: 3.8
+    k: 2.0
+    s: 1.5
+  clearance_hole:
+    close_fit: 2.2
+    medium_fit: 2.4
+    loose_fit: 2.6
+  counterbore:
+    diameter: 4.0
+    depth: 2.3
+  common_lengths_mm: [3, 4, 5, 6, 8, 10, 12, 16]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.socket_head_screw
+    fn: make_socket_head_screw
+    args: {size: "M2", length: 8}
+    cache: cache/m2_iso4762_L8.step
+  notes: ISO 4762 M2 内六角螺丝；微型机器人最小常用规格。
+
 M3_ISO4762:
   aliases: [M3, m3, M3-ISO4762, M3-DIN912, m3-socket-head]
   standard: "ISO 4762 / DIN 912"
@@ -67,6 +98,68 @@ M2_5_ISO4762:
     args: {size: "M2.5", length: 8}
     cache: cache/m2_5_iso4762_L8.step
   notes: 机器人/无人机常用；SolidWorks Toolbox DIN 912 M2.5，头径 4.5mm。
+
+M4_ISO4762:
+  aliases: [M4, m4, M4-ISO4762, M4-DIN912, m4-socket-head]
+  standard: "ISO 4762 / DIN 912"
+  type: hex-socket-head-cap-screw
+  thread:
+    d: 4.0
+    pitch: 0.70
+    unit: mm
+  head:
+    dk: 7.0
+    k: 4.0
+    s: 3.0
+  clearance_hole:
+    close_fit: 4.3
+    medium_fit: 4.5
+    loose_fit: 4.8
+  counterbore:
+    diameter: 7.5
+    depth: 4.4
+  common_lengths_mm: [6, 8, 10, 12, 14, 16, 20, 25, 30]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.socket_head_screw
+    fn: make_socket_head_screw
+    args: {size: "M4", length: 12}
+    cache: cache/m4_iso4762_L12.step
+  notes: ISO 4762 M4 内六角圆柱头螺丝；机器人框架常用规格。
+
+M5_ISO4762:
+  aliases: [M5, m5, M5-ISO4762, M5-DIN912, m5-socket-head]
+  standard: "ISO 4762 / DIN 912"
+  type: hex-socket-head-cap-screw
+  thread:
+    d: 5.0
+    pitch: 0.80
+    unit: mm
+  head:
+    dk: 8.5
+    k: 5.0
+    s: 4.0
+  clearance_hole:
+    close_fit: 5.3
+    medium_fit: 5.5
+    loose_fit: 5.8
+  counterbore:
+    diameter: 9.0
+    depth: 5.5
+  common_lengths_mm: [8, 10, 12, 14, 16, 20, 25, 30, 40]
+  source:
+    primary: https://www.bossard.com
+    confidence: 5
+    last_verified: 2026-04-28
+  factory:
+    module: build123d_parts_lib.parts.fasteners.socket_head_screw
+    fn: make_socket_head_screw
+    args: {size: "M5", length: 16}
+    cache: cache/m5_iso4762_L16.step
+  notes: ISO 4762 M5 内六角圆柱头螺丝；中型机器人常用规格。
 
 M6_ISO4762:
   aliases: [M6, m6, M6-ISO4762, M6-DIN912, m6-socket-head]

@@ -17,14 +17,20 @@ import math
 from pathlib import Path
 
 from build123d import (
-    Align, Axis, BuildLine, BuildPart, BuildSketch,
-    Circle, Cylinder, Line, Location, Locations,
-    Mode, Part, Plane, PolarLine, Rectangle,
-    SagittaArc, TangentArc, Wire,
-    export_step, make_face,
+    Align,
+    Axis,
+    BuildPart,
+    BuildSketch,
+    Circle,
+    Location,
+    Locations,
+    Mode,
+    Part,
+    Plane,
+    Rectangle,
+    export_step,
 )
 from build123d import extrude as bd_extrude
-
 
 # GT2 带标准厚度
 _THICKNESS = 1.38  # mm（GT2 带厚，橡胶基带）

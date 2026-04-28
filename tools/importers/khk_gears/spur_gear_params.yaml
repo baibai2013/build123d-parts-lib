@@ -1,0 +1,53 @@
+# KHK 直齿圆柱齿轮标准规格表（Spur Gear）
+# Standards: JIS B 1701-1 / ISO 53
+# Source: https://khkgears.net (产品目录公开参数)
+# License: MIT（公知几何参数，非 KHK 版权内容）
+#
+# 字段说明：
+#   m      = 模数 module (mm)
+#   z      = 齿数 number of teeth
+#   alpha  = 压力角 pressure angle (°)，标准 20°
+#   d      = 节圆直径 pitch diameter = m × z (mm)
+#   da     = 齿顶圆直径 outside diameter = m × (z + 2) (mm)
+#   df     = 齿根圆直径 root diameter = m × (z - 2.5) (mm)
+#   h      = 全齿高 whole depth = 2.25 × m (mm)
+#   b_typ  = 典型齿宽 typical face width = 10 × m (mm)
+#
+# 注：所有参数均可由 gear_formulas.py 计算验证
+
+standard_tooth_proportions:
+  addendum_coeff: 1.00        # ha = 1.00 × m
+  dedendum_coeff: 1.25        # hf = 1.25 × m
+  whole_depth_coeff: 2.25     # h  = 2.25 × m
+  clearance_coeff: 0.25       # c  = 0.25 × m
+  standard_pressure_angle: 20.0   # degrees
+
+# 常用模数系列（JIS B 1701 第一优先系列）
+preferred_modules: [0.5, 0.8, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0]
+
+# 常用齿数范围（KHK 标准库）
+common_tooth_counts:
+  m0_5: [10, 12, 15, 16, 17, 18, 20, 24, 25, 30, 36, 40, 48, 50, 60]
+  m1_0: [10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 25, 28, 30, 32, 35, 36, 40, 45, 48, 50, 60, 72, 80, 96, 100]
+  m1_5: [10, 12, 14, 15, 16, 17, 18, 20, 22, 24, 25, 28, 30, 32, 35, 36, 40, 45, 48, 50, 60, 72, 80, 100]
+  m2_0: [10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 25, 28, 30, 32, 35, 36, 40, 45, 48, 50, 60, 72, 80]
+  m2_5: [10, 12, 14, 15, 17, 18, 20, 22, 24, 25, 28, 30, 32, 36, 40, 45, 50, 60]
+  m3_0: [10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 25, 28, 30, 32, 35, 36, 40, 45, 50, 60]
+
+# 精度等级（JIS B 1702-1:1998）
+accuracy_grades:
+  N4: "超精密（ N4，测量机器用）"
+  N5: "精密（N5，精密减速机用）"
+  N6: "高精（N6，一般机器用，KHK 标准品）"
+  N7: "普通（N7，3D 打印/教学用）"
+  N8: "粗（N8，速度< 1m/s）"
+
+# 推荐使用精度等级
+default_grade: "N6"
+
+# 材料代码（KHK 常用）
+materials:
+  S45C: { name: "碳素钢 S45C", density_g_cm3: 7.85 }
+  MC901: { name: "MC 尼龙", density_g_cm3: 1.16 }
+  A2017: { name: "铝合金 A2017", density_g_cm3: 2.79 }
+  SUS303: { name: "不锈钢 SUS303", density_g_cm3: 7.93 }

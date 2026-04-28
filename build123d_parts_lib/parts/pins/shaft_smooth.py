@@ -14,7 +14,13 @@ from __future__ import annotations
 from pathlib import Path
 
 from build123d import (
-    Align, Axis, BuildPart, chamfer, Cylinder, Part, export_step,
+    Align,
+    Axis,
+    BuildPart,
+    Cylinder,
+    Part,
+    chamfer,
+    export_step,
 )
 
 # 直径 -> (倒角长度, 默认长度, 最小长度, 最大长度)

@@ -14,8 +14,18 @@ License: MIT
 from __future__ import annotations
 
 from build123d import (
-    BuildPart, BuildSketch, Rectangle, Circle, Locations, Location,
-    Mode, Part, Plane, Axis, extrude, fillet,
+    Axis,
+    BuildPart,
+    BuildSketch,
+    Circle,
+    Location,
+    Locations,
+    Mode,
+    Part,
+    Plane,
+    Rectangle,
+    extrude,
+    fillet,
 )
 
 

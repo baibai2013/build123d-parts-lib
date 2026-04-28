@@ -14,8 +14,15 @@ License: MIT
 from __future__ import annotations
 
 from build123d import (
-    BuildPart, Sphere, Cylinder, Box, Plane, Part, Mode, Location, Locations,
-    Align, Axis,
+    Align,
+    Box,
+    BuildPart,
+    Cylinder,
+    Location,
+    Locations,
+    Mode,
+    Part,
+    Sphere,
 )
 
 

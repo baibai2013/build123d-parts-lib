@@ -17,8 +17,18 @@ from pathlib import Path
 from typing import NamedTuple
 
 from build123d import (
-    Axis, BuildPart, BuildSketch, Circle, Locations, Mode, Part, Plane,
-    Polygon, Rectangle, extrude, export_step,
+    Axis,
+    BuildPart,
+    BuildSketch,
+    Circle,
+    Locations,
+    Mode,
+    Part,
+    Plane,
+    Polygon,
+    Rectangle,
+    export_step,
+    extrude,
 )
 
 

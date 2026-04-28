@@ -8,11 +8,23 @@ License: MIT
 from __future__ import annotations
 
 from build123d import (
-    BuildPart, BuildSketch, Box, Rectangle, Mode, Part, Plane, Axis, extrude,
+    Axis,
+    BuildPart,
+    BuildSketch,
+    Mode,
+    Part,
+    Plane,
+    Rectangle,
+    extrude,
 )
 
 from build123d_parts_lib.parts.servos.sg90 import (
-    BODY_L, BODY_W, BODY_H, EAR_W_TOTAL, EAR_T, EAR_Z_OFFSET,
+    BODY_H,
+    BODY_L,
+    BODY_W,
+    EAR_T,
+    EAR_W_TOTAL,
+    EAR_Z_OFFSET,
 )
 
 

@@ -12,14 +12,24 @@ License: MIT
 """
 from __future__ import annotations
 
-from math import cos, sin, pi
+from math import cos, pi, sin
 from pathlib import Path
 from typing import NamedTuple
 
 from build123d import (
-    Align, Axis, BuildPart, BuildSketch, Circle, Cylinder, Locations, Location,
-    Mode, Part, Plane, Rectangle, RigidJoint,
-    add, export_step, extrude,
+    Align,
+    BuildPart,
+    BuildSketch,
+    Circle,
+    Cylinder,
+    Location,
+    Locations,
+    Mode,
+    Part,
+    Plane,
+    Rectangle,
+    export_step,
+    extrude,
 )
 
 

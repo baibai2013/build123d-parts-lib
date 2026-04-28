@@ -21,8 +21,9 @@ def test_sg90_imports_and_builds():
     p = make_sg90()
     assert p is not None
     assert p.is_valid
-    # SG90 bbox 期望：32.2 × 12.2 × 27.7（含耳 + 输出轴）
+    # SG90 bbox 期望：29.9 × 12.6 × 31.1（含耳 + 输出轴）
+    # SG90 bbox expected: 29.9 × 12.6 × 31.1 (ears + shaft)
     bb = p.bounding_box().size
-    assert abs(bb.X - 32.2) < 0.5
-    assert abs(bb.Y - 12.2) < 0.5
-    assert abs(bb.Z - 27.7) < 0.5
+    assert abs(bb.X - 29.9) < 0.5
+    assert abs(bb.Y - 12.6) < 0.5
+    assert abs(bb.Z - 31.1) < 0.5

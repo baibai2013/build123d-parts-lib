@@ -12,8 +12,16 @@ from pathlib import Path
 from typing import NamedTuple
 
 from build123d import (
-    Align, Axis, Box, BuildPart, Cylinder, Hole,
-    Location, Locations, Mode, Part, export_step,
+    Align,
+    Box,
+    BuildPart,
+    Cylinder,
+    Hole,
+    Location,
+    Locations,
+    Mode,
+    Part,
+    export_step,
 )
 
 

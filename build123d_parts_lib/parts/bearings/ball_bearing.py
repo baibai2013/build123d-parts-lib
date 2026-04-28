@@ -1,43 +1,60 @@
 """ISO 15 deep-groove ball bearing (simplified).
+ISO 15 深沟球轴承（简化版）。
 
-Source: data-sources/bearings.yaml (skill build123d-cad)
+Source: bearings.yaml (YAML single source of truth / YAML 单一数据源)
 Standards: ISO 15 / JIS B1521
 License: MIT
 
-支持型号：608ZZ / 624ZZ / 625ZZ / 626ZZ / 6000ZZ / 6001-2RS / 6002ZZ
+支持型号 / Supported models:
+    608ZZ / 624ZZ / 625ZZ / 626ZZ / 6000ZZ / 6001-2RS / 6002ZZ
 
-简化程度：
-- 外圈 + 内圈 + 保持架（用中径圆柱近似）
-- 不建模滚球；足够装配定位与 bbox 占位
-- 两端盖用浅槽区分（ZZ/2RS 双面密封）
+简化程度 / Simplification level:
+- 外圈 + 内圈 + 保持架（用中径圆柱近似）/ outer ring + inner ring + cage (mid-diameter cylinder approx)
+- 不建模滚球；足够装配定位与 bbox 占位 / no balls modeled; sufficient for assembly and bbox
+- 两端盖用浅槽区分（ZZ/2RS 双面密封）/ end shields approximated
 """
 from __future__ import annotations
 
 from pathlib import Path
 from typing import NamedTuple
 
+import yaml
 from build123d import (
-    Align, BuildPart, Cylinder,
-    Mode, Part, export_step,
+    Align,
+    BuildPart,
+    Cylinder,
+    Mode,
+    Part,
+    export_step,
 )
 
 
 class BearingSpec(NamedTuple):
-    d: float   # inner diameter
-    D: float   # outer diameter
-    B: float   # width
+    d: float   # inner diameter / 内径
+    D: float   # outer diameter / 外径
+    B: float   # width / 宽度
 
 
-# 参数表（与 data-sources/bearings.yaml 对应）
-_SPECS: dict[str, BearingSpec] = {
-    "608ZZ":    BearingSpec(d=8.0,  D=22.0, B=7.0),
-    "624ZZ":    BearingSpec(d=4.0,  D=13.0, B=5.0),
-    "625ZZ":    BearingSpec(d=5.0,  D=16.0, B=5.0),
-    "626ZZ":    BearingSpec(d=6.0,  D=19.0, B=6.0),
-    "6000ZZ":   BearingSpec(d=10.0, D=26.0, B=8.0),
-    "6001-2RS": BearingSpec(d=12.0, D=28.0, B=8.0),
-    "6002ZZ":   BearingSpec(d=15.0, D=32.0, B=9.0),
-}
+def _load_specs() -> dict[str, BearingSpec]:
+    """Load deep-groove ball bearing specs from bearings.yaml.
+    从 bearings.yaml 加载深沟球轴承规格（仅 deep-groove-ball-bearing 类型）。
+    """
+    yaml_path = Path(__file__).parent / "bearings.yaml"
+    raw = yaml.safe_load(yaml_path.read_text())
+    specs: dict[str, BearingSpec] = {}
+    for key, entry in raw.items():
+        if not isinstance(entry, dict):
+            continue
+        # 仅加载 deep-groove-ball-bearing 类型 / only load deep-groove type
+        if entry.get("type") != "deep-groove-ball-bearing":
+            continue
+        dims = entry.get("dimensions", {})
+        specs[key] = BearingSpec(d=dims["d"], D=dims["D"], B=dims["B"])
+    return specs
+
+
+# 参数表（从 bearings.yaml 动态加载 / loaded dynamically from bearings.yaml）
+_SPECS: dict[str, BearingSpec] = _load_specs()
 
 CAGE_RATIO = 0.55  # 保持架中径 = (d + D) / 2 × ratio（视觉近似）
 
@@ -56,7 +73,7 @@ def make_ball_bearing(model: str = "608ZZ") -> Part:
     key = model.upper()
     if key not in _SPECS:
         available = ", ".join(_SPECS.keys())
-        raise ValueError(f"未知型号 {model!r}，可用型号：{available}")
+        raise ValueError(f"unknown model / 未知型号 {model!r}. Available / 可用型号：{available}")
 
     spec = _SPECS[key]
     r_inner = spec.d / 2

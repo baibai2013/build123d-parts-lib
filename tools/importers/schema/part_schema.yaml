@@ -1,0 +1,49 @@
+# 本库 YAML 零件 Schema 定义
+# 所有 importers 生成的 YAML 必须通过 validate.py 检验此 schema
+# License: MIT
+
+$schema_version: "1.0"
+
+required_fields:
+  - aliases          # list[str]，≥3 个常见叫法
+  - standard         # str，如 "ISO 4762 / DIN 912"
+  - type             # str，snake-case 类型标识
+  - source           # object，含 primary / confidence / last_verified
+  - factory          # object，含 module / fn / args / cache
+
+source:
+  required:
+    - primary        # str，有效 URL 或标准号 URL
+    - confidence     # int，1-5
+    - last_verified  # date，YYYY-MM-DD
+  confidence_levels:
+    5: "ISO / GB / DIN / JIS / ANSI 标准文档原文"
+    4: "主流厂商 datasheet（SKF / NSK / Bossard / Misumi）"
+    3: "行业惯例 / 多厂商一致"
+    2: "实测 / 样品测量"
+    1: "估算 / 非正式来源"
+  min_confidence_for_commit: 4
+
+factory:
+  required:
+    - module         # str，Python import 路径
+    - fn             # str，factory 函数名（make_xxx）
+    - args           # dict，默认参数
+    - cache          # str，相对于本 yaml 文件的 STEP 缓存路径
+
+dimensions:
+  unit: mm           # 所有尺寸默认单位
+
+optional_fields:
+  - weight_g         # float，重量（克）
+  - fit              # dict，装配配合尺寸
+  - load             # dict，载荷参数（轴承专用）
+  - notes            # str，一句中文说明
+  - common_lengths_mm  # list[float]，紧固件常用长度
+
+prohibited_sources:
+  - "LGPL"
+  - "GPL"
+  - "FreeCAD FastenersWB"
+  - "NopSCADlib"
+  - "MCAD"
