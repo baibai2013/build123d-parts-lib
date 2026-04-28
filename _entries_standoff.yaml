@@ -1,0 +1,215 @@
+# Standoff & Carriage Bolt Entries (separate from fasteners.yaml)
+# 六角铜柱隔离柱 + 马车螺栓 DIN 603 — 独立条目文件
+#
+# Last verified: 2026-04-28
+# Note: 此文件不修改 fasteners.yaml，仅作为新增条目暂存
+#       _entries_standoff.yaml is a staging file, not consumed by rebuild_cache yet.
+
+# ============================================================
+# Hex Standoffs / 六角铜柱隔离柱
+# ============================================================
+# Standard:  市场惯例（非统一标准）/ Market convention (no unified standard)
+# Material:  Brass (黄铜) — typical
+# Geometry:
+#   FF (Female-Female / 双通): both ends internal thread, depth ~0.8*L per end
+#   MF (Male-Female / 单通):   one end internal thread, other end male stud
+#                              stud length: 6mm (M3), 8mm (M4)
+
+M3_STANDOFF_FF_L10:
+  aliases: [M3-standoff-FF-10, M3-spacer-FF-10]
+  standard: "Market convention"
+  type: hex-standoff-ff
+
+  thread:
+    d: 3.0
+    pitch: 0.50
+    unit: mm
+
+  dimensions:
+    s: 5.5            # 对边宽 / across-flats
+    length: 10.0      # 总长 / total length
+
+  common_lengths_mm: [5, 8, 10, 12, 16, 20]
+
+  factory:
+    module: build123d_parts_lib.parts.fasteners.standoff_hex
+    fn: make_hex_standoff
+    args: {size: "M3", length: 10.0, style: "FF"}
+    cache: cache/m3_standoff_ff_L10.step
+
+  source:
+    primary: https://bulkman3d.com/product/hd0042-1/
+    confidence: 3
+    last_verified: 2026-04-28
+
+  notes: "M3 hex standoff, female-female (双通), L=10mm. [unverified — market convention]"
+
+
+M3_STANDOFF_MF_L10:
+  aliases: [M3-standoff-MF-10]
+  standard: "Market convention"
+  type: hex-standoff-mf
+
+  thread:
+    d: 3.0
+    pitch: 0.50
+    unit: mm
+
+  dimensions:
+    s: 5.5
+    length: 10.0
+    stud_length: 6.0   # 外螺纹小杆长度
+
+  common_lengths_mm: [5, 8, 10, 12, 16, 20]
+
+  factory:
+    module: build123d_parts_lib.parts.fasteners.standoff_hex
+    fn: make_hex_standoff
+    args: {size: "M3", length: 10.0, style: "MF"}
+    cache: cache/m3_standoff_mf_L10.step
+
+  source:
+    primary: https://bulkman3d.com/product/hd0042-1/
+    confidence: 3
+    last_verified: 2026-04-28
+
+  notes: "M3 hex standoff, male-female (单通), L=10mm + 6mm male stud. [unverified — market convention]"
+
+
+M4_STANDOFF_FF_L10:
+  aliases: [M4-standoff-FF-10]
+  standard: "Market convention"
+  type: hex-standoff-ff
+
+  thread:
+    d: 4.0
+    pitch: 0.70
+    unit: mm
+
+  dimensions:
+    s: 7.0
+    length: 10.0
+
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+
+  factory:
+    module: build123d_parts_lib.parts.fasteners.standoff_hex
+    fn: make_hex_standoff
+    args: {size: "M4", length: 10.0, style: "FF"}
+    cache: cache/m4_standoff_ff_L10.step
+
+  source:
+    primary: https://bulkman3d.com/product/hd0042-1/
+    confidence: 3
+    last_verified: 2026-04-28
+
+  notes: "M4 hex standoff, female-female (双通), L=10mm. [unverified — market convention]"
+
+
+M4_STANDOFF_MF_L10:
+  aliases: [M4-standoff-MF-10]
+  standard: "Market convention"
+  type: hex-standoff-mf
+
+  thread:
+    d: 4.0
+    pitch: 0.70
+    unit: mm
+
+  dimensions:
+    s: 7.0
+    length: 10.0
+    stud_length: 8.0
+
+  common_lengths_mm: [8, 10, 12, 16, 20, 25]
+
+  factory:
+    module: build123d_parts_lib.parts.fasteners.standoff_hex
+    fn: make_hex_standoff
+    args: {size: "M4", length: 10.0, style: "MF"}
+    cache: cache/m4_standoff_mf_L10.step
+
+  source:
+    primary: https://bulkman3d.com/product/hd0042-1/
+    confidence: 3
+    last_verified: 2026-04-28
+
+  notes: "M4 hex standoff, male-female (单通), L=10mm + 8mm male stud. [unverified — market convention]"
+
+
+# ============================================================
+# DIN 603 Carriage Bolts / 马车螺栓
+# ============================================================
+# Standard:  DIN 603 / ISO 8678 (mushroom head, square neck)
+# Note:      DIN 603 standard starts at M5; M4 here follows market convention.
+# Geometry:
+#   - Round (mushroom) head dome
+#   - Square neck under head (anti-rotation)
+#   - Threaded shank below
+
+M4_DIN603:
+  aliases: [M4-DIN603, M4-carriage-bolt, M4-coach-bolt]
+  standard: "DIN 603 (extended, market convention)"
+  type: carriage-bolt
+
+  thread:
+    d: 4.0
+    pitch: 0.70
+    unit: mm
+
+  head:
+    dk: 8.0       # 圆头外径 / round head outer diameter
+    k:  2.4       # 头高 / head height
+
+  dimensions:
+    sq:   4.0     # 方颈对边 / square neck side length
+    sq_h: 2.4     # 方颈高度 / square neck depth
+
+  common_lengths_mm: [16, 20, 25, 30]
+
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_carriage
+    fn: make_carriage_bolt
+    args: {size: "M4", length: 20.0}
+    cache: cache/m4_din603_L20.step
+
+  source:
+    primary: https://www.aspenfasteners.com/content/pdf/Metric_DIN_603_spec.pdf
+    confidence: 3
+    last_verified: 2026-04-28
+
+  notes: "M4 carriage bolt — non-standard size (DIN 603 starts at M5). [unverified — market convention]"
+
+
+M5_DIN603:
+  aliases: [M5-DIN603, M5-carriage-bolt, M5-coach-bolt]
+  standard: "DIN 603 / ISO 8678"
+  type: carriage-bolt
+
+  thread:
+    d: 5.0
+    pitch: 0.80
+    unit: mm
+
+  head:
+    dk: 13.0      # ISO 8678 / DIN 603: dk = 12.45–13.55, mid 13.0
+    k:  3.0       # head height (k_min=2.7, market median ~3.0)
+
+  dimensions:
+    sq:   5.0     # square neck max = thread d
+    sq_h: 3.5     # square neck depth (f_min=2.9, f_max=4.1, mid 3.5)
+
+  common_lengths_mm: [20, 25, 30, 40]
+
+  factory:
+    module: build123d_parts_lib.parts.fasteners.screw_carriage
+    fn: make_carriage_bolt
+    args: {size: "M5", length: 20.0}
+    cache: cache/m5_din603_L20.step
+
+  source:
+    primary: https://www.aspenfasteners.com/content/pdf/Metric_DIN_603_spec.pdf
+    confidence: 5
+    last_verified: 2026-04-28
+
+  notes: "M5 carriage bolt per DIN 603 / ISO 8678."
