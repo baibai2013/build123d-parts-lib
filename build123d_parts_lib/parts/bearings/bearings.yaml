@@ -21,6 +21,9 @@ MR63ZZ:
     D: 6.0
     B: 2.5
     unit: mm
+  geometry:
+    d_ball_mm: 0.87     # 滚珠直径（设计系数 0.58 × 径向间隙 1.5mm）
+    n_balls: 10          # 滚珠数量（节圆周长 / 相邻球中心距）
   load:
     dynamic_c_n: 270
     static_c0_n: 100
@@ -170,6 +173,9 @@ MR104ZZ:
     D: 22.0
     B: 7.0
     unit: mm
+  geometry:
+    d_ball_mm: 4.1      # 滚珠直径（设计系数 0.58 × 径向间隙）
+    n_balls: 7           # 滚珠数量（节圆周长 / 相邻球中心距）
   load:
     dynamic_c_n: 3350
     static_c0_n: 1370
@@ -383,6 +389,9 @@ F688ZZ:
     flange_D: 17.5
     flange_t: 1.0
     unit: mm
+  geometry:
+    d_ball_mm: 2.3      # 滚珠直径（设计系数 0.58 × 径向间隙 4mm）
+    n_balls: 10          # 滚珠数量（节圆周长 / 相邻球中心距）
   fit:
     press_fit_housing_d: 15.8
     shaft_d: 8.0

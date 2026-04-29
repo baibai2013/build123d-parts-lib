@@ -42,7 +42,7 @@ def _load_specs() -> dict[str, LMSpec]:
     从 lm_bearings.yaml 加载直线轴承规格。
     """
     yaml_path = Path(__file__).parent / "lm_bearings.yaml"
-    raw = yaml.safe_load(yaml_path.read_text())
+    raw = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
     specs: dict[str, LMSpec] = {}
     for key, entry in raw.items():
         if not isinstance(entry, dict):

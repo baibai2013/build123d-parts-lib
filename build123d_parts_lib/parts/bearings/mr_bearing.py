@@ -38,7 +38,7 @@ def _load_specs() -> dict[str, MRSpec]:
     从 bearings.yaml 加载 MR 系列微型轴承规格（仅 miniature-deep-groove-ball-bearing 类型）。
     """
     yaml_path = Path(__file__).parent / "bearings.yaml"
-    raw = yaml.safe_load(yaml_path.read_text())
+    raw = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
     specs: dict[str, MRSpec] = {}
     for key, entry in raw.items():
         if not isinstance(entry, dict):

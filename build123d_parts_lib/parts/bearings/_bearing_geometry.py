@@ -129,8 +129,11 @@ def make_deep_groove_bearing_compound(
     d_ball, r_ball       = g["d_ball"], g["r_ball"]
     r_groove, n_balls    = g["r_groove"], g["n_balls"]
 
-    # 圈壁厚度（外圈外径 - 节圆到球顶的距离）/ ring wall thickness
-    ring_wall_offset = r_ball + gap * 0.12     # 圈与球顶的余量 / clearance above ball
+    # 圈内/外表面到节圆的距离：取 0.6×r_ball，使 torus（r_groove≈1.04×r_ball）
+    # 可切入约 0.44×r_ball 深的可见沟槽。
+    # 注意不能用 r_ball + 余量，否则 torus 外边界(r_pc+r_groove) 小于外圈内面(r_pc+offset)，
+    # 导致布尔减料无交集——沟槽不被切出。
+    ring_wall_offset = r_ball * 0.6
     r_outer_inner    = r_pc + ring_wall_offset  # 外圈内径
     r_inner_outer    = r_pc - ring_wall_offset  # 内圈外径
 

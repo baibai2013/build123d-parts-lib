@@ -30,6 +30,8 @@ import argparse
 import sys
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding="utf-8")
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PARTS_ROOT = REPO_ROOT / "build123d_parts_lib" / "parts"
 
@@ -88,29 +90,41 @@ def _check_assert_fn(tree: ast.AST) -> tuple[str, str]:
 
 def _check_fallback_warning(source: str, tree: ast.AST) -> tuple[str, str]:
     """
-    检查 _load_specs 中 fallback 计算路径是否有 warnings.warn。
+    检查 _load_specs 函数体内是否有比例估算 fallback 且缺少 warnings.warn。
+
+    只看 _load_specs 函数体内的浮点系数乘法（`* 0.`）和显式 _RATIO / _ESTIMATE 标记。
+    几何构造函数中的设计公式（如 m_hex = spec.m * 0.42）不在检测范围内。
     Returns: (status, message)
     """
-    has_load_specs = any(
-        isinstance(node, ast.FunctionDef) and node.name == "_load_specs"
-        for node in ast.walk(tree)
-    )
-    if not has_load_specs:
+    # 找到 _load_specs 函数节点
+    load_specs_node: ast.FunctionDef | None = None
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef) and node.name == "_load_specs":
+            load_specs_node = node
+            break
+
+    if load_specs_node is None:
         return "SKIP", "_load_specs 未找到（非标准件可忽略）"
 
-    has_warn = "warnings.warn" in source
-    # 探测常见的 fallback 计算模式
-    fallback_patterns = ["_FALLBACK", "fallback", "* 0.", "ratio", "estimate"]
-    has_fallback_code = any(p in source for p in fallback_patterns)
+    # 提取 _load_specs 函数体的源码片段（用行号范围从 source 截取）
+    lines = source.splitlines()
+    start = load_specs_node.lineno - 1
+    end = load_specs_node.end_lineno if hasattr(load_specs_node, "end_lineno") else len(lines)
+    fn_source = "\n".join(lines[start:end])
 
-    if has_fallback_code and not has_warn:
+    has_warn = "warnings.warn" in source
+    # 在 _load_specs 函数体内探测比例估算 fallback
+    ratio_patterns = ["* 0.", "_RATIO", "_ESTIMATE", "estimate_"]
+    has_ratio_fallback = any(p in fn_source for p in ratio_patterns)
+
+    if has_ratio_fallback and not has_warn:
         return "FAIL", (
-            "检测到 fallback 计算逻辑但未发现 warnings.warn——"
+            "_load_specs 内含比例估算逻辑但未发现 warnings.warn——"
             "内部几何字段缺失时必须打印 WARNING，不得静默降级"
         )
     if has_warn:
         return "PASS", "fallback 降级路径有 warnings.warn ✓"
-    return "PASS", "_load_specs 存在，未发现 fallback 计算路径 ✓"
+    return "PASS", "_load_specs 存在，未发现 fallback 比例估算路径 ✓"
 
 
 # ── 检查单文件 ────────────────────────────────────────────────────────────────

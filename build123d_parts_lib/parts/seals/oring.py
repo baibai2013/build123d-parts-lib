@@ -32,7 +32,7 @@ def _load_specs() -> dict[str, ORingSpec]:
     从 oring.yaml 加载全部规格。
     """
     yaml_path = Path(__file__).parent / "oring.yaml"
-    raw = yaml.safe_load(yaml_path.read_text())
+    raw = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
     specs: dict[str, ORingSpec] = {}
     for key, entry in raw.items():
         # 跳过非 dict 条目（注释块等）/ skip non-dict entries (comment blocks, etc.)

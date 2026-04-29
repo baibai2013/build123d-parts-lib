@@ -29,6 +29,8 @@ import argparse
 import sys
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding="utf-8")
+
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

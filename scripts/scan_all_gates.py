@@ -26,6 +26,8 @@ import json
 import sys
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding="utf-8")
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -38,7 +40,7 @@ PARTS_ROOT = REPO_ROOT / "build123d_parts_lib" / "parts"
 YAML_SCAN_MAP: list[tuple[str, str, str]] = [
     ("build123d_parts_lib/parts/bearings/bearings.yaml",    "ball_bearing",    "608ZZ"),
     ("build123d_parts_lib/parts/bearings/bearings.yaml",    "mr_bearing",      "MR63ZZ"),
-    ("build123d_parts_lib/parts/bearings/bearings.yaml",    "flanged_bearing", "F608ZZ"),
+    ("build123d_parts_lib/parts/bearings/bearings.yaml",    "flanged_bearing", "F688ZZ"),
     # 新增示例（取消注释并补充实际型号）：
     # ("build123d_parts_lib/parts/servos/servos.yaml",      "standard_servo",  "SG90"),
     # ("build123d_parts_lib/parts/transmission/gears.yaml", "spur_gear",       "M2Z20"),
@@ -69,12 +71,6 @@ def run_d1() -> list[dict]:
     results = []
     for yaml_rel, slug, model in YAML_SCAN_MAP:
         yaml_path = REPO_ROOT / yaml_rel
-        contract_path = (
-            PARTS_ROOT
-            / yaml_path.parent.relative_to(PARTS_ROOT.parent / "build123d_parts_lib" / "parts"
-                                            if False else yaml_path.parent.relative_to(REPO_ROOT))
-        )
-        # 简化路径推算
         cat_dir = yaml_path.parent
         contract_path = cat_dir / "contracts" / f"{slug}_contract.yaml"
 

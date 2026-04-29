@@ -38,7 +38,7 @@ def _load_specs() -> dict[str, BearingSpec]:
     从 bearings.yaml 加载深沟球轴承规格（仅 deep-groove-ball-bearing 类型）。
     """
     yaml_path = Path(__file__).parent / "bearings.yaml"
-    raw = yaml.safe_load(yaml_path.read_text())
+    raw = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
     specs: dict[str, BearingSpec] = {}
     for key, entry in raw.items():
         if not isinstance(entry, dict):

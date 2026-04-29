@@ -42,7 +42,7 @@ class ACBSpec(NamedTuple):
 def _load_specs() -> dict[str, ACBSpec]:
     """Load angular-contact bearing specs from bearings.yaml."""
     yaml_path = Path(__file__).parent / "bearings.yaml"
-    raw = yaml.safe_load(yaml_path.read_text())
+    raw = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
     specs: dict[str, ACBSpec] = {}
     for key, entry in raw.items():
         if not isinstance(entry, dict):
