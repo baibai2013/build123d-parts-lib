@@ -108,7 +108,7 @@
 
 | Slug | Factory | 覆盖规格 | 预览 |
 |------|---------|---------|:----:|
-| `oring`<br>O 型圈 | `make_oring(d1, d2)` | d2：1.5 / 2.0 / 2.5 / 3.5 mm，12 个常用规格（ISO 3601-1 / GB/T 3452.1） | ![](../build123d_parts_lib/parts/seals/cache/oring.png) |
+| `oring`<br>O 型圈 | `make_oring(d1, d2)` | d2：1.5 / 2.0 / 2.5 / 3.5 mm，13 个常用规格（ISO 3601-1 / GB/T 3452.1） | ![](../build123d_parts_lib/parts/seals/cache/oring.png) |
 
 > 模块路径：`build123d_parts_lib.parts.seals.<slug>`。YAML：`oring.yaml`。
 

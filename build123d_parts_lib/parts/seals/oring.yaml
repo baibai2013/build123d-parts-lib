@@ -163,6 +163,32 @@ OR_15x20:
     cache: cache/oring_d15_cs20.step
   notes: 内径 15mm 截面 2mm。
 
+OR_40x20:
+  aliases: [o-ring-40x2, or-40-20, o40x2.0, or40x2, bom-d1]
+  standard: "GB/T 3452.1 / ISO 3601-1"
+  type: o-ring
+  dimensions:
+    d1: 40.0
+    d2: 2.0
+    unit: mm
+  tolerance:
+    d1_plus: 0.30
+    d1_minus: 0.30
+    d2_plus: 0.10
+    d2_minus: 0.10
+  source:
+    primary: https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=B2B43E1D35B65FD42ABD6DF3E23D88E2
+    confidence: 5
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.seals.oring
+    fn: make_oring
+    args: {d1: 40.0, d2: 2.0}
+    cache: cache/oring_d40_cs20.step
+  notes: |
+    内径 40mm 截面 2mm O 型圈（BOM D1）。NBR 材质，液冷/气密关节密封常用规格。
+    外径 = 44mm，截面圆 ⌀2mm。
+
 # ── d2 = 2.5mm 系列 ──────────────────────────────────────────────
 
 OR_20x25:
