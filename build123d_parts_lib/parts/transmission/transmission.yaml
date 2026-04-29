@@ -390,3 +390,195 @@ KEY_8X7:
     args: {width: 8.0, height: 7.0, length: 32.0}
     cache: cache/key_8x7_l32.step
   notes: ISO 2491 平键 8×7（宽≠高）；适配 ⌀18~⌀22 轴；大扭矩传动轴。
+
+# ──────────────────────────────────────────────────────
+# 渐开线齿轮族（ISO 54 / DIN 867 / ISO 23509 / ISO 1122）
+# ──────────────────────────────────────────────────────
+# 字段说明：
+#   module         = 模数 m (mm)
+#   teeth          = 齿数 z
+#   bore_d         = 中心孔径 (mm)
+#   face_width     = 齿宽 (mm)
+#   pressure_angle = 压力角（标准 20°）
+#   helix_angle    = 螺旋角 β（斜齿轮）
+#   mating_teeth   = 配对齿数（锥齿轮，决定节锥角 δ）
+#
+# 每条目的 `factory.args` 为代表规格；该类型所有规格请见 .py 文件的 __main__ 冒烟测试。
+# `cache` 字段指向 scripts/build_cache.py 生成的代表 STEP + PNG 对。
+
+# ── 直齿轮 Spur Gear (ISO 54 / DIN 867) ──
+SPUR_GEAR_M2_20T_BORE8:
+  aliases: [spur_gear_m2_20t, spur_m2_z20, iso54_spur_m2_z20]
+  dimensions:
+    module: 2.0
+    teeth: 20
+    bore_d: 8.0
+    face_width: 20.0
+    pressure_angle: 20.0
+    pitch_d: 40.0
+    addendum_d: 44.0
+    dedendum_d: 35.0
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/74642.html
+    confidence: 5
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.transmission.spur_gear
+    fn: make_spur_gear
+    args: {module: 2.0, teeth: 20, bore_d: 8.0}
+    cache: cache/spur_gear.step
+  notes: ISO 54 直齿圆柱齿轮；渐开线齿形 + 齿根圆角过渡；支持 m1/m2、z12~40、bore ⌀5~⌀10 任意组合。
+
+# ── 齿条 Gear Rack (ISO 54 / DIN 867) ──
+GEAR_RACK_M2_L200_W15:
+  aliases: [gear_rack_m2_l200, rack_m2_200, iso54_rack_m2]
+  dimensions:
+    module: 2.0
+    length: 200.0
+    width: 15.0
+    base_h: 8.0
+    tooth_h: 4.5
+    pressure_angle: 20.0
+    teeth_count: 31
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/74642.html
+    confidence: 5
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.transmission.gear_rack
+    fn: make_gear_rack
+    args: {module: 2.0, length: 200.0, width: 15.0, base_h: 8.0}
+    cache: cache/gear_rack.step
+  notes: ISO 54 直齿齿条；梯形齿（20° 压力角）+ 底板安装孔；3D 打印机 / CNC 轴 / 小机器人线性驱动。
+
+# ── 斜齿轮 Helical Gear (ISO 54) ──
+HELICAL_GEAR_MN2_30T_B20_BORE10:
+  aliases: [helical_gear_mn2_30t, helical_m2_z30_b20, iso54_helical_mn2]
+  dimensions:
+    module_normal: 2.0
+    teeth: 30
+    bore_d: 10.0
+    helix_angle: 20.0
+    face_width: 20.0
+    pressure_angle_normal: 20.0
+    pitch_d_transverse: 63.85
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/74642.html
+    confidence: 5
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.transmission.helical_gear
+    fn: make_helical_gear
+    args: {module: 2.0, teeth: 30, helix_angle: 20.0, bore_d: 10.0}
+    cache: cache/helical_gear.step
+  notes: ISO 54 斜齿圆柱齿轮；10 层 Loft 螺旋齿面；静音 / 高载荷传动；支持 β 15°~25°。
+
+# ── 蜗杆 Worm (ISO 1122) ──
+WORM_M2_Z1_L50_Q10:
+  aliases: [worm_m2_z1, worm_m2_single, iso1122_worm_m2]
+  dimensions:
+    module_axial: 2.0
+    threads: 1
+    length: 50.0
+    diameter_coeff: 10.0
+    pitch_d: 20.0
+    addendum_d: 24.0
+    dedendum_d: 15.2
+    lead: 6.283
+    pressure_angle: 20.0
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/5816.html
+    confidence: 4
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.transmission.worm_gear
+    fn: make_worm
+    args: {module: 2.0, threads: 1, length: 50.0, diameter_coeff: 10.0}
+    cache: cache/worm.step
+  notes: ISO 1122 单头蜗杆；螺旋扫掠梯形齿；大减速比自锁关节；配 WORM_WHEEL_M2_30T 使用。
+
+# ── 蜗轮 Worm Wheel (ISO 1122，简化版) ──
+WORM_WHEEL_M2_30T_BORE8:
+  aliases: [worm_wheel_m2_30t, worm_wheel_m2_z30]
+  dimensions:
+    module: 2.0
+    teeth: 30
+    bore_d: 8.0
+    worm_threads: 1
+    worm_d: 20.0
+    face_width: 15.0
+    pitch_d: 60.0
+    pressure_angle: 20.0
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/5816.html
+    confidence: 3
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.transmission.worm_gear
+    fn: make_worm_wheel
+    args: {module: 2.0, teeth: 30, bore_d: 8.0, worm_threads: 1, worm_d: 20.0}
+    cache: cache/worm_wheel.step
+  notes: |
+    ISO 1122 蜗轮（简化版 ★★★☆☆）；外形同渐开线直齿轮，带圆弧凹槽抱蜗杆。
+    减速比 i = z2/z1 = 30（配单头蜗杆），工业打印可用；精密场合建议专业齿轮软件。
+
+# ── 锥齿轮 Bevel Gear (ISO 23509，Tredgold 近似) ──
+BEVEL_GEAR_M2_20T_MATE20_BORE8:
+  aliases: [bevel_gear_m2_20t, bevel_m2_z20_mate20, iso23509_bevel_m2]
+  dimensions:
+    module: 2.0
+    teeth: 20
+    mating_teeth: 20
+    bore_d: 8.0
+    pitch_cone_angle_deg: 45.0
+    cone_distance: 28.28
+    face_width: 9.43
+    heel_pitch_d: 40.0
+    heel_addendum_d: 44.0
+    heel_dedendum_d: 35.0
+    pressure_angle: 20.0
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/35349.html
+    confidence: 3
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.transmission.bevel_gear
+    fn: make_bevel_gear
+    args: {module: 2.0, teeth: 20, mating_teeth: 20, bore_d: 8.0}
+    cache: cache/bevel_gear.step
+  notes: |
+    ISO 23509 直齿锥齿轮（Tredgold 近似，★★★☆☆ 简化版）。
+    等传动比 1:1 (δ=45°) 直角换向；大端-小端 Loft 两截面构造齿面。
+    2D 齿廓已验证 20 齿渐开线正确；3D 薄齿视觉效果是 Tredgold 几何固有特性。
+    高精度场合建议 Gleason / Ohlendorf 法，超出本库范围。
+
+# ── 内齿圈 Internal Gear (ISO 54) ──
+INTERNAL_GEAR_M2_60T_OD130:
+  aliases: [internal_gear_m2_60t, ring_gear_m2_z60, iso54_internal_m2]
+  dimensions:
+    module: 2.0
+    teeth: 60
+    outer_d: 130.0
+    inner_d: 116.0
+    root_d: 125.0
+    face_width: 16.0
+    pressure_angle: 20.0
+    unit: mm
+  source:
+    primary: https://www.iso.org/standard/74642.html
+    confidence: 5
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.transmission.internal_gear
+    fn: make_internal_gear
+    args: {module: 2.0, teeth: 60, outer_d: 130.0}
+    cache: cache/internal_gear.step
+  notes: |
+    ISO 54 内齿圈（齿朝圆心凸）；行星齿轮系外齿圈 / 差速器 / 减速器。
+    行星约束：z_sun + 2·z_planet = z_ring（此条 z=60 配 zs=20 + zp=20 行星）。

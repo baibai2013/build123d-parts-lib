@@ -20,7 +20,7 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from build123d import export_step  # noqa: E402
 
-from build123d_parts_lib._preview import save_preview_png  # noqa: E402
+from build123d_parts_lib._preview_ocp import save_preview_png_auto  # noqa: E402
 
 # ============================================================
 # 代表规格清单（slug, factory callable, kwargs）
@@ -60,12 +60,23 @@ def _rep_bundle():
     from build123d_parts_lib.parts.servos.servo_horn import make_servo_horn
     from build123d_parts_lib.parts.servos.sg90 import make_sg90
     from build123d_parts_lib.parts.servos.standard_servo import make_servo
+    from build123d_parts_lib.parts.transmission.bevel_gear import make_bevel_gear
+    from build123d_parts_lib.parts.transmission.gear_rack import make_gear_rack
+    from build123d_parts_lib.parts.transmission.helical_gear import make_helical_gear
+    from build123d_parts_lib.parts.transmission.internal_gear import (
+        make_internal_gear,
+    )
     from build123d_parts_lib.parts.transmission.key_parallel import (
         make_parallel_key,
     )
+    from build123d_parts_lib.parts.transmission.spur_gear import make_spur_gear
     from build123d_parts_lib.parts.transmission.timing_belt_gt2 import make_gt2_belt
     from build123d_parts_lib.parts.transmission.timing_pulley_gt2 import (
         make_gt2_pulley,
+    )
+    from build123d_parts_lib.parts.transmission.worm_gear import (
+        make_worm,
+        make_worm_wheel,
     )
 
     # (category, slug, callable, kwargs, title)
@@ -112,6 +123,29 @@ def _rep_bundle():
          dict(length=200.0), "GT2 Belt  L200"),
         ("transmission", "key_parallel", make_parallel_key,
          dict(width=5.0, height=5.0, length=20.0), "ISO 2491  Key 5×5×20"),
+        # gears (ISO 54 / ISO 23509 / ISO 1122)
+        ("transmission", "spur_gear", make_spur_gear,
+         dict(module=2.0, teeth=20, bore_d=8.0),
+         "Spur Gear  m2 z20 ⌀8"),
+        ("transmission", "gear_rack", make_gear_rack,
+         dict(module=2.0, length=200.0, width=15.0, base_h=8.0),
+         "Gear Rack  m2 L200 W15"),
+        ("transmission", "helical_gear", make_helical_gear,
+         dict(module=2.0, teeth=30, helix_angle=20.0, bore_d=10.0),
+         "Helical Gear  mn2 z30 β20° ⌀10"),
+        ("transmission", "bevel_gear", make_bevel_gear,
+         dict(module=2.0, teeth=20, mating_teeth=20, bore_d=8.0),
+         "Bevel Gear  m2 z20×20 ⌀8"),
+        ("transmission", "worm", make_worm,
+         dict(module=2.0, threads=1, length=50.0, diameter_coeff=10.0),
+         "Worm  m2 z1 L50 q10"),
+        ("transmission", "worm_wheel", make_worm_wheel,
+         dict(module=2.0, teeth=30, bore_d=8.0,
+              worm_threads=1, worm_d=20.0),
+         "Worm Wheel  m2 z30 ⌀8"),
+        ("transmission", "internal_gear", make_internal_gear,
+         dict(module=2.0, teeth=60, outer_d=130.0),
+         "Internal Gear  m2 z60 ⌀130"),
         # retainers
         ("retainers", "retaining_ring_shaft", make_retaining_ring_shaft,
          dict(shaft_d=5.0), "GB/T 894.1  Ring D5 shaft"),
@@ -142,6 +176,7 @@ def main() -> int:
     print(f">> Building {len(bundle)} representative parts ...")
 
     ok, fail = 0, 0
+    backends: dict[str, int] = {}
     for category, slug, fn, kwargs, title in bundle:
         cache_dir = parts_root / category / "cache"
         cache_dir.mkdir(parents=True, exist_ok=True)
@@ -150,15 +185,22 @@ def main() -> int:
         try:
             part = fn(**kwargs)
             export_step(part, str(step_path))
-            save_preview_png(part, png_path, title=title)
+            _, backend = save_preview_png_auto(part, png_path, title=title)
+            backends[backend] = backends.get(backend, 0) + 1
             vol = part.volume
-            print(f"   [OK] {category}/{slug}.step  vol={vol:.1f} mm3  + .png")
+            print(
+                f"   [OK] {category}/{slug}.step  "
+                f"vol={vol:.1f} mm3  + .png ({backend})"
+            )
             ok += 1
         except Exception as e:
             print(f"   [FAIL] {category}/{slug}: {type(e).__name__}: {e}")
             fail += 1
 
-    print(f"\nDone. ok={ok}, fail={fail}")
+    print(
+        f"\nDone. ok={ok}, fail={fail}  "
+        f"backends={dict(backends)}"
+    )
     return 0 if fail == 0 else 1
 
 
