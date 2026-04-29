@@ -1,6 +1,6 @@
 # Bearings — 轴承
 
-工业级深沟球轴承实体，包含外圈、内圈、滚珠、保持架四个组件。
+工业级轴承实体，包含外圈、内圈、滚珠、保持架四个组件。支持深沟球、MR 微型、法兰、薄截面、角接触五类。
 
 ---
 
@@ -11,6 +11,8 @@
 | `ball_bearing` | `make_ball_bearing(model)` | 608ZZ / 624ZZ / 625ZZ / 626ZZ / 6000ZZ / 6001-2RS / 6002ZZ |
 | `mr_bearing` | `make_mr_bearing(model)` | MR63ZZ / MR74ZZ / MR84ZZ / MR85ZZ / MR104ZZ |
 | `flanged_bearing` | `make_flanged_bearing(model)` | F688ZZ / F693ZZ / F623ZZ / F624ZZ / F625ZZ / F684ZZ |
+| `thin_section_bearing` | `make_thin_section_bearing(model)` | TS17x23x3_5 / TS20x27x4 / TS25x33x4 / TS30x40x6（INA/FAG 61803） |
+| `angular_contact_bearing` | `make_angular_contact_bearing(model)` | 7001C / 7002C / 7003C / 7004C（15° 接触角，单排 C 型） |
 
 尺寸数据来源：`bearings.yaml` / `lm_bearings.yaml`
 
@@ -71,6 +73,8 @@ Compound
 from build123d_parts_lib.parts.bearings.ball_bearing import make_ball_bearing
 from build123d_parts_lib.parts.bearings.mr_bearing import make_mr_bearing
 from build123d_parts_lib.parts.bearings.flanged_bearing import make_flanged_bearing
+from build123d_parts_lib.parts.bearings.thin_section_bearing import make_thin_section_bearing
+from build123d_parts_lib.parts.bearings.angular_contact_bearing import make_angular_contact_bearing
 from build123d import export_step
 
 # 标准深沟球轴承
@@ -83,6 +87,12 @@ mr85 = make_mr_bearing("MR85ZZ")
 # 法兰轴承
 f688 = make_flanged_bearing("F688ZZ")
 
+# 薄截面深沟球（谐波减速器波发生器轴承）
+ts = make_thin_section_bearing("TS17x23x3_5")  # Φ17×Φ23×3.5 mm
+
+# 角接触球轴承（机器人关节，DB 成对配置）
+acb = make_angular_contact_bearing("7001C")  # Φ12×Φ28×8 mm，15°
+
 # 访问子件（如获取外圈）
 outer = next(c for c in b608.children if "outer_ring" in c.label)
 print(f"outer ring volume: {outer.volume:.2f} mm³")
@@ -94,17 +104,21 @@ print(f"outer ring volume: {outer.volume:.2f} mm³")
 
 ```
 bearings/
-├─ _bearing_geometry.py   # 共享几何核心（raceway + balls + cage）
-├─ ball_bearing.py         # 深沟球轴承 factory
-├─ mr_bearing.py           # MR 微型轴承 factory
-├─ flanged_bearing.py      # 法兰球轴承 factory
-├─ linear_bushing.py       # 直线轴承（独立实现）
-├─ bearings.yaml           # 深沟球轴承 / MR / 法兰尺寸数据
-├─ lm_bearings.yaml        # LM 直线轴承尺寸数据
-└─ cache/                  # 预生成 STEP + PNG
+├─ _bearing_geometry.py        # 共享几何核心（raceway + balls + cage + angular contact）
+├─ ball_bearing.py              # 深沟球轴承 factory
+├─ mr_bearing.py                # MR 微型轴承 factory
+├─ flanged_bearing.py           # 法兰球轴承 factory
+├─ thin_section_bearing.py      # 薄截面深沟球轴承 factory（BOM A3 谐波减速器）
+├─ angular_contact_bearing.py   # 角接触球轴承 factory（BOM A4 关节主轴承）
+├─ linear_bushing.py            # 直线轴承（独立实现）
+├─ bearings.yaml                # 深沟球 / MR / 法兰 / 薄截面 / 角接触尺寸数据
+├─ lm_bearings.yaml             # LM 直线轴承尺寸数据
+└─ cache/                       # 预生成 STEP + PNG（每类仅代表规格 1 对）
    ├─ ball_bearing.step / .png
    ├─ mr_bearing.step / .png
-   └─ flanged_bearing.step / .png
+   ├─ flanged_bearing.step / .png
+   ├─ thin_section_bearing.step / .png
+   └─ angular_contact_bearing.step / .png
 ```
 
 ---

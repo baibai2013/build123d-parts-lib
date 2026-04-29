@@ -526,3 +526,224 @@ F684ZZ:
     args: {model: "F684ZZ"}
     cache: cache/f684zz.step
   notes: D4 超薄法兰轴承（B=2.5mm）；紧凑轴向空间首选。
+
+# ──────────────────────────────────────────────────────
+# 薄截面深沟球轴承（Thin-Section Deep-Groove Ball Bearing）
+# Standards: ISO 15, JIS B1521, INA(FAG) 61803 系列
+# 几何与标准深沟球轴承相同，截面极薄（(D-d)/2 ≈ 3–6 mm）
+# ──────────────────────────────────────────────────────
+
+TS17x23x3_5:
+  aliases: [ts17x23x3_5, ts-17x23x3.5, 61803, 61803-2z]
+  standard: "ISO 15 / INA 61803 series"
+  type: thin-section-deep-groove-ball-bearing
+  shielding: open
+  dimensions:
+    d: 17.0
+    D: 23.0
+    B: 3.5
+    unit: mm
+  source:
+    primary: https://www.ina.de/content/dam/ina/en/main-navigation/products/rolling-bearings/deep-groove-ball-bearings/thin-section-deep-groove-ball-bearings.html
+    confidence: 4
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.bearings.thin_section_bearing
+    fn: make_thin_section_bearing
+    args: {model: "TS17x23x3_5"}
+    cache: cache/ts17x23x3_5.step
+  notes: 谐波减速器波发生器轴承（BOM A3）；Koyo / INA 超薄截面，核心承载件。
+
+TS20x27x4:
+  aliases: [ts20x27x4, ts-20x27x4]
+  standard: "ISO 15 / INA 61804 series"
+  type: thin-section-deep-groove-ball-bearing
+  shielding: open
+  dimensions:
+    d: 20.0
+    D: 27.0
+    B: 4.0
+    unit: mm
+  source:
+    primary: https://www.ina.de/content/dam/ina/en/main-navigation/products/rolling-bearings/deep-groove-ball-bearings/thin-section-deep-groove-ball-bearings.html
+    confidence: 4
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.bearings.thin_section_bearing
+    fn: make_thin_section_bearing
+    args: {model: "TS20x27x4"}
+    cache: cache/ts20x27x4.step
+  notes: D20 薄截面；谐波波发生器备选尺寸，截面比 61803 略宽。
+
+TS25x33x4:
+  aliases: [ts25x33x4, ts-25x33x4]
+  standard: "ISO 15 / INA series"
+  type: thin-section-deep-groove-ball-bearing
+  shielding: open
+  dimensions:
+    d: 25.0
+    D: 33.0
+    B: 4.0
+    unit: mm
+  source:
+    primary: https://www.ina.de/content/dam/ina/en/main-navigation/products/rolling-bearings/deep-groove-ball-bearings/thin-section-deep-groove-ball-bearings.html
+    confidence: 4
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.bearings.thin_section_bearing
+    fn: make_thin_section_bearing
+    args: {model: "TS25x33x4"}
+    cache: cache/ts25x33x4.step
+  notes: D25 薄截面；中型谐波或摆线减速器波发生器适用。
+
+TS30x40x6:
+  aliases: [ts30x40x6, ts-30x40x6, kss-30x40x6]
+  standard: "ISO 15 / KSS / INA series"
+  type: thin-section-deep-groove-ball-bearing
+  shielding: open
+  dimensions:
+    d: 30.0
+    D: 40.0
+    B: 6.0
+    unit: mm
+  source:
+    primary: https://www.kss-bearings.com/
+    confidence: 4
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.bearings.thin_section_bearing
+    fn: make_thin_section_bearing
+    args: {model: "TS30x40x6"}
+    cache: cache/ts30x40x6.step
+  notes: D30 薄截面（KSS / INA 系）；大型谐波减速器波发生器承载件。
+
+# ──────────────────────────────────────────────────────
+# 角接触球轴承（Angular Contact Ball Bearing）
+# Standards: ISO 7228, JIS B1520, DIN 628-1
+# 接触角 15°（C 系列）；外圈推力自由侧带孔肩（单肩截面）
+# 通常成对 DB（背靠背）或 DF（面对面）配置，支持双向轴向
+# ──────────────────────────────────────────────────────
+
+7001C:
+  aliases: [7001c, 7001-c, 7001ac]
+  standard: "ISO 7228 / JIS B1520 / DIN 628-1"
+  type: angular-contact-ball-bearing
+  contact_angle: 15
+  shielding: open
+  dimensions:
+    d: 12.0
+    D: 28.0
+    B: 8.0
+    contact_angle_deg: 15.0
+    unit: mm
+  load:
+    dynamic_c_n: 6550
+    static_c0_n: 3400
+    max_rpm_grease: 18000
+  weight_g: 18.0
+  fit:
+    press_fit_housing_d: 27.8
+    shaft_d: 12.0
+  source:
+    primary: https://www.nsk.com/products/angularcontact/index.html
+    confidence: 5
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.bearings.angular_contact_bearing
+    fn: make_angular_contact_bearing
+    args: {model: "7001C"}
+    cache: cache/angular_contact_7001c.step
+  notes: 谐波减速器输出主轴承（BOM A4），成对 DB 配置；承受径向+轴向+倾覆载荷。
+
+7002C:
+  aliases: [7002c, 7002-c, 7002ac]
+  standard: "ISO 7228 / JIS B1520 / DIN 628-1"
+  type: angular-contact-ball-bearing
+  contact_angle: 15
+  shielding: open
+  dimensions:
+    d: 15.0
+    D: 32.0
+    B: 9.0
+    contact_angle_deg: 15.0
+    unit: mm
+  load:
+    dynamic_c_n: 8300
+    static_c0_n: 4500
+    max_rpm_grease: 16000
+  weight_g: 25.0
+  fit:
+    press_fit_housing_d: 31.8
+    shaft_d: 15.0
+  source:
+    primary: https://www.nsk.com/products/angularcontact/index.html
+    confidence: 5
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.bearings.angular_contact_bearing
+    fn: make_angular_contact_bearing
+    args: {model: "7002C"}
+    cache: cache/angular_contact_7002c.step
+  notes: D15 角接触；中型机器人关节主轴承，DB/DF 成对配置。
+
+7003C:
+  aliases: [7003c, 7003-c, 7003ac]
+  standard: "ISO 7228 / JIS B1520 / DIN 628-1"
+  type: angular-contact-ball-bearing
+  contact_angle: 15
+  shielding: open
+  dimensions:
+    d: 17.0
+    D: 35.0
+    B: 10.0
+    contact_angle_deg: 15.0
+    unit: mm
+  load:
+    dynamic_c_n: 10200
+    static_c0_n: 5700
+    max_rpm_grease: 14000
+  weight_g: 38.0
+  fit:
+    press_fit_housing_d: 34.8
+    shaft_d: 17.0
+  source:
+    primary: https://www.nsk.com/products/angularcontact/index.html
+    confidence: 5
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.bearings.angular_contact_bearing
+    fn: make_angular_contact_bearing
+    args: {model: "7003C"}
+    cache: cache/angular_contact_7003c.step
+  notes: D17 角接触；大型仿生机器人髋部/腰部主轴承。
+
+7004C:
+  aliases: [7004c, 7004-c, 7004ac]
+  standard: "ISO 7228 / JIS B1520 / DIN 628-1"
+  type: angular-contact-ball-bearing
+  contact_angle: 15
+  shielding: open
+  dimensions:
+    d: 20.0
+    D: 42.0
+    B: 12.0
+    contact_angle_deg: 15.0
+    unit: mm
+  load:
+    dynamic_c_n: 15900
+    static_c0_n: 9300
+    max_rpm_grease: 12000
+  weight_g: 70.0
+  fit:
+    press_fit_housing_d: 41.8
+    shaft_d: 20.0
+  source:
+    primary: https://www.nsk.com/products/angularcontact/index.html
+    confidence: 5
+    last_verified: 2026-04-29
+  factory:
+    module: build123d_parts_lib.parts.bearings.angular_contact_bearing
+    fn: make_angular_contact_bearing
+    args: {model: "7004C"}
+    cache: cache/angular_contact_7004c.step
+  notes: D20 角接触；重载机器人腰部/底盘主轴承，承载能力最高。

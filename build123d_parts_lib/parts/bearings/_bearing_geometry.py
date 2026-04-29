@@ -7,11 +7,19 @@
 - 滚珠（均匀分布在节圆 / steel balls on pitch circle）
 - 保持架（带球窝 / cage with ball pockets）
 
+角接触球轴承（angular contact ball bearing）额外特征：
+- 外圈推力自由侧（+Z）带孔肩倒去（counterbore），露出单肩截面
+- 内圈标准双肩（完整）
+
 All deep-groove ball bearings share the same core geometry:
 - Outer ring with raceway groove
 - Inner ring with raceway groove
 - Steel balls distributed on pitch circle
 - Cage with ball pockets
+
+Angular contact ball bearing adds:
+- Counterbore on outer ring +Z (thrust-free) side — characteristic single-shoulder profile
+- Standard inner ring (full shoulders on both sides)
 
 Geometry philosophy:
 滚珠直径 d_ball ≈ 径向间隙 × 0.58（经验系数）
@@ -195,6 +203,112 @@ def make_deep_groove_bearing_compound(
     # ── 组装 Compound / Assemble ──────────────────────────────
     compound = Compound(children=[outer_ring, inner_ring, cage, *balls])
     compound.label = f"{label_prefix}bearing" if label_prefix else "bearing"
+    return compound
+
+
+def make_angular_contact_bearing_compound(
+    d: float,
+    D: float,
+    B: float,
+    contact_angle_deg: float = 15.0,
+    label_prefix: str = "",
+) -> Compound:
+    """Build an angular contact ball bearing (single-direction thrust).
+    构建角接触球轴承（外圈单肩 / 推力自由侧带孔肩倒去）。
+
+    Key geometry difference from deep-groove:
+    - Outer ring: counterbore on +Z side removes one shoulder,
+      giving the characteristic single-shoulder ('C') cross-section.
+    - Inner ring: standard full-shoulder cylinder.
+
+    Args:
+        d: 内径 / bore diameter (mm)
+        D: 外径 / outer diameter (mm)
+        B: 宽度 / width (mm)
+        contact_angle_deg: 接触角（°），7001C = 15°
+        label_prefix: children label 前缀，如 "7001C/"
+
+    Returns:
+        Compound: outer_ring, inner_ring, cage, ball_NN
+    Coordinates: 轴承中心在原点，轴线沿 Z；Z 范围 -B/2 ~ +B/2。
+    """
+    g = _compute_ball_geometry(d, D, B)
+    r_i, r_o, r_pc   = g["r_i"], g["r_o"], g["r_pc"]
+    gap               = g["gap"]
+    d_ball, r_ball    = g["d_ball"], g["r_ball"]
+    r_groove, n_balls = g["r_groove"], g["n_balls"]
+
+    # Ensure outer ring wall ≥ 20% of radial gap for visual quality
+    # 保证外圈壁厚可见（至少 20% 径向间隙）
+    min_wall      = max(gap * 0.20, 0.5)
+    wall_offset   = min(r_ball + gap * 0.12, (r_o - r_pc) - min_wall)
+    r_outer_inner = r_pc + wall_offset   # 外圈内径（标准肩侧）
+    r_inner_outer = r_pc - wall_offset   # 内圈外径
+
+    raceway_torus = _make_raceway_torus(r_pc, r_groove)
+
+    # ── 外圈（带推力自由侧孔肩） / Outer Ring with counterbore ──────
+    # Counterbore removes 80% of ring-wall depth on the +Z (thrust-free) side.
+    # This gives the characteristic "open shoulder" look of angular contact bearings.
+    # 孔肩倒去 80% 圈壁厚度，在 +Z（推力自由侧）形成单肩截面特征外观。
+    ring_wall     = r_o - r_outer_inner
+    cb_depth      = B * 0.45                                # 45% 宽度
+    cb_radius     = r_outer_inner + ring_wall * 0.8         # 倒去 80% 圈壁
+    cb_z_center   = B / 2 - cb_depth / 2                   # 以轴承中心为基准
+
+    with BuildPart() as outer_bp:
+        Cylinder(radius=r_o, height=B,
+                 align=(Align.CENTER, Align.CENTER, Align.CENTER))
+        Cylinder(radius=r_outer_inner, height=B,
+                 align=(Align.CENTER, Align.CENTER, Align.CENTER),
+                 mode=Mode.SUBTRACT)
+        with Locations((0, 0, cb_z_center)):
+            Cylinder(radius=cb_radius, height=cb_depth,
+                     align=(Align.CENTER, Align.CENTER, Align.CENTER),
+                     mode=Mode.SUBTRACT)
+    outer_ring = outer_bp.part - raceway_torus
+    outer_ring.label = f"{label_prefix}outer_ring"
+    outer_ring.color = Color(0.72, 0.72, 0.78)
+
+    # ── 内圈（标准双肩） / Inner Ring (standard) ─────────────────────
+    with BuildPart() as inner_bp:
+        Cylinder(radius=r_inner_outer, height=B,
+                 align=(Align.CENTER, Align.CENTER, Align.CENTER))
+        Cylinder(radius=r_i, height=B,
+                 align=(Align.CENTER, Align.CENTER, Align.CENTER),
+                 mode=Mode.SUBTRACT)
+    inner_ring = inner_bp.part - raceway_torus
+    inner_ring.label = f"{label_prefix}inner_ring"
+    inner_ring.color = Color(0.72, 0.72, 0.78)
+
+    # ── 滚珠 / Steel Balls ────────────────────────────────────────────
+    balls = []
+    for i, loc in enumerate(PolarLocations(r_pc, n_balls)):
+        ball = loc * Sphere(r_ball)
+        ball.label = f"{label_prefix}ball_{i:02d}"
+        ball.color = Color(0.85, 0.85, 0.88)
+        balls.append(ball)
+
+    # ── 保持架 / Cage ─────────────────────────────────────────────────
+    cage_t       = max(d_ball * CAGE_THICKNESS_RATIO, 0.25)
+    cage_h       = B * CAGE_HEIGHT_RATIO
+    r_cage_outer = r_pc + cage_t / 2
+    r_cage_inner = r_pc - cage_t / 2
+
+    with BuildPart() as cage_bp:
+        Cylinder(radius=r_cage_outer, height=cage_h,
+                 align=(Align.CENTER, Align.CENTER, Align.CENTER))
+        Cylinder(radius=r_cage_inner, height=cage_h,
+                 align=(Align.CENTER, Align.CENTER, Align.CENTER),
+                 mode=Mode.SUBTRACT)
+        with PolarLocations(r_pc, n_balls):
+            Sphere(r_ball * 1.08, mode=Mode.SUBTRACT)
+    cage = cage_bp.part
+    cage.label = f"{label_prefix}cage"
+    cage.color = Color(0.85, 0.72, 0.40)
+
+    compound = Compound(children=[outer_ring, inner_ring, cage, *balls])
+    compound.label = f"{label_prefix}bearing" if label_prefix else "angular_contact_bearing"
     return compound
 
 

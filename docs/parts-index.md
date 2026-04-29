@@ -58,10 +58,12 @@
 | `mr_bearing`<br>微型球轴承 | `make_mr_bearing(model)` | MR63ZZ / MR74ZZ / MR84ZZ / MR85ZZ / MR104ZZ | ![](../build123d_parts_lib/parts/bearings/cache/mr_bearing.png) |
 | `flanged_bearing`<br>法兰球轴承 | `make_flanged_bearing(model)` | F688ZZ / F693ZZ / F623ZZ / F624ZZ / F625ZZ / F684ZZ | ![](../build123d_parts_lib/parts/bearings/cache/flanged_bearing.png) |
 | `linear_bushing`<br>直线轴承 | `make_linear_bushing(model)` | LM6UU / LM8UU / LM10UU / LM12UU / LMF8UU / LMF10UU（ISO 10736） | ![](../build123d_parts_lib/parts/bearings/cache/linear_bushing.png) |
+| `thin_section_bearing`<br>薄截面深沟球轴承 | `make_thin_section_bearing(model)` | TS17x23x3_5 / TS20x27x4 / TS25x33x4 / TS30x40x6（INA/FAG 61803 系列） | ![](../build123d_parts_lib/parts/bearings/cache/thin_section_bearing.png) |
+| `angular_contact_bearing`<br>角接触球轴承 | `make_angular_contact_bearing(model)` | 7001C / 7002C / 7003C / 7004C，15° 接触角 | ![](../build123d_parts_lib/parts/bearings/cache/angular_contact_bearing.png) |
 
 > 模块路径：`build123d_parts_lib.parts.bearings.<slug>`。YAML：`bearings.yaml` / `lm_bearings.yaml`。
 >
-> ⚙️ **工业级几何**（ball_bearing / mr_bearing / flanged_bearing）：外圈 + 内圈均带环面滚道沟槽，真实滚珠均匀分布节圆，保持架带球窝。返回 `Compound`（子件含 outer_ring / inner_ring / cage / ball_NN label）。共享核心：`_bearing_geometry.py`。详见 [bearings/README.md](../build123d_parts_lib/parts/bearings/README.md)。
+> ⚙️ **工业级几何**（ball_bearing / mr_bearing / flanged_bearing / thin_section_bearing / angular_contact_bearing）：外圈 + 内圈均带环面滚道沟槽，真实滚珠均匀分布节圆，保持架带球窝。角接触轴承外圈带单肩沉孔（C 型接触角）。返回 `Compound`（子件含 outer_ring / inner_ring / cage / ball_NN label）。共享核心：`_bearing_geometry.py`。详见 [bearings/README.md](../build123d_parts_lib/parts/bearings/README.md)。
 
 ### 📍 Pins & Shafts（销与光轴）
 

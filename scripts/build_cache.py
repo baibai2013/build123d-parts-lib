@@ -32,11 +32,17 @@ from build123d_parts_lib._preview_ocp import save_preview_png_auto  # noqa: E402
 
 def _rep_bundle():
     """延迟 import，避免启动时就全加载。"""
+    from build123d_parts_lib.parts.bearings.angular_contact_bearing import (
+        make_angular_contact_bearing,
+    )
     from build123d_parts_lib.parts.bearings.ball_bearing import make_ball_bearing
     from build123d_parts_lib.parts.bearings.flanged_bearing import (
         make_flanged_bearing,
     )
     from build123d_parts_lib.parts.bearings.mr_bearing import make_mr_bearing
+    from build123d_parts_lib.parts.bearings.thin_section_bearing import (
+        make_thin_section_bearing,
+    )
     from build123d_parts_lib.parts.fasteners.countersunk_screw import (
         make_countersunk_screw,
     )
@@ -103,6 +109,10 @@ def _rep_bundle():
          dict(model="MR85ZZ"), "MR Bearing  MR85ZZ"),
         ("bearings", "flanged_bearing", make_flanged_bearing,
          dict(model="F688ZZ"), "Flanged Bearing  F688ZZ"),
+        ("bearings", "thin_section_bearing", make_thin_section_bearing,
+         dict(model="TS17x23x3_5"), "Thin-Section Bearing  TS17x23x3_5"),
+        ("bearings", "angular_contact_bearing", make_angular_contact_bearing,
+         dict(model="7001C"), "Angular Contact Bearing  7001C"),
         # pins
         ("pins", "pin_cylindrical", make_cylindrical_pin,
          dict(diameter=4.0, length=20.0), "GB/T 119.1  Pin D4×20"),
