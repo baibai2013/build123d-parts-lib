@@ -1,5 +1,5 @@
-"""法兰微型深沟球轴承（Flanged Miniature Deep-Groove Ball Bearing），简化版。
-Flanged miniature deep-groove ball bearing, simplified.
+"""Flanged miniature deep-groove ball bearing — industrial quality.
+法兰微型深沟球轴承（工业级几何）。
 
 Source: bearings.yaml (YAML single source of truth / YAML 单一数据源)
 Standards: ISO 15 / JIS B1521（法兰系列）
@@ -8,12 +8,12 @@ License: MIT
 支持型号 / Supported models:
     F688ZZ / F693ZZ / F623ZZ / F624ZZ / F625ZZ / F684ZZ
 
-简化程度 / Simplification level:
-- 外圈 + 内圈 + 保持架（用中径圆柱近似）+ 法兰圆盘
-  outer ring + inner ring + cage (mid-diameter cylinder approx) + flange disc
-- 不建模滚球；足够装配定位与 bbox 占位 / no balls modeled; sufficient for assembly and bbox
-- 法兰贴在外圈 +Z 端（主体 Z 居中，法兰往 +Z 伸出）
-  flange at +Z end of body (body Z-centered, flange protrudes +Z)
+几何特点 / Geometry features:
+- 主体：外圈 + 内圈 + 滚珠 + 保持架（与 MR/ball_bearing 一致）
+  Body: outer ring + inner ring + balls + cage (same as MR/ball_bearing)
+- 法兰圆盘贴在外圈 +Z 端
+  Flange disc at +Z end of outer ring
+- 返回 Compound：4 主体件 + N 滚珠 + 1 法兰 / 4 body parts + N balls + 1 flange
 """
 from __future__ import annotations
 
@@ -21,22 +21,18 @@ from pathlib import Path
 from typing import NamedTuple
 
 import yaml
-from build123d import (
-    Align,
-    BuildPart,
-    Cylinder,
-    Location,
-    Locations,
-    Mode,
-    Part,
-    export_step,
+from build123d import Compound, export_step
+
+from build123d_parts_lib.parts.bearings._bearing_geometry import (
+    make_deep_groove_bearing_compound,
+    make_flange_disc,
 )
 
 
 class FlangedBearingSpec(NamedTuple):
     d: float         # inner diameter / 内径
     D: float         # outer diameter / 外径
-    B: float         # width (body only, excluding flange) / 宽度（不含法兰）
+    B: float         # body width (excludes flange) / 主体宽度（不含法兰）
     flange_D: float  # flange outer diameter / 法兰外径
     flange_t: float  # flange thickness / 法兰厚度
 
@@ -51,7 +47,6 @@ def _load_specs() -> dict[str, FlangedBearingSpec]:
     for key, entry in raw.items():
         if not isinstance(entry, dict):
             continue
-        # 仅加载法兰深沟球轴承 / only load flanged deep-groove type
         if entry.get("type") != "flanged-deep-groove-ball-bearing":
             continue
         dims = entry.get("dimensions", {})
@@ -65,19 +60,24 @@ def _load_specs() -> dict[str, FlangedBearingSpec]:
     return specs
 
 
-# 参数表（从 bearings.yaml 动态加载 / loaded dynamically from bearings.yaml）
 _SPECS: dict[str, FlangedBearingSpec] = _load_specs()
 
 
-def make_flanged_bearing(model: str = "F688ZZ") -> Part:
-    """生成法兰微型轴承简化实体（外圈 + 内圈 + 保持架 + 法兰圆盘）。
+def make_flanged_bearing(model: str = "F688ZZ") -> Compound:
+    """Generate an industrial-quality flanged miniature ball bearing.
+    生成法兰微型深沟球轴承工业级实体（主体 + 法兰圆盘）。
 
     Args:
         model: 型号字符串，如 "F688ZZ"、"F624ZZ"。大小写不敏感。
 
-    坐标：
-        - 主体（B 高度）中心在 Z=0，Z 范围：-B/2 ~ +B/2
-        - 法兰圆盘紧贴主体 +Z 端，Z 范围：+B/2 ~ +B/2+flange_t
+    Returns:
+        Compound with body parts + flange:
+          - {model}/outer_ring / inner_ring / cage / ball_NN
+          - {model}/flange
+
+    Coordinates:
+        - 主体（B 高度）中心在 Z=0 / body centered at Z=0
+        - 法兰贴在主体 +Z 端，Z 范围 +B/2 ~ +B/2+flange_t
         - 总高 = B + flange_t
     """
     key = model.upper()
@@ -86,67 +86,28 @@ def make_flanged_bearing(model: str = "F688ZZ") -> Part:
         raise ValueError(f"unknown model / 未知型号 {model!r}. Available / 可用型号：{available}")
 
     spec = _SPECS[key]
-    r_inner   = spec.d / 2
-    r_outer   = spec.D / 2
-    r_flange  = spec.flange_D / 2
 
-    # 环壁厚度
-    gap    = r_outer - r_inner
-    ring_t = max(gap * 0.28, 0.3)
+    # 主体（外圈 + 内圈 + 滚珠 + 保持架）/ body core
+    body = make_deep_groove_bearing_compound(
+        d=spec.d, D=spec.D, B=spec.B,
+        label_prefix=f"{key}/",
+    )
 
-    with BuildPart() as bearing:
-        # ── 主体（Z 居中） ──────────────────────────────
-        # 外圈
-        Cylinder(
-            radius=r_outer, height=spec.B,
-            align=(Align.CENTER, Align.CENTER, Align.CENTER),
-        )
-        Cylinder(
-            radius=r_outer - ring_t, height=spec.B,
-            align=(Align.CENTER, Align.CENTER, Align.CENTER),
-            mode=Mode.SUBTRACT,
-        )
+    # 法兰圆盘（贴在外圈 +Z 端）/ flange disc at +Z end
+    flange_z_center = spec.B / 2 + spec.flange_t / 2
+    flange = make_flange_disc(
+        d=spec.d,
+        flange_D=spec.flange_D,
+        flange_t=spec.flange_t,
+        z_center=flange_z_center,
+        label=f"{key}/flange",
+    )
 
-        # 内圈
-        Cylinder(
-            radius=r_inner + ring_t, height=spec.B,
-            align=(Align.CENTER, Align.CENTER, Align.CENTER),
-        )
-        Cylinder(
-            radius=r_inner, height=spec.B,
-            align=(Align.CENTER, Align.CENTER, Align.CENTER),
-            mode=Mode.SUBTRACT,
-        )
-
-        # 保持架
-        r_cage = (r_inner + r_outer) / 2
-        cage_t = min(ring_t * 0.6, gap * 0.15)
-        Cylinder(
-            radius=r_cage + cage_t / 2, height=spec.B * 0.6,
-            align=(Align.CENTER, Align.CENTER, Align.CENTER),
-        )
-        Cylinder(
-            radius=r_cage - cage_t / 2, height=spec.B * 0.6,
-            align=(Align.CENTER, Align.CENTER, Align.CENTER),
-            mode=Mode.SUBTRACT,
-        )
-
-        # ── 法兰圆盘（贴在主体 +Z 端） ─────────────────
-        # 法兰中心 Z = B/2 + flange_t/2
-        flange_z = spec.B / 2 + spec.flange_t / 2
-        with Locations(Location((0, 0, flange_z))):
-            Cylinder(
-                radius=r_flange, height=spec.flange_t,
-                align=(Align.CENTER, Align.CENTER, Align.CENTER),
-            )
-            # 中心孔穿透法兰
-            Cylinder(
-                radius=r_inner, height=spec.flange_t,
-                align=(Align.CENTER, Align.CENTER, Align.CENTER),
-                mode=Mode.SUBTRACT,
-            )
-
-    return bearing.part
+    # 组合：body 的所有 children + flange
+    all_children = list(body.children) + [flange]
+    result = Compound(children=all_children)
+    result.label = f"{key}/bearing"
+    return result
 
 
 if __name__ == "__main__":
@@ -159,8 +120,10 @@ if __name__ == "__main__":
         out_path = cache_dir / f"{slug}.step"
         export_step(part, str(out_path))
         bb = part.bounding_box()
+        n_balls = sum(1 for c in part.children if "ball_" in c.label)
         spec = _SPECS[model_name]
         total_h = spec.B + spec.flange_t
         print(f"OK: {out_path.name}  "
-              f"OD={bb.size.X:.1f}x{bb.size.Z:.1f}mm (expect OD={spec.flange_D}x{total_h})  "
-              f"vol={part.volume:.2f} mm3")
+              f"OD={bb.size.X:.1f}×{bb.size.Z:.1f}mm (expect ⌀{spec.flange_D}×{total_h})  "
+              f"balls={n_balls}  "
+              f"vol={part.volume:.2f} mm³")

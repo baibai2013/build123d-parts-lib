@@ -54,12 +54,14 @@
 
 | Slug | Factory | 覆盖规格 | 预览 |
 |------|---------|---------|:----:|
-| `ball_bearing`<br>深沟球轴承 | `make_ball_bearing(model)` | 608 / 624 / 625 / 626 / 6000 / 6001-2RS / 6002 | ![](../build123d_parts_lib/parts/bearings/cache/ball_bearing.png) |
-| `mr_bearing`<br>微型球轴承 | `make_mr_bearing(model)` | MR63 / MR74 / MR84 / MR85 / MR104 | ![](../build123d_parts_lib/parts/bearings/cache/mr_bearing.png) |
-| `flanged_bearing`<br>法兰球轴承 | `make_flanged_bearing(model)` | F688 / F693 / F623 / F624 / F625 / F684 | ![](../build123d_parts_lib/parts/bearings/cache/flanged_bearing.png) |
+| `ball_bearing`<br>深沟球轴承 | `make_ball_bearing(model)` | 608ZZ / 624ZZ / 625ZZ / 626ZZ / 6000ZZ / 6001-2RS / 6002ZZ | ![](../build123d_parts_lib/parts/bearings/cache/ball_bearing.png) |
+| `mr_bearing`<br>微型球轴承 | `make_mr_bearing(model)` | MR63ZZ / MR74ZZ / MR84ZZ / MR85ZZ / MR104ZZ | ![](../build123d_parts_lib/parts/bearings/cache/mr_bearing.png) |
+| `flanged_bearing`<br>法兰球轴承 | `make_flanged_bearing(model)` | F688ZZ / F693ZZ / F623ZZ / F624ZZ / F625ZZ / F684ZZ | ![](../build123d_parts_lib/parts/bearings/cache/flanged_bearing.png) |
 | `linear_bushing`<br>直线轴承 | `make_linear_bushing(model)` | LM6UU / LM8UU / LM10UU / LM12UU / LMF8UU / LMF10UU（ISO 10736） | ![](../build123d_parts_lib/parts/bearings/cache/linear_bushing.png) |
 
 > 模块路径：`build123d_parts_lib.parts.bearings.<slug>`。YAML：`bearings.yaml` / `lm_bearings.yaml`。
+>
+> ⚙️ **工业级几何**（ball_bearing / mr_bearing / flanged_bearing）：外圈 + 内圈均带环面滚道沟槽，真实滚珠均匀分布节圆，保持架带球窝。返回 `Compound`（子件含 outer_ring / inner_ring / cage / ball_NN label）。共享核心：`_bearing_geometry.py`。详见 [bearings/README.md](../build123d_parts_lib/parts/bearings/README.md)。
 
 ### 📍 Pins & Shafts（销与光轴）
 

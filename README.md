@@ -159,8 +159,11 @@ pytest tests/ -v
 改了零件源码后：
 
 ```bash
-python3 scripts/rebuild_cache.py            # 重建全部
-python3 scripts/rebuild_cache.py --verify-only   # 只检查是否存在
+python scripts/build_cache.py                        # 重建 bundle 全部代表规格
+python scripts/build_cache.py --only bearings        # 只重建指定类别
+python scripts/build_cache.py --only ball_bearing --model 6000ZZ  # 导出指定型号
+python scripts/verify_cache.py                       # 验证 cache 与 factory 一致性
+python scripts/verify_cache.py --only bearings       # 只验证指定类别
 ```
 
 ### 加新零件（贡献指引）

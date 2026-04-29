@@ -1,17 +1,19 @@
 """Rebuild cache/: 每个 factory 只保留一个代表 STEP + 一张 PNG。
 
-- 清空所有 parts/*/cache/*
-- 对每个 factory 调用一次"代表调用"
+- 增量覆盖 bundle 里的零件，不在 bundle 里的 cache 保留不动
 - 导出 STEP 到 cache/<slug>.step
 - 渲染 PNG 到 cache/<slug>.png
 
-运行方式（从仓库根）：
-    python scripts/build_cache.py
+运行方式(从仓库根)：
+    python scripts/build_cache.py                    # 全量重建 bundle 所有条目
+    python scripts/build_cache.py --only bearings    # 只重建匹配 category 的条目
+    python scripts/build_cache.py --only ball_bearing # 只重建匹配 slug 的条目
 
 License: MIT
 """
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -165,15 +167,69 @@ def purge_cache(parts_root: Path) -> int:
     return removed
 
 
-def main() -> int:
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    """CLI: --only 过滤 + --model 指定具体型号。
+    CLI: --only filters + --model targets a specific spec.
+    """
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument(
+        "--only",
+        metavar="CATEGORY_OR_SLUG",
+        help="只重建匹配 category (如 bearings) 或 slug (如 ball_bearing) 的条目;"
+             " 不传时全量重建 bundle。",
+    )
+    parser.add_argument(
+        "--model",
+        metavar="MODEL_NAME",
+        help="指定具体型号 (如 6000ZZ, MR104ZZ)。必须与 --only <slug> 搭配,"
+             " 且该 factory 的 kwargs 必须含 'model' 键。输出文件名带型号后缀:"
+             " cache/<slug>_<model_lower>.{step,png},不覆盖代表规格。",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parse_args(argv)
     parts_root = REPO_ROOT / "build123d_parts_lib" / "parts"
 
-    print(f">> Purging cache under {parts_root} ...")
-    n = purge_cache(parts_root)
-    print(f"   removed {n} files\n")
-
+    # 增量式重建：只覆盖 bundle 里的零件，不在 bundle 里的 cache 文件保留不动。
+    # Incremental rebuild: only overwrite parts in bundle, keep other cache files intact.
     bundle = _rep_bundle()
-    print(f">> Building {len(bundle)} representative parts ...")
+
+    # 按 --only 过滤 / filter by --only
+    if args.only:
+        filtered = [e for e in bundle if args.only in (e[0], e[1])]
+        if not filtered:
+            print(f"!! --only {args.only!r} 无匹配条目 / no matching entries")
+            print(f"   可用 category: {sorted({e[0] for e in bundle})}")
+            return 1
+        bundle = filtered
+
+    # --model 覆盖 kwargs['model'] + slug 加型号后缀
+    # --model overrides kwargs['model'] + appends model suffix to slug
+    if args.model:
+        if not args.only:
+            print("!! --model 必须与 --only <slug> 搭配 / requires --only <slug>")
+            return 1
+        if len(bundle) != 1:
+            print(f"!! --model 要求 --only 精确匹配单个 slug (当前 {len(bundle)} 个)")
+            return 1
+        category, slug, fn, kwargs, title = bundle[0]
+        if "model" not in kwargs:
+            print(f"!! factory {category}/{slug} 的 kwargs 无 'model' 键;"
+                  f" kwargs={kwargs}")
+            return 1
+        new_kwargs = {**kwargs, "model": args.model}
+        model_suffix = args.model.lower().replace("-", "_")
+        new_slug = f"{slug}_{model_suffix}"
+        new_title = f"{title.split()[0]} {args.model}"
+        bundle = [(category, new_slug, fn, new_kwargs, new_title)]
+        print(f">> --only {args.only!r} --model {args.model!r}"
+              f" → {category}/{new_slug}")
+    elif args.only:
+        print(f">> --only {args.only!r} → {len(bundle)} parts")
+    else:
+        print(f">> Building {len(bundle)} representative parts ...")
 
     ok, fail = 0, 0
     backends: dict[str, int] = {}
