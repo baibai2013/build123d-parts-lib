@@ -1,6 +1,8 @@
+[English](README_EN.md) | 中文
+
 # build123d-parts-lib
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![build123d](https://img.shields.io/badge/build123d-0.10+-green)](https://github.com/gumyr/build123d)
 
@@ -186,6 +188,12 @@ python scripts/verify_cache.py --only bearings       # 只验证指定类别
 
 ---
 
+## 免责声明
+
+本库以参考与复用为目的，零件模型为工程简化表示，参数数据基于网络公开数据收集整理，实际尺寸因厂家和批次存在差异，建议在具体应用中加以核对。各工艺配合间隙请参考相应规范，`fits.yaml` 经验值仅供参考。上游版本持续演进，建议固定依赖版本。按现状提供，不对特定场景的适用性作出承诺。
+
+---
+
 ## License
 
-MIT — 见 [LICENSE](LICENSE)。
+Apache License 2.0 — 商业可用，含专利授权条款，与上游 [build123d](https://github.com/gumyr/build123d)（Apache 2.0）保持一致。详见 [LICENSE](LICENSE)。
