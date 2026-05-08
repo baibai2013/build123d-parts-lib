@@ -1,0 +1,40 @@
+# O 型圈结构约束合同 / O-ring structural constraint contract
+# slug: oring
+# 适用所有内径 × 截面直径规格（参数化合同，不含数值）。
+# Applies to all d1 × d2 size combinations (parametric contract, no numeric values).
+
+slug: oring
+part_class: o-ring
+
+# 单体 Part，无 Compound 子件 / single-body Part, no Compound children
+compound_structure: null
+
+# 视觉特征约束 / visual feature constraints
+visual_features:
+  - name: torus_ring
+    description: "实体为完整封闭圆环（环形圆圈截面），顶/底视角可见圆形轮廓，ISO 视角可见环形截面。\
+                   Solid is a complete closed torus ring; top/bottom show circular outline; ISO shows torus cross-section."
+    required: true
+    views: [TOP, ISO, FRONT]
+
+  - name: cord_section
+    description: "ISO/正视视角可见圆形截面（截面直径 d2 明显小于内径 d1）。\
+                   ISO/front view shows circular cord cross-section (d2 visibly smaller than d1)."
+    required: true
+    views: [ISO, FRONT]
+
+# 几何不变式 / geometry invariants
+# expr 中的 g-dict key 与 oring.py GEOMETRY_INVARIANTS lambda 完全对应。
+# g-dict keys match exactly with oring.py GEOMETRY_INVARIANTS lambdas.
+geometry_invariants:
+  - description: "截面直径必须小于内径 / cord diameter must be less than inside diameter"
+    expr: "g['d2'] < g['d1']"
+
+  - description: "major_radius 必须等于 d1/2 + d2/2"
+    expr: "abs(g['major_r'] - (g['d1'] / 2 + g['d2'] / 2)) < 1e-9"
+
+  - description: "minor_radius 必须等于 d2/2"
+    expr: "abs(g['minor_r'] - g['d2'] / 2) < 1e-9"
+
+  - description: "外径必须等于 d1 + 2*d2 / outer diameter must equal d1 + 2*d2"
+    expr: "abs(g['outer_d'] - (g['d1'] + 2 * g['d2'])) < 1e-9"

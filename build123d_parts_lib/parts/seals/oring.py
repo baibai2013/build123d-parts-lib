@@ -14,6 +14,7 @@ Geometry:
 """
 from __future__ import annotations
 
+import math
 from pathlib import Path
 from typing import NamedTuple
 
@@ -95,7 +96,41 @@ def make_oring(d1: float = 10.0, d2: float = 2.0) -> Part:
             align=(Align.CENTER, Align.CENTER, Align.CENTER),
         )
 
+    # 计算 g-dict 供不变式断言 / compute geometry dict for invariant checks
+    g = {
+        "d1": d1,
+        "d2": d2,
+        "major_r": major_r,
+        "minor_r": minor_r,
+        "outer_d": d1 + 2 * d2,
+    }
+    _assert_geometry_invariants(g)
+
     return oring.part
+
+
+# ── 几何不变式（Single Truth）──────────────────────────────────────────────
+# GEOMETRY_INVARIANTS 是约束的唯一真相；contract.yaml expr 从此派生。
+# Geometry invariants — single source of truth; contract.yaml expr derived from here.
+GEOMETRY_INVARIANTS = [
+    # (描述 / description,  test lambda)
+    ("截面直径必须小于内径 / cord diameter must be less than inside diameter",
+     lambda g: g["d2"] < g["d1"]),
+    ("major_radius 必须等于 d1/2 + d2/2",
+     lambda g: abs(g["major_r"] - (g["d1"] / 2 + g["d2"] / 2)) < 1e-9),
+    ("minor_radius 必须等于 d2/2 / minor_radius must equal d2/2",
+     lambda g: abs(g["minor_r"] - g["d2"] / 2) < 1e-9),
+    ("外径必须等于 d1 + 2*d2 / outer diameter must equal d1 + 2*d2",
+     lambda g: abs(g["outer_d"] - (g["d1"] + 2 * g["d2"])) < 1e-9),
+]
+
+
+def _assert_geometry_invariants(g: dict) -> None:
+    """Assert all geometry invariants. Fail immediately on violation.
+    断言所有几何不变式，违反时立即报错（不吞异常）。
+    """
+    for desc, test in GEOMETRY_INVARIANTS:
+        assert test(g), f"Invariant FAIL: {desc}\n  g={g}"
 
 
 if __name__ == "__main__":

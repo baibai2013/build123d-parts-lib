@@ -65,6 +65,7 @@ def _rep_bundle():
     from build123d_parts_lib.parts.retainers.retaining_ring_shaft import (
         make_retaining_ring_shaft,
     )
+    from build123d_parts_lib.parts.seals.oring import make_oring
     from build123d_parts_lib.parts.servos.servo_horn import make_servo_horn
     from build123d_parts_lib.parts.servos.sg90 import make_sg90
     from build123d_parts_lib.parts.servos.standard_servo import make_servo
@@ -163,6 +164,9 @@ def _rep_bundle():
          dict(shaft_d=5.0), "GB/T 894.1  Ring D5 shaft"),
         ("retainers", "retaining_ring_hole", make_retaining_ring_hole,
          dict(hole_d=10.0), "GB/T 893.1  Ring D10 hole"),
+        # seals
+        ("seals", "oring", make_oring,
+         dict(d1=10.0, d2=2.0), "ISO 3601-1  O-Ring d1=10 d2=2"),
     ]
 
 
