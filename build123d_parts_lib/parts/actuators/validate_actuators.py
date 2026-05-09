@@ -49,11 +49,11 @@ PARTS_SPEC = [
      "make_encoder_cover",
      30.0, 6.0, 1.0, 0.2, False),
     ("rotor_shell",
-     "build123d_parts_lib.parts.actuators.motor_rotor",
+     "build123d_parts_lib.parts.actuators.rotor_shell",
      "make_rotor_shell",
      47.5, 12.0, 1.0, 0.2, False),
     ("arc_magnet",
-     "build123d_parts_lib.parts.actuators.motor_rotor",
+     "build123d_parts_lib.parts.actuators.arc_magnet",
      "make_arc_magnet",
      2.5, 10.0, 0.3, 0.2, False),   # X bbox = radial thickness ~2.46 mm
     ("motor_stator",

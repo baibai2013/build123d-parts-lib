@@ -18,6 +18,9 @@ env/
 *.swp
 .DS_Store
 
+# Claude Code local settings (machine-specific, not for commit)
+.claude/settings.local.json
+
 .pytest_cache/
 .coverage
 htmlcov/

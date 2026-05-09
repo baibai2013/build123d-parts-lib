@@ -69,10 +69,8 @@ def _rep_bundle():
     from build123d_parts_lib.parts.actuators.encoder_cover import make_encoder_cover
     from build123d_parts_lib.parts.actuators.flex_spline import make_flex_spline
     from build123d_parts_lib.parts.actuators.motor_controller import make_motor_controller
-    from build123d_parts_lib.parts.actuators.motor_rotor import (
-        make_arc_magnet,
-        make_rotor_shell,
-    )
+    from build123d_parts_lib.parts.actuators.arc_magnet import make_arc_magnet
+    from build123d_parts_lib.parts.actuators.rotor_shell import make_rotor_shell
     from build123d_parts_lib.parts.actuators.motor_stator import (
         make_motor_stator,
         make_stator_winding,
