@@ -94,3 +94,4 @@ if __name__ == "__main__":
               f"⌀{bb.size.X:.1f}×{bb.size.Z:.1f}mm  "
               f"balls={n_balls}  "
               f"vol={part.volume:.2f} mm³")
+ 
