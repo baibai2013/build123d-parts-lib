@@ -104,6 +104,25 @@
 
 > 模块路径：`build123d_parts_lib.parts.retainers.<slug>`。YAML：`retainers.yaml`。
 
+### 🦾 Actuators（驱动器）
+
+**QDD 谐波减速关节模组 / QDD Harmonic Drive Joint Module**
+
+| Slug | Factory | 描述 | 预览 |
+|------|---------|------|:----:|
+| `housing_circular_spline`<br>主外壳 / 刚轮一体件 | `make_housing_circular_spline()` | Φ45×30 mm，PA12 SLS；102 齿刚轮内壁 + Φ28 H7 轴承座 + 4× M3 热嵌铜螺母 | ![](../build123d_parts_lib/parts/actuators/cache/housing_circular_spline.png) |
+| `flex_spline`<br>柔轮 | `make_flex_spline()` | Φ32×20 mm，TPU 95A；100 齿 m0.3 渐开线齿形，壁厚 1.2 mm | ![](../build123d_parts_lib/parts/actuators/cache/flex_spline.png) |
+| `wave_generator_cam`<br>波发生器凸轮 | `make_wave_generator_cam()` | 椭圆 17×15.5×14 mm，SLA 树脂；Φ5 H7 中心孔 + 2×1.2 键槽 | ![](../build123d_parts_lib/parts/actuators/cache/wave_generator_cam.png) |
+| `output_flange`<br>输出法兰 | `make_output_flange()` | Φ40×8 mm，PETG；Φ12 中心孔 + 6× M2 PCD34 | ![](../build123d_parts_lib/parts/actuators/cache/output_flange.png) |
+| `motor_endcap_front`<br>电机前端盖 | `make_motor_endcap_front()` | Φ45×5 mm，PETG；Φ8 H7 轴承座 + 4× M3 PCD39 | ![](../build123d_parts_lib/parts/actuators/cache/motor_endcap_front.png) |
+| `encoder_cover`<br>编码器后盖 | `make_encoder_cover()` | Φ30×6 mm，PETG；Φ6.2×3.5 磁钢盲孔 + 3× M2 PCB 安装孔 | ![](../build123d_parts_lib/parts/actuators/cache/encoder_cover.png) |
+
+> 模块路径：`build123d_parts_lib.parts.actuators.<slug>`。BOM：`actuators/BOM.md`。
+>
+> 🔩 **装配体**：`assembly.py`（含 8 件定位装配，`cache/assembly.step` 19 MB）；爆炸展开动画：`exploded.py`（16 s OCP Animation 循环）。
+>
+> ⚙️ **谐波参数**：flex_teeth=100 / ring_teeth=102 / module=0.3 / 减速比=50 / 外径=45 mm。
+
 ### 🔵 Seals（密封件）
 
 | Slug | Factory | 覆盖规格 | 预览 |
@@ -175,12 +194,13 @@ python scripts/build_cache.py
 
 ---
 
-## 统计（2026-04-28）
+## 统计（2026-05-08）
 
-- **Factory 文件**：43 个 `.py`（26 紧固 + 4 轴承 + 4 销轴 + 3 舵机 + 3 传动 + 2 卡簧 + 1 密封）
+- **Factory 文件**：49 个 `.py`（26 紧固 + 4 轴承 + 4 销轴 + 3 舵机 + 3 传动 + 2 卡簧 + 1 密封 + **6 驱动器**）
 - **参数化规格**：220+ 条（通过 NamedTuple 查表）
 - **cache**：每 factory 1 STEP + 1 PNG
 - **YAML 条目**：200+ 条
+- **装配体**：1 件（QDD 谐波减速关节模组，8 零件，`assembly.step` 19 MB）
 
 ---
 

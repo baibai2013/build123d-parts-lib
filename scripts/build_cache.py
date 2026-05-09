@@ -65,6 +65,18 @@ def _rep_bundle():
     from build123d_parts_lib.parts.retainers.retaining_ring_shaft import (
         make_retaining_ring_shaft,
     )
+    from build123d_parts_lib.parts.actuators.encoder_cover import make_encoder_cover
+    from build123d_parts_lib.parts.actuators.flex_spline import make_flex_spline
+    from build123d_parts_lib.parts.actuators.housing_circular_spline import (
+        make_housing_circular_spline,
+    )
+    from build123d_parts_lib.parts.actuators.motor_endcap_front import (
+        make_motor_endcap_front,
+    )
+    from build123d_parts_lib.parts.actuators.output_flange import make_output_flange
+    from build123d_parts_lib.parts.actuators.wave_generator_cam import (
+        make_wave_generator_cam,
+    )
     from build123d_parts_lib.parts.seals.oring import make_oring
     from build123d_parts_lib.parts.servos.servo_horn import make_servo_horn
     from build123d_parts_lib.parts.servos.sg90 import make_sg90
@@ -167,6 +179,19 @@ def _rep_bundle():
         # seals
         ("seals", "oring", make_oring,
          dict(d1=10.0, d2=2.0), "ISO 3601-1  O-Ring d1=10 d2=2"),
+        # actuators (QDD harmonic drive joint module)
+        ("actuators", "housing_circular_spline", make_housing_circular_spline,
+         dict(), "QDD Housing / Circular Spline  Φ45×30"),
+        ("actuators", "flex_spline", make_flex_spline,
+         dict(), "QDD Flex Spline  Φ32×20 z100 m0.3"),
+        ("actuators", "wave_generator_cam", make_wave_generator_cam,
+         dict(), "QDD Wave Generator Cam  17×15.5×14"),
+        ("actuators", "output_flange", make_output_flange,
+         dict(), "QDD Output Flange  Φ40×8"),
+        ("actuators", "motor_endcap_front", make_motor_endcap_front,
+         dict(), "QDD Motor Endcap Front  Φ45×5"),
+        ("actuators", "encoder_cover", make_encoder_cover,
+         dict(), "QDD Encoder Cover  Φ30×6"),
     ]
 
 
