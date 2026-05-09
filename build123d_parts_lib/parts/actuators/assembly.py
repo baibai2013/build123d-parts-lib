@@ -12,12 +12,16 @@ Axial stack (Z from output face z=0 toward motor end, +Z):
     z=  3 ~ 17  : wave_generator_cam     (Pos(0,0,3))   — inside flex cup
     z= 30 ~ 35  : motor_endcap_front     (Pos(0,0,30))
     z= 35 ~ 41  : encoder_cover          (Pos(0,0,35))
+    z=  0 ~ 45  : rotor_shaft            (Pos(0,0,0))   — Φ5h6×45, through wave cam + stator bore
+    z= 28 ~ 38  : motor_stator           (Pos(0,0,28))  — 4010 12-slot, OD=40mm
+    z= 28 ~ 40  : motor_rotor_shell      (Pos(0,0,28))  — OD=47.5mm (outrunner, exceeds Φ45 envelope)
+    z= 28 ~ 38  : arc_magnets × 14      (Pos(0,0,28) + Rot per pole)
 """
 from __future__ import annotations
 
 from pathlib import Path
 
-from build123d import Compound, Part, Pos, import_step, export_step
+from build123d import Compound, Part, Pos, Rot, import_step, export_step
 from ocp_vscode import Camera, show, set_port
 from ocp_vscode.comms import port_check
 from ocp_vscode.state import get_ports
@@ -38,6 +42,14 @@ if __name__ == "__main__":
     enc_cover  = import_step(str(CACHE / "encoder_cover.step"))
     bearing_7001 = import_step(str(BEARING_CACHE / "angular_contact_bearing.step"))
     thin_brg     = import_step(str(BEARING_CACHE / "thin_section_bearing.step"))
+    # Motor sub-assembly (E-1/E-2/E-3)
+    rotor_shaft      = import_step(str(CACHE / "rotor_shaft.step"))
+    motor_stator     = import_step(str(CACHE / "motor_stator.step"))
+    rotor_shell      = import_step(str(CACHE / "rotor_shell.step"))
+    arc_magnet       = import_step(str(CACHE / "arc_magnet.step"))
+    # Motor detail parts
+    stator_winding   = import_step(str(CACHE / "stator_winding.step"))
+    motor_controller = import_step(str(CACHE / "motor_controller.step"))
 
     print("  All STEP files loaded.")
 
@@ -50,6 +62,17 @@ if __name__ == "__main__":
     enc_cover_asm    = Pos(0, 0, 35)  * enc_cover
     bearing_7001_asm = Pos(0, 0,  0)  * bearing_7001
     thin_bearing_asm = Pos(0, 0,  3)  * thin_brg
+    # Motor sub-assembly: shaft runs full axial length; stator + rotor at z=28
+    rotor_shaft_asm      = Pos(0, 0,  0)  * rotor_shaft
+    motor_stator_asm     = Pos(0, 0, 28)  * motor_stator
+    rotor_shell_asm      = Pos(0, 0, 28)  * rotor_shell
+    stator_winding_asm   = Pos(0, 0, 28)  * stator_winding     # co-located with stator
+    motor_controller_asm = Pos(0, 0, 41)  * motor_controller   # above encoder cover
+    # 14 arc magnets distributed at 360/14° intervals around rotor
+    arc_magnet_asms = [
+        Pos(0, 0, 28) * Rot(0, 0, 360.0 * i / 14) * arc_magnet
+        for i in range(14)
+    ]
 
     # ── 组合装配体 / Combine into compound ────────────────────────────────────
     asm = Compound(children=[
@@ -61,6 +84,12 @@ if __name__ == "__main__":
         enc_cover_asm,
         bearing_7001_asm,
         thin_bearing_asm,
+        rotor_shaft_asm,
+        motor_stator_asm,
+        rotor_shell_asm,
+        stator_winding_asm,
+        motor_controller_asm,
+        *arc_magnet_asms,
     ])
 
     # ── OCP 预览 / OCP preview ────────────────────────────────────────────────
@@ -71,13 +100,22 @@ if __name__ == "__main__":
         show(
             housing_asm, flex_asm, wave_cam_asm, output_asm,
             motor_cap_asm, enc_cover_asm, bearing_7001_asm, thin_bearing_asm,
+            rotor_shaft_asm, motor_stator_asm, rotor_shell_asm,
+            stator_winding_asm, motor_controller_asm,
+            *arc_magnet_asms,
             names=[
                 "housing", "flex_spline", "wave_cam", "output_flange",
                 "motor_endcap", "encoder_cover", "bearing_7001c", "thin_bearing",
+                "rotor_shaft", "motor_stator", "rotor_shell",
+                "stator_winding", "motor_controller",
+                *[f"magnet_{i:02d}" for i in range(14)],
             ],
             colors=[
                 "steelblue", "coral", "goldenrod", "mediumseagreen",
                 "slateblue", "lightgray", "silver", "silver",
+                "dimgray", "orangered", "darkgray",
+                "goldenrod", "darkgreen",
+                *["mediumpurple"] * 14,
             ],
             reset_camera=Camera.ISO,
         )
@@ -102,10 +140,16 @@ if __name__ == "__main__":
     child_names = [
         "housing", "flex_spline", "wave_cam", "output_flange",
         "motor_endcap", "encoder_cover", "bearing_7001c", "thin_bearing",
+        "rotor_shaft", "motor_stator", "rotor_shell",
+        "stator_winding", "motor_controller",
+        *[f"magnet_{i:02d}" for i in range(14)],
     ]
     child_parts = [
         housing_asm, flex_asm, wave_cam_asm, output_asm,
         motor_cap_asm, enc_cover_asm, bearing_7001_asm, thin_bearing_asm,
+        rotor_shaft_asm, motor_stator_asm, rotor_shell_asm,
+        stator_winding_asm, motor_controller_asm,
+        *arc_magnet_asms,
     ]
     for cname, cpart in zip(child_names, child_parts):
         if not cpart.is_valid:

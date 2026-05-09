@@ -60,6 +60,7 @@
 | `linear_bushing`<br>直线轴承 | `make_linear_bushing(model)` | LM6UU / LM8UU / LM10UU / LM12UU / LMF8UU / LMF10UU（ISO 10736） | ![](../build123d_parts_lib/parts/bearings/cache/linear_bushing.png) |
 | `thin_section_bearing`<br>薄截面深沟球轴承 | `make_thin_section_bearing(model)` | TS17x23x3_5 / TS20x27x4 / TS25x33x4 / TS30x40x6（INA/FAG 61803 系列） | ![](../build123d_parts_lib/parts/bearings/cache/thin_section_bearing.png) |
 | `angular_contact_bearing`<br>角接触球轴承 | `make_angular_contact_bearing(model)` | 7001C / 7002C / 7003C / 7004C，15° 接触角 | ![](../build123d_parts_lib/parts/bearings/cache/angular_contact_bearing.png) |
+| `needle_bearing`<br>冲压外圈滚针轴承 | `make_needle_bearing(model)` | HK0608 / HK0810 / HK1010（DIN 618-1，无内圈，密闭一端） | ![](../build123d_parts_lib/parts/bearings/cache/needle_bearing.png) |
 
 > 模块路径：`build123d_parts_lib.parts.bearings.<slug>`。YAML：`bearings.yaml` / `lm_bearings.yaml`。
 >
@@ -116,10 +117,16 @@
 | `output_flange`<br>输出法兰 | `make_output_flange()` | Φ40×8 mm，PETG；Φ12 中心孔 + 6× M2 PCD34 | ![](../build123d_parts_lib/parts/actuators/cache/output_flange.png) |
 | `motor_endcap_front`<br>电机前端盖 | `make_motor_endcap_front()` | Φ45×5 mm，PETG；Φ8 H7 轴承座 + 4× M3 PCD39 | ![](../build123d_parts_lib/parts/actuators/cache/motor_endcap_front.png) |
 | `encoder_cover`<br>编码器后盖 | `make_encoder_cover()` | Φ30×6 mm，PETG；Φ6.2×3.5 磁钢盲孔 + 3× M2 PCB 安装孔 | ![](../build123d_parts_lib/parts/actuators/cache/encoder_cover.png) |
+| `rotor_shaft`<br>转子轴 | `make_rotor_shaft()` | Φ5 h6×45 mm；DIN 6885 键槽 2×1.0，前轴颈 Φ4×3，M3 盲孔 | ![](../build123d_parts_lib/parts/actuators/cache/rotor_shaft.png) |
+| `motor_stator`<br>电机定子 | `make_motor_stator()` | 4010 外转子定子，Φ40×10 mm，12 槽，yoke Φ28，穿轴孔 Φ14 | ![](../build123d_parts_lib/parts/actuators/cache/motor_stator.png) |
+| `stator_winding`<br>定子铜线绕组 | `make_stator_winding()` | 12 槽导体 + 24 端线圈弧段，Φ39.6×16 mm（含端部伸出量各 3 mm） | ![](../build123d_parts_lib/parts/actuators/cache/stator_winding.png) |
+| `rotor_shell`<br>外转子壳 | `make_rotor_shell()` | Φ47.5×12 mm，壁厚 1.5 mm；14 个弧形磁钢固定槽（0.5 mm 深，23.1°） | ![](../build123d_parts_lib/parts/actuators/cache/rotor_shell.png) |
+| `arc_magnet`<br>弧形磁钢 | `make_arc_magnet()` | 14 极，弧 23.1°，t=2 mm，内 r=20.25 mm；×14 组成转子磁极阵列 | ![](../build123d_parts_lib/parts/actuators/cache/arc_magnet.png) |
+| `motor_controller`<br>电机控制器 PCB | `make_motor_controller()` | Φ40×1.6 mm FOC 驱动板；6× MOSFET + MCU + 2× 电容 + 3× 相线连接器 | ![](../build123d_parts_lib/parts/actuators/cache/motor_controller.png) |
 
 > 模块路径：`build123d_parts_lib.parts.actuators.<slug>`。BOM：`actuators/BOM.md`。
 >
-> 🔩 **装配体**：`assembly.py`（含 8 件定位装配，`cache/assembly.step` 19 MB）；爆炸展开动画：`exploded.py`（16 s OCP Animation 循环）。
+> 🔩 **装配体**：`assembly.py`（含全部零件定位装配，`cache/assembly.step`）；爆炸展开动画：`exploded.py`（16 s OCP Animation 循环）。
 >
 > ⚙️ **谐波参数**：flex_teeth=100 / ring_teeth=102 / module=0.3 / 减速比=50 / 外径=45 mm。
 

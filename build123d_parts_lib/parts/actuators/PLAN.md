@@ -284,3 +284,326 @@ parts/actuators/
 ---
 
 *计划表版本：2026-04-29 | 执行时更新状态列*
+
+---
+
+## 电机原材料 + 备选轴承 建模计划（2026-05-09 追加，2026-05-09 重制）
+
+> **背景**：BOM.md 中 E1/E2/E3/P1 共 4 类尚未建模，用户确认全部实现。  
+> **执行原则**：每个零件完成几何后必须先走 `/cad-vision-verify`，通过 `verdict=PASS` 后再走标件入库流程（actuator 专属件走 A5，标准件 needle_bearing 走完整 A1-A5）。  
+> **cache 规范**：每个 factory 只入 1 对 `<slug>.step` + `<slug>.png`，多角度验证图留在 `verify_temp/`，不提交。
+
+---
+
+### 关键尺寸链（已验算）
+
+```
+stator tooth-tip OD = 40 mm
++ air_gap 0.25 mm           → magnet_inner_r = 20.25 mm
++ magnet_t 2 mm             → magnet_outer_r = 22.25 mm
++ shell_wall 1.5 mm         → rotor_shell_OD = 47.5 mm  ← 电机段超出 Φ45mm 约束（方案 A）
+```
+
+### 装配关系（cross_refs）
+
+```
+rotor_shaft ──同轴──→ motor_stator（穿过 stator_id=14 内孔）
+rotor_shaft ──同轴压配──→ motor_rotor_shell（中心孔 Φ5）
+motor_stator ──气隙 0.25mm──→ arc_magnet × 14
+motor_rotor_shell ──包裹定子──→ motor_stator（r 方向）
+rotor_shaft ──键槽对位──→ wave_generator_cam（key_w=2.0, key_hub_depth=1.2, +Y）
+```
+
+---
+
+### 里程碑总览
+
+| # | 里程碑 | 文件 | 关键尺寸 | 状态 |
+|---|--------|------|---------|:----:|
+| E-1 | 转子轴 | `actuators/rotor_shaft.py` | Φ5 h6 × 45 mm，DIN 6885 键槽 2×1.0，前轴颈 Φ4×3，M3 盲孔 | 🔨 代码完成，待验证入库 |
+| E-2 | 电机定子 | `actuators/motor_stator.py` | 4010，OD=40 mm，H=10 mm，12 槽，yoke_od=28 mm | ⬜ |
+| E-3 | 外转子壳 + 弧形磁钢 | `actuators/motor_rotor.py` | 壳 Φ47.5×12，14 极；磁钢 α=19.3°，t=2 mm | ⬜ |
+| P1 | 滚针轴承（标准件） | `bearings/needle_bearing.py` | HK0608 / HK0810 / HK1010，无内圈 | ⬜ |
+| FIN | 装配体更新 | `actuators/assembly.py` | 电机子总成 z=28~42 mm | ⬜ |
+
+---
+
+### E-1 转子轴 — 执行流程
+
+> 代码已完成（`rotor_shaft.py`），STEP 已在 `cache/rotor_shaft.step`，尚未走视觉验证和入库。
+
+**Step 1 — Layer 0 验证（已通过，确认即可）**
+
+```bash
+cd /Users/liyijiang/work/build123d-parts-lib
+python3 -m build123d_parts_lib.parts.actuators.rotor_shaft
+# 期望：BRep + BBox ✓，STEP 写出，无报错
+```
+
+**Step 2 — Layer 1 视觉预览（OCP 截图）**
+
+```python
+from build123d_parts_lib.parts.actuators.rotor_shaft import make_rotor_shaft
+from build123d_parts_lib._preview_ocp import save_preview_png_auto
+
+part = make_rotor_shaft()
+save_preview_png_auto(part, "build123d_parts_lib/parts/actuators/cache/rotor_shaft.png",
+                      title="QDD Rotor Shaft  Φ5h6×45")
+```
+
+视觉检查清单：键槽可见 / 前轴颈台阶清晰 / 后端盲孔开口可见 / 两端倒角 C0.3 / 无破面
+
+**Step 3 — Layer 2 `/cad-vision-verify`（标准件入库门控）**
+
+```python
+import sys; sys.path.insert(0, "/Users/liyijiang/.agents/skills/cad-vision-verify/scripts")
+from verify_loop import verify_standard_part
+from build123d_parts_lib.parts.actuators.rotor_shaft import make_rotor_shaft
+
+result = verify_standard_part(
+    solid         = make_rotor_shaft(),
+    slug          = "rotor_shaft",
+    model         = "QDD_5h6x45",
+    yaml_path     = None,           # actuator 专属件，无独立 YAML
+    contract_path = None,
+    verify_temp   = "./verify_temp",
+)
+print(result["verdict"])  # 需 PASS 才进 Step 4
+```
+
+**Step 4 — 入库 A5（verdict=PASS 后）**
+
+```bash
+# 在 scripts/build_cache.py _rep_bundle() 中已有条目，直接运行
+python3 scripts/build_cache.py --only rotor_shaft
+# 确认 cache/rotor_shaft.step + cache/rotor_shaft.png 存在且无多角度副产物
+```
+
+更新 `validate_actuators.py`：
+```python
+("rotor_shaft", make_rotor_shaft, 5.0, 45.0, 0.2, 0.2, False),
+```
+
+---
+
+### E-2 电机定子 — 执行流程
+
+> **几何**：12 槽外定子，单体 Part（不含绕组线圈，工程简化）。
+
+**关键参数**：
+
+| 参数 | 值 |
+|------|---|
+| stator_od | 40.0 mm（齿顶外径） |
+| stator_h | 10.0 mm |
+| yoke_od | 28.0 mm（轭部外径，= 内腔边界） |
+| stator_id | 14.0 mm（穿轴内孔） |
+| n_slots | 12 |
+| slot_depth | ≈ 6.0 mm（= (stator_od - yoke_od) / 2） |
+| slot_opening | ≈ 2.5 mm |
+
+**建模策略**：外圆柱（Φ40×10）+ 内孔（Φ14）+ 12 槽（PolarLocations + 矩形切槽）
+
+**Step 1 — A3 建模**：写 `actuators/motor_stator.py`，`make_motor_stator() -> Part`
+
+**Step 2 — Layer 0**：`python3 -m build123d_parts_lib.parts.actuators.motor_stator`  
+期望：`bbox ≈ (40, 40, 10)`，`volume` 合理，`is_valid` 或 `volume > 0`（12 槽布尔可能触发 soft is_valid）
+
+**Step 3 — Layer 1**：OCP/VTK 截图，检查槽开口均匀、内孔贯通、无破面
+
+**Step 4 — Layer 2 `/cad-vision-verify`**：
+
+```python
+result = verify_standard_part(
+    solid         = make_motor_stator(),
+    slug          = "motor_stator",
+    model         = "4010_12slot",
+    yaml_path     = None,
+    contract_path = None,
+    verify_temp   = "./verify_temp",
+)
+```
+
+视觉检查重点：TOP 视角可数 12 槽开口 / FRONT 可见齿高 / 内孔贯通
+
+**Step 5 — A5 入库**：
+- `scripts/build_cache.py` 新增条目 `("actuators", "motor_stator", make_motor_stator, {}, "QDD Motor Stator 4010 12-slot")`
+- `validate_actuators.py` 新增：`("motor_stator", make_motor_stator, 40.0, 10.0, 1.0, 0.2, True)`
+
+---
+
+### E-3 外转子壳 + 弧形磁钢 — 执行流程
+
+> **几何**：两个独立 Part：外转子壳（薄壁圆筒 + 端板）+ 弧形磁钢 × 14（PolarLocations）。
+
+**关键参数**：
+
+| 参数 | 值 |
+|------|---|
+| rotor_shell_od | 47.5 mm |
+| rotor_shell_h | 12.0 mm |
+| shell_wall_t | 1.5 mm |
+| center_bore_d | 5.0 mm（配转子轴 h6） |
+| n_poles | 14 |
+| magnet_t | 2.0 mm |
+| magnet_inner_r | 20.25 mm |
+| magnet_arc_angle | 360/14 × 0.9 ≈ 23.1°（极弧系数 0.9） |
+| magnet_h | 10.0 mm（同定子高） |
+
+**建模策略**：
+- 转子壳：外圆柱抽壳 + 端板 + 中心轴孔
+- 弧形磁钢：`BuildSketch` 弧形截面（内外半径 + 极弧角）+ extrude × 14（PolarLocations）
+- 两者分别 `make_rotor_shell()` / `make_arc_magnet()` 独立 factory，`make_motor_rotor()` 返回 Compound
+
+**Step 1 — A3 建模**：写 `actuators/motor_rotor.py`
+
+**Step 2 — Layer 0**：
+```bash
+python3 -m build123d_parts_lib.parts.actuators.motor_rotor
+# 期望：shell bbox ≈ (47.5, 47.5, 12)；磁钢 bbox ≈ (44.5, 44.5, 10)
+```
+
+**Step 3 — Layer 1**：OCP 截图，检查 14 极弧形磁钢均匀分布、转子壳端板完整
+
+**Step 4 — Layer 2 `/cad-vision-verify`**（外转子壳 + 磁钢分别验证）：
+
+```python
+# 转子壳
+result_shell = verify_standard_part(
+    solid="rotor_shell", model="QDD_47.5x12", yaml_path=None, contract_path=None,
+    verify_temp="./verify_temp")
+# 磁钢（TOP 视角需可数 14 块）
+result_magnet = verify_standard_part(
+    solid="arc_magnet_array", model="14pole_23deg", yaml_path=None, contract_path=None,
+    verify_temp="./verify_temp")
+```
+
+**Step 5 — A5 入库**：
+- `build_cache.py` 新增 `motor_rotor_shell` + `arc_magnet` 两条代表规格
+- `validate_actuators.py` 新增：
+  ```python
+  ("motor_rotor_shell", ..., 47.5, 12.0, 1.0, 0.2, False),
+  ("arc_magnet",        ..., 44.5, 10.0, 1.0, 0.2, True),
+  ```
+
+---
+
+### P1 滚针轴承（标准件）— 完整 A1-A5 执行流程
+
+> 这是唯一一个**纯标准件**，需走 standard-parts-playbook 完整 A1-A5。
+
+**A1 — 数据收集**
+
+目标规格：HK0608 / HK0810 / HK1010（冲压外圈，无内圈，滚针保持架）
+
+| 型号 | d（内径）| D（外径）| B（宽）| 参考数据源 |
+|------|---------|---------|-------|---------|
+| HK0608 | 6 mm | 10 mm | 8 mm | INA/FAG HK catalog |
+| HK0810 | 8 mm | 12 mm | 10 mm | INA/FAG HK catalog |
+| HK1010 | 10 mm | 14 mm | 10 mm | INA/FAG HK catalog |
+
+额外收集：`n_needles`（滚针数 ≈ 10）、`d_needle`（滚针直径 ≈ 1.5 mm）  
+数据源：`WebSearch "INA HK0608 dimensions specifications"` → confidence ≥ 4
+
+**A2 — YAML 条目 + Contract**
+
+- YAML 新增至 `build123d_parts_lib/parts/bearings/bearings.yaml`（key：`HK0608` / `HK0810` / `HK1010`）
+- Contract 新建：`parts/bearings/contracts/needle_bearing_contract.yaml`
+
+Contract 骨架：
+```yaml
+slug: needle_bearing
+part_class: drawn-cup-needle-bearing
+compound_structure: null   # 单体 Part（工程简化，不建滚针）
+visual_features:
+  - name: outer_cup
+    description: "薄壁冲压外圈，无内圈，内孔贯通可见"
+    required: true
+    views: [ISO, FRONT]
+geometry_invariants:
+  - description: "外圈内径必须大于内径"
+    expr: "g['r_inner_cup'] > g['r_bore']"
+  - description: "壁厚合理（冲压件 ~0.5 mm）"
+    expr: "g['r_outer'] - g['r_inner_cup'] < 2.5"
+```
+
+**A3 — Python 模块**
+
+文件：`build123d_parts_lib/parts/bearings/needle_bearing.py`  
+Factory：`make_needle_bearing(model: str = "HK0608") -> Part`  
+几何：外圈薄壁圆筒（revolve 截面）+ 两端倒角，工程简化不建滚针  
+四层结构：`NeedleBearingSpec` NamedTuple + `_FALLBACK` + `_load_specs()` + `make_needle_bearing()`
+
+**A4 — 三层验证**
+
+```bash
+# Layer 0
+python3 -m build123d_parts_lib.parts.bearings.needle_bearing
+# 期望：HK0608 bbox ≈ (10, 10, 8)；HK0810 ≈ (12, 12, 10)；HK1010 ≈ (14, 14, 10)
+
+# Layer 1 — OCP/VTK 截图
+# 检查：薄壁外圈清晰 / 内孔贯通 / 两端倒角 / 无破面
+
+# Layer 2 — /cad-vision-verify
+python3 /Users/liyijiang/.agents/skills/cad-vision-verify/scripts/verify_loop.py \
+  --mode standard-part \
+  --slug needle_bearing \
+  --model HK0608 \
+  --yaml build123d_parts_lib/parts/bearings/bearings.yaml \
+  --contract build123d_parts_lib/parts/bearings/contracts/needle_bearing_contract.yaml \
+  --verify-temp ./verify_temp
+# verdict=PASS（score ≥ 80）才进 A5
+```
+
+**A5 — 入库收尾**
+
+```bash
+# build_cache.py 新增代表规格 HK0608
+# ("bearings", "needle_bearing", make_needle_bearing, {"model": "HK0608"}, "Needle Bearing  HK0608")
+python3 scripts/build_cache.py --only needle_bearing
+
+# 更新 docs/parts-index.md（bearings 表格新增一行）
+# 更新 skill data-sources: ~/.agents/skills/build123d-cad/references/data-sources/bearings.yaml
+# Commit 两个 repo（parts-lib + skill）
+```
+
+---
+
+### FIN — 装配体更新
+
+> 依赖 E-1/E-2/E-3 全部 `verdict=PASS` 入库后执行。
+
+更新 `actuators/assembly.py`：在已有 6 件装配基础上加入电机子总成（z=28~42 mm）：
+- `motor_stator` 固定在 z=28 mm，`RigidJoint`
+- `rotor_shaft` 穿过定子内孔（Φ14），同轴
+- `motor_rotor` 套在定子外（气隙 0.25 mm），随轴转动
+- 14 块弧形磁钢与转子壳随轴旋转
+
+验证：`assembly.do_children_intersect() == False`（无干涉）
+
+---
+
+### 进度追踪
+
+| # | 步骤 | 完成标志 | 状态 |
+|---|------|---------|:----:|
+| E-1-1 | rotor_shaft Layer 0 验证 | `is_valid` + bbox ✓ | ✅ |
+| E-1-2 | rotor_shaft Layer 1 截图 | `cache/rotor_shaft.png` 存在 | ✅ |
+| E-1-3 | rotor_shaft Layer 2 verify | `verdict=PASS` | ✅ |
+| E-1-4 | rotor_shaft A5 入库 | `build_cache.py` ✓，validate 条目 ✓ | ✅ |
+| E-2-1 | motor_stator A3 建模 | `motor_stator.py` 完成 | ✅ |
+| E-2-2 | motor_stator Layer 0/1 | bbox ≈ (40,40,10) ✓ | ✅ |
+| E-2-3 | motor_stator Layer 2 verify | `verdict=PASS` | ✅ |
+| E-2-4 | motor_stator A5 入库 | build_cache ✓ | ✅ |
+| E-3-1 | motor_rotor A3 建模 | `motor_rotor.py` 完成 | ✅ |
+| E-3-2 | motor_rotor Layer 0/1 | shell + magnet bbox ✓ | ✅ |
+| E-3-3 | motor_rotor Layer 2 verify | `verdict=PASS`（壳+磁钢各一次）| ✅ |
+| E-3-4 | motor_rotor A5 入库 | build_cache ✓（2 条目）| ✅ |
+| P1-1 | needle_bearing A1 数据收集 | INA/FAG HK 三型号尺寸确认 | ✅ |
+| P1-2 | needle_bearing A2 YAML+Contract | bearings.yaml ✓，contract ✓ | ✅ |
+| P1-3 | needle_bearing A3 建模 | `needle_bearing.py` 完成 | ✅ |
+| P1-4 | needle_bearing A4 三层验证 | `verdict=PASS` | ✅ |
+| P1-5 | needle_bearing A5 入库 | build_cache ✓，skill YAML ✓，index ✓ | ✅ |
+| FIN | assembly.py 电机子总成 | volume=86273mm³, STEP RT 0.0084% ✓ | ✅ |
+
+*计划版本：2026-05-09 重制*

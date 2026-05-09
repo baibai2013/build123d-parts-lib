@@ -756,3 +756,103 @@ TS30x40x6:
     args: {model: "7004C"}
     cache: cache/angular_contact_7004c.step
   notes: D20 角接触；重载机器人腰部/底盘主轴承，承载能力最高。
+
+# ── 冲压外圈滚针轴承 HK 系列（Drawn-Cup Needle Roller Bearing, DIN 618-1） ────────
+# 无内圈，密闭一端；适用于受限空间的径向载荷场景（如 QDD 波发生器轴孔）。
+# 数据来源：Schaeffler/INA 产品手册（HK 系列），置信度 4。
+
+HK0608:
+  aliases: [hk0608, hk-0608]
+  standard: "DIN 618-1 / ISO 3030"
+  type: drawn-cup-needle-bearing
+  dimensions:
+    d: 6.0
+    D: 10.0
+    B: 8.0
+    unit: mm
+  geometry:
+    shell_wall_t: 0.4
+    n_needles: 10
+    d_needle_mm: 1.5
+  load:
+    dynamic_c_n: 3450
+    static_c0_n: 2750
+    max_rpm_grease: 18000
+  weight_g: 3.0
+  fit:
+    housing_H7_d: 10.0
+    shaft_h6_d: 6.0
+  source:
+    primary: https://www.schaeffler.com/en/products/rolling-bearings/needle-roller-bearings/drawn-cup-needle-roller-bearings/
+    confidence: 4
+    last_verified: 2026-05-09
+  factory:
+    module: build123d_parts_lib.parts.bearings.needle_bearing
+    fn: make_needle_bearing
+    args: {model: "HK0608"}
+    cache: cache/needle_bearing.step
+  notes: QDD 关节波发生器轴孔用；无内圈减小径向截面高度。
+
+HK0810:
+  aliases: [hk0810, hk-0810]
+  standard: "DIN 618-1 / ISO 3030"
+  type: drawn-cup-needle-bearing
+  dimensions:
+    d: 8.0
+    D: 12.0
+    B: 10.0
+    unit: mm
+  geometry:
+    shell_wall_t: 0.4
+    n_needles: 11
+    d_needle_mm: 1.5
+  load:
+    dynamic_c_n: 5300
+    static_c0_n: 4300
+    max_rpm_grease: 15000
+  weight_g: 5.0
+  fit:
+    housing_H7_d: 12.0
+    shaft_h6_d: 8.0
+  source:
+    primary: https://www.schaeffler.com/en/products/rolling-bearings/needle-roller-bearings/drawn-cup-needle-roller-bearings/
+    confidence: 4
+    last_verified: 2026-05-09
+  factory:
+    module: build123d_parts_lib.parts.bearings.needle_bearing
+    fn: make_needle_bearing
+    args: {model: "HK0810"}
+    cache: cache/needle_bearing.step
+  notes: 8mm 轴径用；重载版 HK0608 替代选项。
+
+HK1010:
+  aliases: [hk1010, hk-1010]
+  standard: "DIN 618-1 / ISO 3030"
+  type: drawn-cup-needle-bearing
+  dimensions:
+    d: 10.0
+    D: 14.0
+    B: 10.0
+    unit: mm
+  geometry:
+    shell_wall_t: 0.4
+    n_needles: 13
+    d_needle_mm: 2.0
+  load:
+    dynamic_c_n: 6100
+    static_c0_n: 5400
+    max_rpm_grease: 13000
+  weight_g: 7.0
+  fit:
+    housing_H7_d: 14.0
+    shaft_h6_d: 10.0
+  source:
+    primary: https://www.schaeffler.com/en/products/rolling-bearings/needle-roller-bearings/drawn-cup-needle-roller-bearings/
+    confidence: 4
+    last_verified: 2026-05-09
+  factory:
+    module: build123d_parts_lib.parts.bearings.needle_bearing
+    fn: make_needle_bearing
+    args: {model: "HK1010"}
+    cache: cache/needle_bearing.step
+  notes: 10mm 轴径用；径向截面 2mm，紧凑重载场景。

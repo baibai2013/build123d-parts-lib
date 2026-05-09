@@ -36,6 +36,7 @@ def _rep_bundle():
         make_angular_contact_bearing,
     )
     from build123d_parts_lib.parts.bearings.ball_bearing import make_ball_bearing
+    from build123d_parts_lib.parts.bearings.needle_bearing import make_needle_bearing
     from build123d_parts_lib.parts.bearings.flanged_bearing import (
         make_flanged_bearing,
     )
@@ -67,6 +68,16 @@ def _rep_bundle():
     )
     from build123d_parts_lib.parts.actuators.encoder_cover import make_encoder_cover
     from build123d_parts_lib.parts.actuators.flex_spline import make_flex_spline
+    from build123d_parts_lib.parts.actuators.motor_controller import make_motor_controller
+    from build123d_parts_lib.parts.actuators.motor_rotor import (
+        make_arc_magnet,
+        make_rotor_shell,
+    )
+    from build123d_parts_lib.parts.actuators.motor_stator import (
+        make_motor_stator,
+        make_stator_winding,
+    )
+    from build123d_parts_lib.parts.actuators.rotor_shaft import make_rotor_shaft
     from build123d_parts_lib.parts.actuators.housing_circular_spline import (
         make_housing_circular_spline,
     )
@@ -126,6 +137,8 @@ def _rep_bundle():
          dict(model="TS17x23x3_5"), "Thin-Section Bearing  TS17x23x3_5"),
         ("bearings", "angular_contact_bearing", make_angular_contact_bearing,
          dict(model="7001C"), "Angular Contact Bearing  7001C"),
+        ("bearings", "needle_bearing", make_needle_bearing,
+         dict(model="HK0608"), "Needle Bearing  HK0608"),
         # pins
         ("pins", "pin_cylindrical", make_cylindrical_pin,
          dict(diameter=4.0, length=20.0), "GB/T 119.1  Pin D4×20"),
@@ -192,6 +205,18 @@ def _rep_bundle():
          dict(), "QDD Motor Endcap Front  Φ45×5"),
         ("actuators", "encoder_cover", make_encoder_cover,
          dict(), "QDD Encoder Cover  Φ30×6"),
+        ("actuators", "rotor_shell", make_rotor_shell,
+         dict(), "QDD Rotor Shell  Φ47.5×12"),
+        ("actuators", "arc_magnet", make_arc_magnet,
+         dict(), "QDD Arc Magnet  14-pole 23°"),
+        ("actuators", "motor_stator", make_motor_stator,
+         dict(), "QDD Motor Stator  4010 12-slot Φ40×10"),
+        ("actuators", "rotor_shaft", make_rotor_shaft,
+         dict(), "QDD Rotor Shaft  Φ5h6×45"),
+        ("actuators", "stator_winding", make_stator_winding,
+         dict(), "QDD Stator Winding  12-coil Φ40×16"),
+        ("actuators", "motor_controller", make_motor_controller,
+         dict(), "QDD Motor Controller PCB  Φ40 FOC"),
     ]
 
 
