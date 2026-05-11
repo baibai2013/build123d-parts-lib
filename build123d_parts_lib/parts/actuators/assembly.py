@@ -8,12 +8,15 @@ Axial stack (Z from output face z=0 toward motor end, +Z):
     z=  0 ~  8  : angular_contact_bearing (Pos(0,0,0))  — output shaft bearing
     z=  0 ~ 30  : housing_circular_spline (Pos(0,0,0))  — main outer shell
     z=  0 ~ 20  : flex_spline            (Pos(0,0,0))   — flex cup, closed end flush
-    z=  3 ~ 17  : wave_generator_cam     (Pos(0,0,3))   — SLA cam, direct TPU contact (bearing-free)
+    z=  3 ~ 17  : wave_generator_cam     (Pos(0,0,3))   — SLA cam, elliptic cam profile, Φ5H7 shaft bore
+    z=  2 ~  3  : shoulder               (on shaft)     — Φ6×1mm台肩, locates wave_cam axially
+    z=  3 ~ 17  : parallel_key           (Pos(0,1.5,3)) — DIN 6885, 2×2×14mm, torque transmission
+    z= 17.1~17.9: snap_ring              (Pos(0,0,17.5))— GB/T 894.1 d5mm, axial lock for wave_cam
     z= 30 ~ 35  : motor_endcap_front     (Pos(0,0,30))
     z= 30 ~32.5 : mr85zz_front           (Pos(0,0,30))  — front rotor-shaft bearing (in endcap seat)
     z= 35 ~ 41  : encoder_cover          (Pos(0,0,35))
     z= 35 ~37.5 : mr85zz_rear            (Pos(0,0,35))  — rear  rotor-shaft bearing (in encoder seat)
-    z=  0 ~ 45  : rotor_shaft            (Pos(0,0,0))   — Φ5h6×45, through wave cam + stator bore
+    z=  0 ~ 45  : rotor_shaft            (Pos(0,0,0))   — Φ5h6×45, shoulder Φ6 at z=2~3
     z= 28 ~ 38  : motor_stator           (Pos(0,0,28))  — 4010 12-slot, OD=40mm
     z= 28 ~ 40  : motor_rotor_shell      (Pos(0,0,28))  — OD=47.5mm (outrunner, exceeds Φ45 envelope)
     z= 28 ~ 38  : arc_magnets × 14      (Pos(0,0,28) + Rot per pole)
@@ -22,7 +25,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from build123d import Compound, Part, Pos, Rot, import_step, export_step
+from build123d import Align, Box, Compound, Part, Pos, Rot, import_step, export_step
 from ocp_vscode import Camera, show, set_port
 from ocp_vscode.comms import port_check
 from ocp_vscode.state import get_ports
@@ -53,6 +56,16 @@ if __name__ == "__main__":
     # MR85ZZ rotor-shaft bearings (front: motor_endcap_front z=30, rear: encoder_cover z=35)
     mr85zz           = import_step(str(BEARING_CACHE / "mr_bearing.step"))
 
+    # Parallel key: 2×2×14mm DIN 6885, rides in shaft keyway +Y side z=3~17
+    # 平行键：嵌入轴槽 +Y 侧，传递 cam→shaft 扭矩（独立第三件）
+    key_part = Box(2, 2, 14, align=(Align.CENTER, Align.MIN, Align.MIN))
+    # Retaining ring GB/T 894.1 for d=5mm shaft, groove center z=17.5
+    # 卡簧：嵌入轴上 GB/T 894.1 槽，防止 wave_cam 轴向窜动
+    from build123d_parts_lib.parts.retainers.retaining_ring_shaft import (
+        make_retaining_ring_shaft,
+    )
+    snap_ring = make_retaining_ring_shaft(shaft_d=5.0)
+
     print("  All STEP files loaded.")
 
     # ── 定位各零件（Algebra Mode）/ Position parts ──────────────────────────
@@ -66,6 +79,10 @@ if __name__ == "__main__":
     # MR85ZZ shaft bearings: front in motor_endcap_front seat, rear in encoder_cover seat
     mr85zz_front_asm = Pos(0, 0, 30)  * mr85zz
     mr85zz_rear_asm  = Pos(0, 0, 35)  * mr85zz
+    # Parallel key: Y starts at shaft_r - key_shaft_depth = 2.5 - 1.0 = 1.5mm; z=3~17
+    key_asm        = Pos(0, 1.5, 3.0) * key_part
+    # Retaining ring: centered at groove z=17.5
+    snap_ring_asm  = Pos(0, 0, 17.5)  * snap_ring
     # Motor sub-assembly: shaft runs full axial length; stator + rotor at z=28
     rotor_shaft_asm      = Pos(0, 0,  0)  * rotor_shaft
     motor_stator_asm     = Pos(0, 0, 28)  * motor_stator
@@ -90,6 +107,8 @@ if __name__ == "__main__":
         mr85zz_front_asm,
         mr85zz_rear_asm,
         rotor_shaft_asm,
+        key_asm,
+        snap_ring_asm,
         motor_stator_asm,
         rotor_shell_asm,
         stator_winding_asm,
@@ -106,14 +125,16 @@ if __name__ == "__main__":
             housing_asm, flex_asm, wave_cam_asm, output_asm,
             motor_cap_asm, enc_cover_asm, bearing_7001_asm,
             mr85zz_front_asm, mr85zz_rear_asm,
-            rotor_shaft_asm, motor_stator_asm, rotor_shell_asm,
+            rotor_shaft_asm, key_asm, snap_ring_asm,
+            motor_stator_asm, rotor_shell_asm,
             stator_winding_asm, motor_controller_asm,
             *arc_magnet_asms,
             names=[
                 "housing", "flex_spline", "wave_cam", "output_flange",
                 "motor_endcap", "encoder_cover", "bearing_7001c",
                 "mr85zz_front", "mr85zz_rear",
-                "rotor_shaft", "motor_stator", "rotor_shell",
+                "rotor_shaft", "parallel_key", "snap_ring",
+                "motor_stator", "rotor_shell",
                 "stator_winding", "motor_controller",
                 *[f"magnet_{i:02d}" for i in range(14)],
             ],
@@ -121,7 +142,8 @@ if __name__ == "__main__":
                 "steelblue", "coral", "goldenrod", "mediumseagreen",
                 "slateblue", "lightgray", "silver",
                 "silver", "silver",
-                "dimgray", "orangered", "darkgray",
+                "dimgray", "sandybrown", "gold",
+                "orangered", "darkgray",
                 "goldenrod", "darkgreen",
                 *["mediumpurple"] * 14,
             ],
@@ -149,7 +171,8 @@ if __name__ == "__main__":
         "housing", "flex_spline", "wave_cam", "output_flange",
         "motor_endcap", "encoder_cover", "bearing_7001c",
         "mr85zz_front", "mr85zz_rear",
-        "rotor_shaft", "motor_stator", "rotor_shell",
+        "rotor_shaft", "parallel_key", "snap_ring",
+        "motor_stator", "rotor_shell",
         "stator_winding", "motor_controller",
         *[f"magnet_{i:02d}" for i in range(14)],
     ]
@@ -157,7 +180,8 @@ if __name__ == "__main__":
         housing_asm, flex_asm, wave_cam_asm, output_asm,
         motor_cap_asm, enc_cover_asm, bearing_7001_asm,
         mr85zz_front_asm, mr85zz_rear_asm,
-        rotor_shaft_asm, motor_stator_asm, rotor_shell_asm,
+        rotor_shaft_asm, key_asm, snap_ring_asm,
+        motor_stator_asm, rotor_shell_asm,
         stator_winding_asm, motor_controller_asm,
         *arc_magnet_asms,
     ]

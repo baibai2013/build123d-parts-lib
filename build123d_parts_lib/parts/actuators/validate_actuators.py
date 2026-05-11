@@ -63,7 +63,7 @@ PARTS_SPEC = [
     ("rotor_shaft",
      "build123d_parts_lib.parts.actuators.rotor_shaft",
      "make_rotor_shaft",
-     5.0, 45.0, 0.2, 0.2, False),
+     6.0, 45.0, 1.0, 0.2, False),   # BBox.X = shoulder_od=6mm; od_tol=1mm
 ]
 
 STEP_DIFF_LIMIT = 0.1   # % round-trip tolerance (plan.md: < 0.1%)
