@@ -46,6 +46,7 @@ from build123d import (
     Part,
     Pos,
     Rot,
+    add,
     chamfer,
     export_step,
 )
@@ -197,7 +198,28 @@ def make_rotor_shell() -> Part:
         angle = 360.0 * i / n_poles   # at magnet center positions
         solid = solid + Rot(0, 0, angle) * lip_proto
 
-    return solid
+    # ── 外圆边缘倒角 / Outer rim chamfers — prevent sharp edges cutting hands ──
+    with BuildPart() as _ch:
+        add(solid)
+        # 开口端外圆 z=0 → C1.0（最容易割手的边缘）
+        open_outer = [
+            e for e in _ch.edges().filter_by(GeomType.CIRCLE)
+            if abs(e.radius - rotor_od / 2) < 0.4 and abs(e.center().Z) < 0.4
+        ]
+        if open_outer:
+            chamfer(open_outer, length=1.0)
+    with BuildPart() as _ch2:
+        add(_ch.part)
+        # 封闭端外圆 z=rotor_h → C0.5
+        closed_outer = [
+            e for e in _ch2.edges().filter_by(GeomType.CIRCLE)
+            if abs(e.radius - rotor_od / 2) < 0.4
+               and abs(e.center().Z - rotor_h) < 0.4
+        ]
+        if closed_outer:
+            chamfer(closed_outer, length=0.5)
+
+    return _ch2.part
 
 
 if __name__ == "__main__":

@@ -8,10 +8,11 @@ Axial stack (Z from output face z=0 toward motor end, +Z):
     z=  0 ~  8  : angular_contact_bearing (Pos(0,0,0))  — output shaft bearing
     z=  0 ~ 30  : housing_circular_spline (Pos(0,0,0))  — main outer shell
     z=  0 ~ 20  : flex_spline            (Pos(0,0,0))   — flex cup, closed end flush
-    z=  3 ~ 17  : thin_section_bearing   (Pos(0,0,3))   — on wave generator cam
-    z=  3 ~ 17  : wave_generator_cam     (Pos(0,0,3))   — inside flex cup
+    z=  3 ~ 17  : wave_generator_cam     (Pos(0,0,3))   — SLA cam, direct TPU contact (bearing-free)
     z= 30 ~ 35  : motor_endcap_front     (Pos(0,0,30))
+    z= 30 ~32.5 : mr85zz_front           (Pos(0,0,30))  — front rotor-shaft bearing (in endcap seat)
     z= 35 ~ 41  : encoder_cover          (Pos(0,0,35))
+    z= 35 ~37.5 : mr85zz_rear            (Pos(0,0,35))  — rear  rotor-shaft bearing (in encoder seat)
     z=  0 ~ 45  : rotor_shaft            (Pos(0,0,0))   — Φ5h6×45, through wave cam + stator bore
     z= 28 ~ 38  : motor_stator           (Pos(0,0,28))  — 4010 12-slot, OD=40mm
     z= 28 ~ 40  : motor_rotor_shell      (Pos(0,0,28))  — OD=47.5mm (outrunner, exceeds Φ45 envelope)
@@ -41,7 +42,6 @@ if __name__ == "__main__":
     motor_cap  = import_step(str(CACHE / "motor_endcap_front.step"))
     enc_cover  = import_step(str(CACHE / "encoder_cover.step"))
     bearing_7001 = import_step(str(BEARING_CACHE / "angular_contact_bearing.step"))
-    thin_brg     = import_step(str(BEARING_CACHE / "thin_section_bearing.step"))
     # Motor sub-assembly (E-1/E-2/E-3)
     rotor_shaft      = import_step(str(CACHE / "rotor_shaft.step"))
     motor_stator     = import_step(str(CACHE / "motor_stator.step"))
@@ -50,6 +50,8 @@ if __name__ == "__main__":
     # Motor detail parts
     stator_winding   = import_step(str(CACHE / "stator_winding.step"))
     motor_controller = import_step(str(CACHE / "motor_controller.step"))
+    # MR85ZZ rotor-shaft bearings (front: motor_endcap_front z=30, rear: encoder_cover z=35)
+    mr85zz           = import_step(str(BEARING_CACHE / "mr_bearing.step"))
 
     print("  All STEP files loaded.")
 
@@ -61,7 +63,9 @@ if __name__ == "__main__":
     motor_cap_asm    = Pos(0, 0, 30)  * motor_cap
     enc_cover_asm    = Pos(0, 0, 35)  * enc_cover
     bearing_7001_asm = Pos(0, 0,  0)  * bearing_7001
-    thin_bearing_asm = Pos(0, 0,  3)  * thin_brg
+    # MR85ZZ shaft bearings: front in motor_endcap_front seat, rear in encoder_cover seat
+    mr85zz_front_asm = Pos(0, 0, 30)  * mr85zz
+    mr85zz_rear_asm  = Pos(0, 0, 35)  * mr85zz
     # Motor sub-assembly: shaft runs full axial length; stator + rotor at z=28
     rotor_shaft_asm      = Pos(0, 0,  0)  * rotor_shaft
     motor_stator_asm     = Pos(0, 0, 28)  * motor_stator
@@ -83,7 +87,8 @@ if __name__ == "__main__":
         motor_cap_asm,
         enc_cover_asm,
         bearing_7001_asm,
-        thin_bearing_asm,
+        mr85zz_front_asm,
+        mr85zz_rear_asm,
         rotor_shaft_asm,
         motor_stator_asm,
         rotor_shell_asm,
@@ -99,20 +104,23 @@ if __name__ == "__main__":
             set_port(port)
         show(
             housing_asm, flex_asm, wave_cam_asm, output_asm,
-            motor_cap_asm, enc_cover_asm, bearing_7001_asm, thin_bearing_asm,
+            motor_cap_asm, enc_cover_asm, bearing_7001_asm,
+            mr85zz_front_asm, mr85zz_rear_asm,
             rotor_shaft_asm, motor_stator_asm, rotor_shell_asm,
             stator_winding_asm, motor_controller_asm,
             *arc_magnet_asms,
             names=[
                 "housing", "flex_spline", "wave_cam", "output_flange",
-                "motor_endcap", "encoder_cover", "bearing_7001c", "thin_bearing",
+                "motor_endcap", "encoder_cover", "bearing_7001c",
+                "mr85zz_front", "mr85zz_rear",
                 "rotor_shaft", "motor_stator", "rotor_shell",
                 "stator_winding", "motor_controller",
                 *[f"magnet_{i:02d}" for i in range(14)],
             ],
             colors=[
                 "steelblue", "coral", "goldenrod", "mediumseagreen",
-                "slateblue", "lightgray", "silver", "silver",
+                "slateblue", "lightgray", "silver",
+                "silver", "silver",
                 "dimgray", "orangered", "darkgray",
                 "goldenrod", "darkgreen",
                 *["mediumpurple"] * 14,
@@ -139,14 +147,16 @@ if __name__ == "__main__":
     children_invalid = []
     child_names = [
         "housing", "flex_spline", "wave_cam", "output_flange",
-        "motor_endcap", "encoder_cover", "bearing_7001c", "thin_bearing",
+        "motor_endcap", "encoder_cover", "bearing_7001c",
+        "mr85zz_front", "mr85zz_rear",
         "rotor_shaft", "motor_stator", "rotor_shell",
         "stator_winding", "motor_controller",
         *[f"magnet_{i:02d}" for i in range(14)],
     ]
     child_parts = [
         housing_asm, flex_asm, wave_cam_asm, output_asm,
-        motor_cap_asm, enc_cover_asm, bearing_7001_asm, thin_bearing_asm,
+        motor_cap_asm, enc_cover_asm, bearing_7001_asm,
+        mr85zz_front_asm, mr85zz_rear_asm,
         rotor_shaft_asm, motor_stator_asm, rotor_shell_asm,
         stator_winding_asm, motor_controller_asm,
         *arc_magnet_asms,

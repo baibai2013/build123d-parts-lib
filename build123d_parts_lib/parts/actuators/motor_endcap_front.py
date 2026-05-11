@@ -1,17 +1,17 @@
 """QDD 电机前端盖 / Motor Front Endcap — front bearing seat and motor interface.
 
-Closes the motor (stator) front end, holds the MR84ZZ front bearing (Φ8 OD),
+Closes the motor (stator) front end, holds the MR85ZZ front bearing (Φ8 OD),
 and connects to the main housing via 4× M3 screws.
 
 Geometry (local Z: motor side=0, housing side=5):
   OD             : Φ45 mm  (matches housing OD)
-  Bearing seat   : Φ8 H7 center bore  (MR84ZZ outer ring press-fit)
+  Bearing seat   : Φ8 H7 center bore  (MR85ZZ outer ring press-fit)
   Bolt holes     : 4× M3 clearance Ø3.4 mm, PCD 39 mm, 90° spacing
   Height         : 5 mm
 
 Material: PETG FDM
 Key tolerances:
-  Bearing seat Φ8 H7  : +0.015/0 mm  (press-fit for MR84ZZ)
+  Bearing seat Φ8 H7  : +0.015/0 mm  (press-fit for MR85ZZ)
   M3 clearance holes  : Ø3.4 mm
 """
 from __future__ import annotations
@@ -38,7 +38,7 @@ from ocp_vscode.state import get_ports
 endcap_od       = 45.0   # outer diameter  mm (matches housing)
 endcap_h        =  5.0   # height  mm
 
-bearing_seat_d  =  8.0   # MR84ZZ bearing outer diameter  mm (H7 press-fit)
+bearing_seat_d  =  8.0   # MR85ZZ outer diameter  mm (H7 press-fit)
 m3_clear_d      =  3.4   # M3 clearance hole diameter  mm
 m3_pcd          = 39.0   # M3 bolt-circle diameter  mm
 m3_count        =  4     # number of M3 holes
@@ -47,7 +47,7 @@ m3_count        =  4     # number of M3 holes
 def make_motor_endcap_front() -> Part:
     """Generate QDD motor front endcap.
 
-    生成 QDD 电机前端盖（含 MR84ZZ 轴承座 + 4× M3 连接孔）。
+    生成 QDD 电机前端盖（含 MR85ZZ 轴承座 + 4× M3 连接孔）。
     """
     with BuildPart() as cap:
         # 主体圆柱 / Main cylinder

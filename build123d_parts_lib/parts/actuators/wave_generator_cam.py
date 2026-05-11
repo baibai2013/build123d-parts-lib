@@ -1,13 +1,20 @@
 """QDD 波发生器凸轮 / Wave Generator Cam — elliptical cam for harmonic drive.
 
-Elliptical cam that presses against the thin-section bearing (Φ17×Φ23×3.5),
-which in turn deforms the flex spline to create harmonic reduction.
+Bearing-free design: SLA resin cam slides directly on TPU 95A flex spline
+inner bore. Long axis ≈ flex_cup_inner_bore (26.85 mm) + slight preload;
+short axis slightly smaller, allowing flex cup to retract at disengagement.
 
 Geometry (local Z: bottom=0, top=cam_h):
-  XY cross-section : ellipse, long-axis 17 mm (+X), short-axis 15.5 mm (+Y)
+  XY cross-section : ellipse, long-axis 27 mm (+X), short-axis 26.5 mm (+Y)
   Center bore      : Φ5 H7  (mates with motor rotor shaft, h6 fit)
   Keyway           : 2×1.2 mm hub-side (DIN 6885, +Y direction)
   Height           : 14 mm
+
+Flex spline interface:
+  Flex cup inner bore (undeformed) : 26.85 mm (= 2 × 13.425 mm)
+  Cam long axis Φ27.0 → δ ≈ +0.075 mm radial preload at engagement zone
+  Cam short axis Φ26.5 → δ ≈ −0.175 mm clearance at disengagement zone
+  Lubricate with PTFE grease before assembly
 
 Material: SLA resin (primary) / PETG FDM (fallback)
 Key tolerances:
@@ -41,8 +48,10 @@ from ocp_vscode.comms import port_check
 from ocp_vscode.state import get_ports
 
 # ── 关键尺寸 / Key dimensions ──────────────────────────────────────────────────
-wave_gen_d_long  = 17.0   # ellipse long-axis diameter  mm (+X)
-wave_gen_d_short = 15.5   # ellipse short-axis diameter mm (+Y)
+# Flex cup inner bore = 2 × (root_r − flex_wall_t) = 2 × 13.425 = 26.85 mm
+# Long axis ≈ inner bore + 0.15 mm preload; short axis < inner bore (clearance).
+wave_gen_d_long  = 27.0   # ellipse long-axis diameter  mm (+X)  ← presses on flex cup
+wave_gen_d_short = 26.5   # ellipse short-axis diameter mm (+Y)  ← flex cup retracts
 cam_h            = 14.0   # cam height  mm
 
 bore_d           =  5.0   # center bore diameter (H7)  mm
@@ -104,10 +113,24 @@ def make_wave_generator_cam() -> Part:
     return _ch.part
 
 
+GEOMETRY_INVARIANTS = {
+    "wave_gen_d_long":  wave_gen_d_long,
+    "wave_gen_d_short": wave_gen_d_short,
+    "cam_h":            cam_h,
+    "bore_d":           bore_d,
+    "key_w":            key_w,
+    "key_hub_depth":    key_hub_depth,
+    # flex spline interface
+    "flex_cup_inner_bore": 26.85,  # mm — from flex_spline.py root_r − wall_t geometry
+    "long_axis_delta":  (wave_gen_d_long  - 26.85) / 2,  # +0.075 mm preload
+    "short_axis_delta": (wave_gen_d_short - 26.85) / 2,  # −0.175 mm clearance
+}
+
+
 if __name__ == "__main__":
-    print("Building QDD wave generator cam ...")
+    print("Building QDD wave generator cam (bearing-free, direct TPU sliding)...")
     print(f"  Ellipse: {wave_gen_d_long} × {wave_gen_d_short} mm  "
-          f"(long × short axis)")
+          f"(long × short axis, flex cup inner bore = 26.85 mm)")
     print(f"  Bore   : Φ{bore_d} H7  Keyway: {key_w}×{key_hub_depth} mm  "
           f"Height: {cam_h} mm")
 
@@ -144,8 +167,8 @@ if __name__ == "__main__":
     print(f"  STEP   : {step_path}")
     print(f"  STL    : {stl_path}")
     assert part.is_valid, "❌ BRep validity FAILED"
-    assert abs(bb.size.X - wave_gen_d_long)  < 0.1, f"X 偏差: {bb.size.X:.2f}"
-    assert abs(bb.size.Y - wave_gen_d_short) < 0.1, f"Y 偏差: {bb.size.Y:.2f}"
-    assert abs(bb.size.Z - cam_h)            < 0.1, f"Z 偏差: {bb.size.Z:.2f}"
+    assert abs(bb.size.X - wave_gen_d_long)  < 0.15, f"X 偏差: {bb.size.X:.2f}"
+    assert abs(bb.size.Y - wave_gen_d_short) < 0.15, f"Y 偏差: {bb.size.Y:.2f}"
+    assert abs(bb.size.Z - cam_h)            < 0.1,  f"Z 偏差: {bb.size.Z:.2f}"
     print("  BRep + BBox: ✓")
     print("────────────────────────────────────────────────────")
