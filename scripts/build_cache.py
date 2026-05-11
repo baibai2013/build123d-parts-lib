@@ -196,7 +196,7 @@ def _rep_bundle():
         ("actuators", "flex_spline", make_flex_spline,
          dict(), "QDD Flex Spline  Φ32×20 z100 m0.3"),
         ("actuators", "wave_generator_cam", make_wave_generator_cam,
-         dict(), "QDD Wave Generator Cam  17×15.5×14"),
+         dict(), "QDD Wave Generator Cam  21.45×20.25×14 bearing"),
         ("actuators", "output_flange", make_output_flange,
          dict(), "QDD Output Flange  Φ40×8"),
         ("actuators", "motor_endcap_front", make_motor_endcap_front,

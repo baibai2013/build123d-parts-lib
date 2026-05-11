@@ -1,25 +1,38 @@
 """QDD 波发生器凸轮 / Wave Generator Cam — elliptical cam for harmonic drive.
 
-Bearing-free design: SLA resin cam slides directly on TPU 95A flex spline
-inner bore. Long axis ≈ flex_cup_inner_bore (26.85 mm) + slight preload;
-short axis slightly smaller, allowing flex cup to retract at disengagement.
+Bearing design: cam ellipse contacts the inner race of a thin-section flex
+bearing (Φ20.85 × Φ26.85 × 3 mm). The bearing outer race (Φ26.85 mm) presses
+into the flex spline inner bore, transmitting the elliptical deformation.
+
+Harmonic drive engagement analysis (with bearing):
+  Flex cup inner bore (undeformed) : 26.85 mm  (= 2 × cup_inner_r = 2 × 13.425)
+  Bearing wall thickness (per side): ~3.0 mm
+  Required deformation per side    : m × (ring_z − flex_z) / 2 = 0.3 × 2/2 = 0.3 mm
+
+  Long axis (+X, engagement zone):
+    cam_long_r + bearing_wall = 10.725 + 3.0 = 13.725 mm (bearing outer surface)
+    flex_inner_r + δ          = 13.425 + 0.3 = 13.725 mm ✓  → +0.3 mm/side engagement
+  Short axis (+Y, disengagement zone):
+    cam_short_r + bearing_wall = 10.125 + 3.0 = 13.125 mm
+    flex_inner_r − δ           = 13.425 − 0.3 = 13.125 mm ✓  → −0.3 mm/side clearance
+
+  Bearing nominal ID:
+    mean_r = (10.725 + 10.125) / 2 = 10.425 mm  →  bearing_ID_nom = 20.85 mm
 
 Geometry (local Z: bottom=0, top=cam_h):
-  XY cross-section : ellipse, long-axis 27 mm (+X), short-axis 26.5 mm (+Y)
+  XY cross-section : ellipse, long-axis 21.45 mm (+X), short-axis 20.25 mm (+Y)
   Center bore      : Φ5 H7  (mates with motor rotor shaft, h6 fit)
   Keyway           : 2×1.2 mm hub-side (DIN 6885, +Y direction)
   Height           : 14 mm
 
-Flex spline interface:
-  Flex cup inner bore (undeformed) : 26.85 mm (= 2 × 13.425 mm)
-  Cam long axis Φ27.0 → δ ≈ +0.075 mm radial preload at engagement zone
-  Cam short axis Φ26.5 → δ ≈ −0.175 mm clearance at disengagement zone
-  Lubricate with PTFE grease before assembly
+Bearing spec (nominal): Φ20.85 × Φ26.85 × 3 mm  (ID × OD × W)
+  thin_section_bearing.py is parametric — pass these dimensions directly.
 
 Material: SLA resin (primary) / PETG FDM (fallback)
 Key tolerances:
   Center bore Φ5 H7 : +0.010/0 mm
   Ellipse accuracy  : ±0.1 mm (drives flex-spline deformation uniformity)
+  Cam OD surface    : h6 fit for bearing inner race press-fit
 """
 from __future__ import annotations
 
@@ -48,11 +61,16 @@ from ocp_vscode.comms import port_check
 from ocp_vscode.state import get_ports
 
 # ── 关键尺寸 / Key dimensions ──────────────────────────────────────────────────
-# Flex cup inner bore = 2 × (root_r − flex_wall_t) = 2 × 13.425 = 26.85 mm
-# Long axis ≈ inner bore + 0.15 mm preload; short axis < inner bore (clearance).
-wave_gen_d_long  = 27.0   # ellipse long-axis diameter  mm (+X)  ← presses on flex cup
-wave_gen_d_short = 26.5   # ellipse short-axis diameter mm (+Y)  ← flex cup retracts
+# Bearing design: cam_long_r = cup_inner_r + δ − bearing_wall = 13.425 + 0.3 − 3.0 = 10.725
+#                 cam_short_r = cup_inner_r − δ − bearing_wall = 13.425 − 0.3 − 3.0 = 10.125
+wave_gen_d_long  = 21.45  # cam ellipse long-axis diameter  mm (+X)  — bearing inner race contact
+wave_gen_d_short = 20.25  # cam ellipse short-axis diameter mm (+Y)  — bearing inner race contact
 cam_h            = 14.0   # cam height  mm
+
+# Mating bearing spec (nominal): Φ20.85 × Φ26.85 × 3 mm
+bearing_id_nom   = 20.85  # bearing inner race nominal diameter mm
+bearing_od       = 26.85  # bearing outer race diameter mm  (= flex spline inner bore)
+bearing_w        =  3.0   # bearing width mm
 
 bore_d           =  5.0   # center bore diameter (H7)  mm
 bore_r           =  bore_d / 2   # 2.5 mm
@@ -63,15 +81,15 @@ key_hub_depth    =  1.2   # hub-side keyway depth  mm (+Y direction from bore su
 
 
 def make_wave_generator_cam() -> Part:
-    """Generate QDD wave generator elliptical cam.
+    """Generate QDD wave generator elliptical cam (bearing-based design).
 
-    生成 QDD 波发生器椭圆凸轮（含中心孔 + 键槽）。
+    生成 QDD 波发生器椭圆凸轮（有轴承设计，含中心孔 + 键槽）。
 
     Build order:
     1. Elliptical extrude (solid cam body)
     2. Subtract center bore Φ5 H7
     3. Subtract keyway slot (2×1.2 mm, hub side, +Y direction)
-    4. Chamfer bore entry (C0.3) to ease bearing press-fit
+    4. Chamfer bore entry (C0.3) to ease shaft press-fit
     """
     # Step 1: 椭圆凸轮主体 / Elliptical cam body ────────────────────────────────
     with BuildPart() as _cam:
@@ -120,18 +138,24 @@ GEOMETRY_INVARIANTS = {
     "bore_d":           bore_d,
     "key_w":            key_w,
     "key_hub_depth":    key_hub_depth,
-    # flex spline interface
-    "flex_cup_inner_bore": 26.85,  # mm — from flex_spline.py root_r − wall_t geometry
-    "long_axis_delta":  (wave_gen_d_long  - 26.85) / 2,  # +0.075 mm preload
-    "short_axis_delta": (wave_gen_d_short - 26.85) / 2,  # −0.175 mm clearance
+    # bearing interface
+    "bearing_id_nom":   bearing_id_nom,
+    "bearing_od":       bearing_od,
+    "bearing_w":        bearing_w,
+    # flex spline interface (via bearing)
+    "flex_cup_inner_bore": 26.85,   # mm — flex_spline.py cup_inner_r geometry
+    "long_axis_delta":  (bearing_od - 26.85) / 2 + (wave_gen_d_long  - bearing_id_nom) / 2,
+    "short_axis_delta": (bearing_od - 26.85) / 2 + (wave_gen_d_short - bearing_id_nom) / 2,
+    # Required deformation = m × (ring_teeth − flex_teeth) / 2 = 0.3 × 2/2 = 0.3 mm/side
 }
 
 
 if __name__ == "__main__":
-    print("Building QDD wave generator cam (bearing-free, direct TPU sliding)...")
-    print(f"  Ellipse: {wave_gen_d_long} × {wave_gen_d_short} mm  "
-          f"(long × short axis, flex cup inner bore = 26.85 mm)")
-    print(f"  Bore   : Φ{bore_d} H7  Keyway: {key_w}×{key_hub_depth} mm  "
+    print("Building QDD wave generator cam (bearing design, Φ20.85×Φ26.85×3 bearing)...")
+    print(f"  Cam ellipse: {wave_gen_d_long} × {wave_gen_d_short} mm  "
+          f"(long × short axis — bearing inner race contact)")
+    print(f"  Bearing    : ID={bearing_id_nom} OD={bearing_od} W={bearing_w} mm")
+    print(f"  Bore       : Φ{bore_d} H7  Keyway: {key_w}×{key_hub_depth} mm  "
           f"Height: {cam_h} mm")
 
     part = make_wave_generator_cam()
@@ -169,6 +193,11 @@ if __name__ == "__main__":
     assert part.is_valid, "❌ BRep validity FAILED"
     assert abs(bb.size.X - wave_gen_d_long)  < 0.15, f"X 偏差: {bb.size.X:.2f}"
     assert abs(bb.size.Y - wave_gen_d_short) < 0.15, f"Y 偏差: {bb.size.Y:.2f}"
+    # Verify ellipse aspect ratio is distinguishable (≥1.0 mm = physically meaningful)
+    aspect_diff = wave_gen_d_long - wave_gen_d_short
+    assert aspect_diff >= 1.0, f"❌ 椭圆长短轴差 {aspect_diff:.2f}mm < 1.0mm，不足以驱动谐波啮合"
+    print(f"  Ellipse: {wave_gen_d_long}×{wave_gen_d_short} mm  差 {aspect_diff:.2f}mm ✓")
     assert abs(bb.size.Z - cam_h)            < 0.1,  f"Z 偏差: {bb.size.Z:.2f}"
-    print("  BRep + BBox: ✓")
+    print(f"  BRep + BBox: ✓")
+    print(f"  Bearing: ID={bearing_id_nom} OD={bearing_od} W={bearing_w} mm")
     print("────────────────────────────────────────────────────")

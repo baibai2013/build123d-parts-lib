@@ -27,7 +27,7 @@
 |---|------|------------|:--------:|------|-----------|------|
 | A1 | 电机前轴承（微型深沟球） | **MR84ZZ** Φ4×Φ8×3 | 1 | 采购 | ✅ `bearings/mr_bearing.py` | 电机前端定位 |
 | A2 | 电机后轴承（微型深沟球） | **MR63ZZ** Φ3×Φ6×2.5 | 1 | 采购 | ✅ `bearings/mr_bearing.py` | 编码器端支撑 |
-| A3 | 波发生器薄截面轴承 | **薄截面深沟球** Φ17×Φ23×3.5 | 1 | 采购 | ✅ `bearings/thin_section_bearing.py` | **核心件**，Koyo / INA |
+| A3 | 波发生器薄截面轴承 | **薄截面深沟球** Φ20.85×Φ26.85×3（定制规格，OD 精配柔轮内孔 26.85 mm）| 1 | 采购 | ✅ `bearings/thin_section_bearing.py`（参数化，支持此规格）| 轴承外圈撑开柔轮产生椭圆变形；内圈坐落在椭圆凸轮外表面（有轴承设计）|
 | A4 | 输出主轴承（角接触） | **7001C** Φ12×Φ28×8，成对 DB 配置 | 1 对 | 采购 | ✅ `bearings/angular_contact_bearing.py` | 承受径向 + 轴向 + 倾覆载荷 |
 
 ---
@@ -85,8 +85,8 @@
 | # | 名称 | 外形尺寸 | 材料 | 打印工艺 | 复杂度 | CAD 文件 |
 |---|------|---------|------|---------|:------:|---------|
 | G1 | **主外壳 / 刚轮一体件** | Φ45×30 mm | PA12 / ASA | SLS / FDM | ★★★ | `housing_circular_spline.py` |
-| G2 | **柔轮**（Flex Spline） | Φ32×20 mm，薄壁 1.2 mm | **TPU 95A** | FDM 层高 ≤ 0.1 mm | ★★★ | `flex_spline.py` |
-| G3 | **波发生器凸轮** | 椭圆，长轴 Φ17 mm | PETG / 光固化树脂 | FDM / SLA | ★★ | `wave_generator_cam.py` |
+| G2 | **柔轮**（Flex Spline） | Φ32×20 mm，薄壁 1.2 mm；法兰 6×M2 热嵌铜螺母孔 PCD 34mm | **TPU 95A** | FDM 层高 ≤ 0.1 mm | ★★★ | `flex_spline.py` |
+| G3 | **波发生器凸轮** | 椭圆长轴 **Φ21.45 mm**×短轴 Φ20.25 mm×H14 mm（轴承内圈接触面，δ=±0.3 mm/side）| SLA 树脂首选 | FDM / SLA | ★★ | `wave_generator_cam.py` |
 | G4 | 输出法兰 | Φ40×8 mm，6 孔 M2 | PETG | FDM | ★ | `output_flange.py` |
 | G5 | 电机前端盖 | Φ45×5 mm，轴承座 Φ8 H7 | PETG | FDM | ★ | `motor_endcap_front.py` |
 | G6 | 编码器后盖 | Φ30×6 mm，AS5047P 定位槽 | PETG | FDM | ★ | `encoder_cover.py` |

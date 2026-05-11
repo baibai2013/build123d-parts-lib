@@ -35,7 +35,7 @@ PARTS_SPEC = [
     ("wave_generator_cam",
      "build123d_parts_lib.parts.actuators.wave_generator_cam",
      "make_wave_generator_cam",
-     17.0, 14.0, 0.5, 0.2, False),
+     21.45, 14.0, 0.2, 0.1, False),  # bearing design: long_axis=21.45, short=20.25
     ("output_flange",
      "build123d_parts_lib.parts.actuators.output_flange",
      "make_output_flange",

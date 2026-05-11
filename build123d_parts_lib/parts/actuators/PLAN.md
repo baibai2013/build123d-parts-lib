@@ -27,12 +27,13 @@ rotor_shaft_d   = 5.0      # 转子轴径 mm（h6 配合）
 motor_bearing_f = 8.0      # 前轴承外径 MR84ZZ mm
 motor_bearing_r = 6.0      # 后轴承外径 MR63ZZ mm
 
-# 谐波减速器
-wave_gen_d_long = 17.0     # 波发生器长轴 mm
-wave_gen_d_short= 15.5     # 波发生器短轴 mm（≈ 长轴 - 1.5）
-wave_gen_bearing= (17.0, 23.0, 3.5)  # 薄截面轴承 ID×OD×W
-flex_spline_od  = 32.0     # 柔轮外径 mm
+# 谐波减速器（有轴承设计 2026-05-11 重新设计）
+wave_gen_d_long  = 21.45   # 波发生器凸轮长轴 mm（轴承内圈接触面）← 有轴承设计修正
+wave_gen_d_short = 20.25   # 波发生器凸轮短轴 mm（长轴差1.2mm，δ=±0.3mm/side 驱动啮合）
+wave_gen_bearing = (20.85, 26.85, 3.0)  # 薄截面深沟球 ID×OD×W；OD=柔轮内孔（26.85mm）
+flex_spline_od   = 32.0    # 柔轮外径 mm
 flex_wall_t     = 1.2      # 柔轮壁厚 mm（TPU 打印关键）
+flex_cup_inner  = 26.85    # 柔轮内孔直径 mm（=2×cup_inner_r，波发生器直接接触面）
 output_bearing  = (12.0, 28.0, 8.0)  # 7001C 角接触 ID×OD×W
 
 # 编码器
@@ -607,3 +608,70 @@ python3 scripts/build_cache.py --only needle_bearing
 | FIN | assembly.py 电机子总成 | volume=86273mm³, STEP RT 0.0084% ✓ | ✅ |
 
 *计划版本：2026-05-09 重制*
+
+---
+
+## 2026-05-11 设计修正记录
+
+### FIX-1 波发生器凸轮椭圆参数错误
+
+**问题**：`wave_generator_cam.py` 原始长轴 27.0 mm / 短轴 26.5 mm，差值仅 0.5 mm，  
+单侧形变量 δ = 0.075 mm < 0.3 mm 需求 → 柔轮齿与刚轮齿始终无法啮合。
+
+**根因**：设计阶段椭圆直径误用了薄截面轴承 OD（Φ23 mm 附近），而非基于  
+柔轮内孔几何计算（cup_inner_r = 13.425 mm → 内孔 Φ26.85 mm + 2×0.3 mm 变形量）。
+
+**修正**：
+```python
+wave_gen_d_long  = 27.45  # +0.3 mm/side 形变量，齿进入刚轮啮合区
+wave_gen_d_short = 26.25  # −0.3 mm/side 间隙，齿脱离刚轮区
+# 验证：required_δ = m × (ring_teeth − flex_teeth) / 2 = 0.3 × 2/2 = 0.3 mm ✓
+```
+
+**Layer 0 验证**：`bbox ≈ (27.45, 26.25, 14.00)` + `aspect_diff=1.20mm ✓`
+
+---
+
+### FIX-2 柔轮法兰缺少 M2 热嵌铜螺母孔
+
+**问题**：`flex_spline.py` 原始法兰无 M2 安装孔，而 `output_flange.py` 有 6×M2 间隙孔  
+（Ø2.4mm，PCD 34mm）→ 柔轮与输出法兰无法物理连接，无法传递扭矩。
+
+**修正**：在法兰面（z=0，输出端）新增 6×M2 热嵌铜螺母盲孔：Ø3.5 mm，深 4 mm，PCD 34 mm。
+
+---
+
+### FIX-4 波发生器凸轮改为有轴承设计
+
+**问题**：原无轴承设计（SLA 凸轮 Φ27.45×Φ26.25 直接滑接 TPU 柔轮内孔 + PTFE 润滑）  
+在 >200 rpm 高速高占空比工况下，动摩擦界面持续产热，TPU 内孔随温升逐渐软化失圆；  
+对仿生狗步态（峰值 ~300 rpm）不可靠，不适合量产。
+
+**根因**：无轴承设计以省去薄截面轴承为代价，引入了持续摩擦界面。
+
+**修正**：恢复薄截面轴承（Φ20.85×Φ26.85×3 mm，定制规格）：
+
+```python
+# 推导（有轴承设计）：
+# flex_inner_r = cup_inner_r = 13.425 mm，δ = 0.3 mm/side，bearing_wall = 3.0 mm
+# cam_long_r  = flex_inner_r + δ − bearing_wall = 13.425 + 0.3 − 3.0 = 10.725 mm
+# cam_short_r = flex_inner_r − δ − bearing_wall = 13.425 − 0.3 − 3.0 = 10.125 mm
+wave_gen_d_long  = 21.45   # = 2 × 10.725 mm（轴承内圈长轴接触面）
+wave_gen_d_short = 20.25   # = 2 × 10.125 mm
+wave_gen_bearing = (20.85, 26.85, 3.0)  # ID×OD×W；OD 精配柔轮内孔 26.85 mm
+```
+
+**Layer 0 验证预期**：`bbox ≈ (21.45, 20.25, 14.00)` + `aspect_diff=1.20 mm ✓`
+
+---
+
+### FIX-3 柔轮 BRep 无效导致法兰+杯体融合失败
+
+**问题**：100 次逐齿 Algebra Mode ADD 操作后，`cup_tube.is_valid=False`  
+（OCC BRep 校验无法通过，但几何体积正确）。`flange + cup_positioned` BRep fuse  
+因无效操作数静默失败，只返回法兰（Z=3mm）而非完整柔轮（Z=20mm）。
+
+**修正**：Step 6 改为 `Compound(children=[flange, cup_positioned])`，绕过 BRep fuse。  
+此为 `assembly.py` 中已文档化的标准做法（含 100 齿布尔历史的零件 is_valid=False 属已知行为）。
+
+**Layer 0 验证**：`volume=3882 mm³ ≥ 3500 ✓`，`bbox.Z=20.0 mm ✓`
