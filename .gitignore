@@ -30,3 +30,6 @@ verify_temp/
 
 # Keep cache/*.step committed (double-storage strategy)
 # Do NOT ignore cache/ directories under build123d_parts_lib/parts/
+
+# But .stl in cache/ is temporary debug output (slicer preview), not for commit
+build123d_parts_lib/parts/**/cache/*.stl
