@@ -47,7 +47,7 @@ n_slots      = 12     # number of stator slots (= number of teeth)
 slot_depth   = (stator_od - yoke_od) / 2   # 6.0 mm radial tooth height
 slot_opening = 2.5    # tangential slot width  mm
 
-GEOMETRY_INVARIANTS = {
+g = {
     "stator_od":   stator_od,
     "stator_h":    stator_h,
     "yoke_od":     yoke_od,
@@ -55,6 +55,28 @@ GEOMETRY_INVARIANTS = {
     "n_slots":     n_slots,
     "slot_depth":  slot_depth,
 }
+
+# GEOMETRY_INVARIANTS 是约束的唯一真相 / single source of truth for invariants.
+GEOMETRY_INVARIANTS = [
+    ("槽深 = (齿顶径 − 轭外径)/2 / slot_depth == (stator_od - yoke_od)/2",
+     lambda g: abs(g["slot_depth"] - (g["stator_od"] - g["yoke_od"]) / 2) < 1e-9),
+    ("径向递增:中心孔 < 轭 < 齿顶 / stator_id < yoke_od < stator_od",
+     lambda g: g["stator_id"] < g["yoke_od"] < g["stator_od"]),
+    ("槽数为正且为 3 的倍数（三相）/ n_slots positive multiple of 3",
+     lambda g: g["n_slots"] > 0 and g["n_slots"] % 3 == 0),
+    ("叠高为正 / stack height positive",
+     lambda g: g["stator_h"] > 0),
+]
+
+
+def _assert_geometry_invariants(g: dict) -> None:
+    """Assert all geometry invariants; fail immediately on violation.
+    断言所有几何不变式，违反时立即报错（不吞异常）。"""
+    for desc, test in GEOMETRY_INVARIANTS:
+        assert test(g), f"Invariant FAIL: {desc}\n  g={g}"
+
+
+_assert_geometry_invariants(g)
 
 
 def make_motor_stator() -> Part:

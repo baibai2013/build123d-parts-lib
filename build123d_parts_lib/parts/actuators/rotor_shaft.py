@@ -72,7 +72,7 @@ encoder_bore_l   = 5.0
 chamfer_l        = 0.3    # C0.3 on shaft ends
 
 
-GEOMETRY_INVARIANTS = {
+g = {
     "shaft_od":        shaft_od,
     "shaft_len":       shaft_len,
     "key_w":           key_w,
@@ -87,6 +87,34 @@ GEOMETRY_INVARIANTS = {
     "encoder_bore_d":  encoder_bore_d,
     "encoder_bore_l":  encoder_bore_l,
 }
+
+# GEOMETRY_INVARIANTS 是约束的唯一真相 / single source of truth for invariants.
+GEOMETRY_INVARIANTS = [
+    ("台肩径 > 轴径（Φ5→Φ6 台阶）/ shoulder_od > shaft_od",
+     lambda g: g["shoulder_od"] > g["shaft_od"]),
+    ("挡圈槽底径 < 轴径 / groove cut into shaft",
+     lambda g: g["groove_d"] < g["shaft_od"]),
+    ("键槽深 < 轴半径 / key depth less than shaft radius",
+     lambda g: g["key_shaft_depth"] < g["shaft_od"] / 2),
+    ("键槽落在轴长内 / keyway within shaft length",
+     lambda g: g["key_z_start"] + g["key_length"] <= g["shaft_len"]),
+    ("挡圈槽落在轴长内 / groove within shaft length",
+     lambda g: g["groove_z"] + g["groove_w"] / 2 <= g["shaft_len"]),
+    ("编码器孔径 < 轴径、孔深 < 轴长 / encoder bore fits",
+     lambda g: g["encoder_bore_d"] < g["shaft_od"] and g["encoder_bore_l"] < g["shaft_len"]),
+    ("关键尺寸为正 / key dims positive",
+     lambda g: g["key_w"] > 0 and g["shoulder_h"] > 0 and g["groove_w"] > 0),
+]
+
+
+def _assert_geometry_invariants(g: dict) -> None:
+    """Assert all geometry invariants; fail immediately on violation.
+    断言所有几何不变式，违反时立即报错（不吞异常）。"""
+    for desc, test in GEOMETRY_INVARIANTS:
+        assert test(g), f"Invariant FAIL: {desc}\n  g={g}"
+
+
+_assert_geometry_invariants(g)
 
 
 def make_rotor_shaft() -> Part:

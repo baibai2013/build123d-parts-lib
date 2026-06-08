@@ -63,7 +63,7 @@ pcb_pcd      = 16.0   # PCB mounting holes PCD  mm
 pcb_hole_n   =  3     # number of PCB mount holes (AS5047P standard 3-hole)
 
 
-GEOMETRY_INVARIANTS = {
+g = {
     "cover_od":         cover_od,
     "cover_h":          cover_h,
     "bearing_seat_d":   bearing_seat_d,
@@ -72,6 +72,32 @@ GEOMETRY_INVARIANTS = {
     "pcb_hole_d":       pcb_hole_d,
     "pcb_pcd":          pcb_pcd,
 }
+
+# GEOMETRY_INVARIANTS 是约束的唯一真相 / single source of truth for invariants.
+GEOMETRY_INVARIANTS = [
+    ("轴承座深度 < 盖高 / bearing seat shallower than cover",
+     lambda g: g["bearing_seat_h"] < g["cover_h"]),
+    ("轴承座径 < 盖外径 / bearing seat inside cover OD",
+     lambda g: g["bearing_seat_d"] < g["cover_od"]),
+    ("轴让位径 < 轴承座径 / shaft clearance inside bearing seat",
+     lambda g: g["shaft_clear_d"] < g["bearing_seat_d"]),
+    ("PCB 安装孔不超出盖外径 / PCD + hole fits within cover OD",
+     lambda g: g["pcb_pcd"] + g["pcb_hole_d"] < g["cover_od"]),
+    ("全部尺寸为正 / all dims positive",
+     lambda g: all(g[k] > 0 for k in
+                   ("cover_od", "cover_h", "bearing_seat_d", "bearing_seat_h",
+                    "shaft_clear_d", "pcb_hole_d", "pcb_pcd"))),
+]
+
+
+def _assert_geometry_invariants(g: dict) -> None:
+    """Assert all geometry invariants; fail immediately on violation.
+    断言所有几何不变式，违反时立即报错（不吞异常）。"""
+    for desc, test in GEOMETRY_INVARIANTS:
+        assert test(g), f"Invariant FAIL: {desc}\n  g={g}"
+
+
+_assert_geometry_invariants(g)
 
 
 def make_encoder_cover() -> Part:

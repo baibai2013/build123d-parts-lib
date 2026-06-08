@@ -75,7 +75,7 @@ fin_h          = magnet_h  # 10.0 mm — full-height tangential guide
 retention_lip_h = 1.5  # mm axial height at open end
 lip_protrusion  = 0.5  # mm inward from inner wall (lip tip r = 21.75 mm)
 
-GEOMETRY_INVARIANTS = {
+g = {
     "rotor_od":         rotor_od,
     "rotor_h":          rotor_h,
     "shell_wall_t":     shell_wall_t,
@@ -90,6 +90,34 @@ GEOMETRY_INVARIANTS = {
     "fin_tip_r":        rotor_od / 2 - shell_wall_t - fin_protrusion,  # 20.75 mm
     "lip_tip_r":        rotor_od / 2 - shell_wall_t - lip_protrusion,  # 21.75 mm
 }
+
+# GEOMETRY_INVARIANTS 是约束的唯一真相 / single source of truth for invariants.
+GEOMETRY_INVARIANTS = [
+    ("fin 尖半径 = rotor_od/2 − 壁厚 − fin 突出 / fin_tip_r definition",
+     lambda g: abs(g["fin_tip_r"] - (g["rotor_od"] / 2 - g["shell_wall_t"] - g["fin_protrusion"])) < 1e-9),
+    ("lip 尖半径 = rotor_od/2 − 壁厚 − lip 突出 / lip_tip_r definition",
+     lambda g: abs(g["lip_tip_r"] - (g["rotor_od"] / 2 - g["shell_wall_t"] - g["lip_protrusion"])) < 1e-9),
+    ("壁厚 < 半径 / wall thinner than radius",
+     lambda g: g["shell_wall_t"] < g["rotor_od"] / 2),
+    ("中心孔 < 外径 / center bore inside OD",
+     lambda g: g["center_bore_d"] < g["rotor_od"]),
+    ("磁极间隙为正 / pole gap positive",
+     lambda g: g["gap_deg"] > 0),
+    ("fin 高度 ≤ 转子高度 / fin within rotor height",
+     lambda g: g["fin_h"] <= g["rotor_h"]),
+    ("极数为正偶数 / n_poles positive even",
+     lambda g: g["n_poles"] > 0 and g["n_poles"] % 2 == 0),
+]
+
+
+def _assert_geometry_invariants(g: dict) -> None:
+    """Assert all geometry invariants; fail immediately on violation.
+    断言所有几何不变式，违反时立即报错（不吞异常）。"""
+    for desc, test in GEOMETRY_INVARIANTS:
+        assert test(g), f"Invariant FAIL: {desc}\n  g={g}"
+
+
+_assert_geometry_invariants(g)
 
 
 def make_rotor_shell() -> Part:

@@ -49,7 +49,7 @@ magnet_h        = 10.0                          # axial height  mm
 arc_factor      =  0.9                          # pole-arc ratio
 magnet_half_deg = 180.0 * arc_factor / n_poles  # ≈ 11.57°  (half arc of one pole)
 
-GEOMETRY_INVARIANTS = {
+g = {
     "n_poles":         n_poles,
     "magnet_inner_r":  magnet_inner_r,
     "magnet_t":        magnet_t,
@@ -58,6 +58,30 @@ GEOMETRY_INVARIANTS = {
     "arc_factor":      arc_factor,
     "magnet_half_deg": magnet_half_deg,
 }
+
+# GEOMETRY_INVARIANTS 是约束的唯一真相 / single source of truth for invariants.
+GEOMETRY_INVARIANTS = [
+    ("外径 = 内径 + 壁厚 / outer_r == inner_r + t",
+     lambda g: abs(g["magnet_outer_r"] - (g["magnet_inner_r"] + g["magnet_t"])) < 1e-9),
+    ("半弧角 = 180·arc_factor / n_poles",
+     lambda g: abs(g["magnet_half_deg"] - 180.0 * g["arc_factor"] / g["n_poles"]) < 1e-9),
+    ("pole-arc 比例 ∈ (0, 1] / arc_factor in (0,1]",
+     lambda g: 0 < g["arc_factor"] <= 1),
+    ("极数为正偶数 / n_poles positive even",
+     lambda g: g["n_poles"] > 0 and g["n_poles"] % 2 == 0),
+    ("径向尺寸为正 / radial dims positive",
+     lambda g: g["magnet_inner_r"] > 0 and g["magnet_t"] > 0 and g["magnet_h"] > 0),
+]
+
+
+def _assert_geometry_invariants(g: dict) -> None:
+    """Assert all geometry invariants; fail immediately on violation.
+    断言所有几何不变式，违反时立即报错（不吞异常）。"""
+    for desc, test in GEOMETRY_INVARIANTS:
+        assert test(g), f"Invariant FAIL: {desc}\n  g={g}"
+
+
+_assert_geometry_invariants(g)
 
 
 def make_arc_magnet() -> Part:

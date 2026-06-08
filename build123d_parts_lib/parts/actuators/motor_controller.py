@@ -55,12 +55,34 @@ r_cap        = 11.0
 r_phase_conn = 18.0
 r_enc_conn   = 15.0
 
-GEOMETRY_INVARIANTS = {
+g = {
     "pcb_d":      pcb_d,
     "pcb_t":      pcb_t,
     "n_mosfets":  6,
     "n_phases":   3,
 }
+
+# GEOMETRY_INVARIANTS 是约束的唯一真相 / single source of truth for invariants.
+GEOMETRY_INVARIANTS = [
+    ("MOSFET 数 = 2 × 相数（每相半桥）/ n_mosfets == 2 * n_phases",
+     lambda g: g["n_mosfets"] == 2 * g["n_phases"]),
+    ("三相驱动 / 3-phase drive",
+     lambda g: g["n_phases"] == 3),
+    ("板厚 < 板径 / board thinner than its diameter",
+     lambda g: g["pcb_t"] < g["pcb_d"]),
+    ("板尺寸为正 / board dims positive",
+     lambda g: g["pcb_d"] > 0 and g["pcb_t"] > 0),
+]
+
+
+def _assert_geometry_invariants(g: dict) -> None:
+    """Assert all geometry invariants; fail immediately on violation.
+    断言所有几何不变式，违反时立即报错（不吞异常）。"""
+    for desc, test in GEOMETRY_INVARIANTS:
+        assert test(g), f"Invariant FAIL: {desc}\n  g={g}"
+
+
+_assert_geometry_invariants(g)
 
 
 def make_motor_controller() -> Compound:

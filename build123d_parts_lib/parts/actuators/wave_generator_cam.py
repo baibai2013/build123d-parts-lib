@@ -131,7 +131,7 @@ def make_wave_generator_cam() -> Part:
     return _ch.part
 
 
-GEOMETRY_INVARIANTS = {
+g = {
     "wave_gen_d_long":  wave_gen_d_long,
     "wave_gen_d_short": wave_gen_d_short,
     "cam_h":            cam_h,
@@ -148,6 +148,38 @@ GEOMETRY_INVARIANTS = {
     "short_axis_delta": (bearing_od - 26.85) / 2 + (wave_gen_d_short - bearing_id_nom) / 2,
     # Required deformation = m × (ring_teeth − flex_teeth) / 2 = 0.3 × 2/2 = 0.3 mm/side
 }
+
+# GEOMETRY_INVARIANTS 是约束的唯一真相 / single source of truth for invariants.
+GEOMETRY_INVARIANTS = [
+    ("椭圆长轴 > 短轴 / ellipse long axis > short axis",
+     lambda g: g["wave_gen_d_long"] > g["wave_gen_d_short"]),
+    ("轴承外径 > 内径 / bearing OD > ID",
+     lambda g: g["bearing_od"] > g["bearing_id_nom"]),
+    ("中心孔 < 短轴 / center bore inside cam",
+     lambda g: g["bore_d"] < g["wave_gen_d_short"]),
+    ("轴承外径 = 柔轮杯内孔 / bearing_od == flex cup inner bore",
+     lambda g: abs(g["bearing_od"] - g["flex_cup_inner_bore"]) < 1e-9),
+    ("长轴干涉量定义 / long_axis_delta definition",
+     lambda g: abs(g["long_axis_delta"]
+                   - ((g["bearing_od"] - g["flex_cup_inner_bore"]) / 2
+                      + (g["wave_gen_d_long"] - g["bearing_id_nom"]) / 2)) < 1e-9),
+    ("短轴干涉量定义 / short_axis_delta definition",
+     lambda g: abs(g["short_axis_delta"]
+                   - ((g["bearing_od"] - g["flex_cup_inner_bore"]) / 2
+                      + (g["wave_gen_d_short"] - g["bearing_id_nom"]) / 2)) < 1e-9),
+    ("关键尺寸为正 / key dims positive",
+     lambda g: g["cam_h"] > 0 and g["bore_d"] > 0 and g["key_w"] > 0 and g["bearing_w"] > 0),
+]
+
+
+def _assert_geometry_invariants(g: dict) -> None:
+    """Assert all geometry invariants; fail immediately on violation.
+    断言所有几何不变式，违反时立即报错（不吞异常）。"""
+    for desc, test in GEOMETRY_INVARIANTS:
+        assert test(g), f"Invariant FAIL: {desc}\n  g={g}"
+
+
+_assert_geometry_invariants(g)
 
 
 if __name__ == "__main__":
