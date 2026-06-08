@@ -50,10 +50,22 @@ _FALLBACK: dict[str, NeedleBearingSpec] = {
     "HK1010": NeedleBearingSpec(d=10.0, D=14.0, B=10.0, shell_wall_t=0.4),
 }
 
-GEOMETRY_INVARIANTS = {
-    "r_inner_cup_gt_r_bore": "shell inner radius > shaft bore radius",
-    "wall_t_lt_2mm": "drawn-cup wall thickness < 2 mm (thin stamped steel)",
-}
+# GEOMETRY_INVARIANTS 是约束的唯一真相 / single source of truth for invariants.
+GEOMETRY_INVARIANTS = [
+    ("壳体内半径 > 轴孔半径 / shell inner radius > shaft bore radius",
+     lambda g: g["r_inner_cup"] > g["r_bore"]),
+    ("冲压外圈壁厚 < 2 mm / drawn-cup wall thickness < 2 mm",
+     lambda g: g["wall_t"] < 2.0),
+    ("外径 > 内径、宽度为正 / OD > bore and width positive",
+     lambda g: g["D"] > g["d"] and g["B"] > 0),
+]
+
+
+def _assert_geometry_invariants(g: dict) -> None:
+    """Assert all geometry invariants; fail immediately on violation.
+    断言所有几何不变式，违反时立即报错（不吞异常）。"""
+    for desc, test in GEOMETRY_INVARIANTS:
+        assert test(g), f"Invariant FAIL: {desc}\n  g={g}"
 
 
 def _load_specs() -> dict[str, NeedleBearingSpec]:
@@ -103,12 +115,11 @@ def make_needle_bearing(model: str = "HK0608") -> Part:
     spec = _SPECS[key]
     d, D, B, wall_t = spec.d, spec.D, spec.B, spec.shell_wall_t
 
-    # Geometry invariant assertions
+    # Geometry invariant assertions — consume GEOMETRY_INVARIANTS single source of truth.
     r_inner_cup = D / 2 - wall_t
-    assert r_inner_cup > d / 2, (
-        f"r_inner_cup={r_inner_cup:.2f} must be > r_bore={d/2:.2f}"
-    )
-    assert wall_t < 2.0, f"wall_t={wall_t} must be < 2 mm for drawn-cup type"
+    g = {"d": d, "D": D, "B": B, "wall_t": wall_t,
+         "r_inner_cup": r_inner_cup, "r_bore": d / 2}
+    _assert_geometry_invariants(g)
 
     with BuildPart() as p:
         # 外圆筒（全实心）/ Full outer cylinder
